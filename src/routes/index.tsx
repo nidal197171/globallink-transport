@@ -279,6 +279,9 @@ function CarIcon() {
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [airport, setAirport] = useState("sfo");
+  const [modalOpen, setModalOpen] = useState(false);
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   return (
     <>
