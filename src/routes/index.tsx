@@ -273,8 +273,8 @@ function Index() {
             ))}
           </nav>
           <div className="nav-cta">
-            <a href="tel:+18005550134" className="btn btn-outline-dark">
-              +1 (800) 555-0134
+            <a href="tel:+14157878776" className="btn btn-outline-dark">
+              (415) 787-8776
             </a>
             <a href="#book" className="btn btn-brass">
               Reserve a car
@@ -297,8 +297,8 @@ function Index() {
               </a>
             ))}
             <div className="mp-actions">
-              <a href="tel:+18005550134" className="btn btn-outline-dark">
-                Call +1 (800) 555-0134
+              <a href="tel:+14157878776" className="btn btn-outline-dark">
+                Call (415) 787-8776
               </a>
               <a href="#book" className="btn btn-brass">
                 Reserve a car
@@ -820,8 +820,8 @@ function Index() {
             <div>
               <h4>Contact</h4>
               <ul>
-                <li>+1 (800) 555-0134</li>
-                <li>dispatch@globallink.travel</li>
+                <li>(415) 787-8776</li>
+                <li>GLtrans10@gmail.com</li>
                 <li>Available 24/7</li>
               </ul>
             </div>
