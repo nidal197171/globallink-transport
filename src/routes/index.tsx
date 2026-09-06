@@ -310,9 +310,9 @@ function Index() {
             <a href="tel:+14157878776" className="btn btn-outline-dark">
               (415) 787-8776
             </a>
-            <a href="#book" className="btn btn-brass">
+            <button className="btn btn-brass" onClick={openModal}>
               Reserve a car
-            </a>
+            </button>
           </div>
           <button
             className="menu-toggle"
