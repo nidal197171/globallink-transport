@@ -400,7 +400,7 @@ function Index() {
             </div>
           </div>
 
-          <BookingCard />
+          <BookingCard onReserve={openModal} />
         </div>
       </section>
 
