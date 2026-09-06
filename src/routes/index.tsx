@@ -107,6 +107,7 @@ function BookingForm({ onBack, onClose }: { onBack: () => void; onClose: () => v
     <form className="booking-form" onSubmit={submit}>
       <h3 className="serif">Book online</h3>
       <p className="modal-sub">Fill this in and it goes straight to our inbox.</p>
+      <p className="fee-note">A 20% gratuity and 10% booking fee will be added to all reservations.</p>
       <div className="bf-grid">
         <input required placeholder="Your name" value={form.name} onChange={set("name")} />
         <input required placeholder="Phone number" type="tel" value={form.phone} onChange={set("phone")} />
@@ -156,6 +157,7 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
                 Book online
               </button>
             </div>
+            <p className="fee-note">A 20% gratuity and 10% booking fee will be added to all reservations.</p>
             <p className="modal-note">Available 24/7 · No card required now</p>
           </>
         ) : (
@@ -260,6 +262,7 @@ function BookingCard({ onReserve }: { onReserve: () => void }) {
       </div>
 
       <div className={`fare-preview${hasPrice ? " has-price" : ""}`}>{content}</div>
+      <p className="fee-note">A 20% gratuity and 10% booking fee will be added to all reservations.</p>
 
       <button className="btn btn-brass" onClick={onReserve}>
         Reserve this ride

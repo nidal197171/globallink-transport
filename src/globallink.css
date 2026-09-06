@@ -322,6 +322,8 @@
 .modal-actions{display:flex;flex-direction:column;gap:10px}
 .modal-actions .btn{width:100%}
 .modal-note{font-size:12px;opacity:.6;margin-top:16px}
+.fee-note{font-size:12px;color:var(--steel);margin-top:12px;line-height:1.5}
+.booking-card .fee-note{margin-top:10px;margin-bottom:4px}
 
 /* Booking form in modal */
 .booking-form h3 { margin: 0 0 4px; font-size: 26px; color: var(--ink); }
