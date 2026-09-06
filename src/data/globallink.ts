@@ -25,6 +25,39 @@ export const CITIES: { slug: string; name: string }[] = [
   { slug: "richmond", name: "Richmond" },
   { slug: "napa", name: "Napa" },
   { slug: "santa-rosa", name: "Santa Rosa" },
+  { slug: "burlingame", name: "Burlingame" },
+  { slug: "millbrae", name: "Millbrae" },
+  { slug: "san-bruno", name: "San Bruno" },
+  { slug: "pacifica", name: "Pacifica" },
+  { slug: "half-moon-bay", name: "Half Moon Bay" },
+  { slug: "foster-city", name: "Foster City" },
+  { slug: "belmont", name: "Belmont" },
+  { slug: "san-carlos", name: "San Carlos" },
+  { slug: "atherton", name: "Atherton" },
+  { slug: "portola-valley", name: "Portola Valley" },
+  { slug: "los-altos", name: "Los Altos" },
+  { slug: "los-gatos", name: "Los Gatos" },
+  { slug: "saratoga", name: "Saratoga" },
+  { slug: "campbell", name: "Campbell" },
+  { slug: "morgan-hill", name: "Morgan Hill" },
+  { slug: "gilroy", name: "Gilroy" },
+  { slug: "union-city", name: "Union City" },
+  { slug: "newark", name: "Newark" },
+  { slug: "castro-valley", name: "Castro Valley" },
+  { slug: "dublin", name: "Dublin" },
+  { slug: "san-ramon", name: "San Ramon" },
+  { slug: "danville", name: "Danville" },
+  { slug: "lafayette", name: "Lafayette" },
+  { slug: "orinda", name: "Orinda" },
+  { slug: "martinez", name: "Martinez" },
+  { slug: "pittsburg", name: "Pittsburg" },
+  { slug: "antioch", name: "Antioch" },
+  { slug: "american-canyon", name: "American Canyon" },
+  { slug: "sonoma", name: "Sonoma" },
+  { slug: "petaluma", name: "Petaluma" },
+  { slug: "novato", name: "Novato" },
+  { slug: "mill-valley", name: "Mill Valley" },
+  { slug: "sausalito", name: "Sausalito" },
 ];
 
 export const AIRPORTS: { code: string; label: string; short: string }[] = [
@@ -42,6 +75,13 @@ export const SFO_RATES: Rates = {
   "san-mateo": 80, "menlo-park": 100, cupertino: 130, milpitas: 140, hayward: 125,
   "san-rafael": 115, concord: 135, pleasanton: 145, livermore: 155, vallejo: 140,
   richmond: 120, napa: 150, "santa-rosa": 165,
+  burlingame: 65, millbrae: 70, "san-bruno": 70, pacifica: 95, "half-moon-bay": 115,
+  "foster-city": 80, belmont: 90, "san-carlos": 95, atherton: 100, "portola-valley": 110,
+  "los-altos": 110, "los-gatos": 130, saratoga: 125, campbell: 120, "morgan-hill": 150,
+  gilroy: 170, "union-city": 105, newark: 110, "castro-valley": 115, dublin: 125,
+  "san-ramon": 130, danville: 135, lafayette: 125, orinda: 120, martinez: 135,
+  pittsburg: 145, antioch: 160, "american-canyon": 140, sonoma: 145, petaluma: 135,
+  novato: 125, "mill-valley": 115, sausalito: 105,
 };
 
 export const OAK_RATES: Rates = {
@@ -51,6 +91,13 @@ export const OAK_RATES: Rates = {
   "san-mateo": 115, "menlo-park": 130, cupertino: 140, milpitas: 120, hayward: 70,
   "san-rafael": 100, concord: 70, pleasanton: 80, livermore: 90, vallejo: 85,
   richmond: 65, napa: 110, "santa-rosa": 130,
+  burlingame: 110, millbrae: 115, "san-bruno": 120, pacifica: 130, "half-moon-bay": 150,
+  "foster-city": 105, belmont: 115, "san-carlos": 120, atherton: 125, "portola-valley": 135,
+  "los-altos": 135, "los-gatos": 145, saratoga: 140, campbell: 135, "morgan-hill": 165,
+  gilroy: 180, "union-city": 85, newark: 90, "castro-valley": 75, dublin: 70,
+  "san-ramon": 75, danville: 80, lafayette: 70, orinda: 65, martinez: 80,
+  pittsburg: 90, antioch: 100, "american-canyon": 110, sonoma: 115, petaluma: 120,
+  novato: 105, "mill-valley": 95, sausalito: 100,
 };
 
 export const SJC_RATES: Rates = {
@@ -60,6 +107,13 @@ export const SJC_RATES: Rates = {
   "menlo-park": 100, cupertino: 70, milpitas: 65, hayward: 90, "san-rafael": 150,
   concord: 115, pleasanton: 75, livermore: 80, vallejo: 150, richmond: 130,
   napa: 155, "santa-rosa": 175,
+  burlingame: 105, millbrae: 110, "san-bruno": 120, pacifica: 145, "half-moon-bay": 155,
+  "foster-city": 95, belmont: 95, "san-carlos": 95, atherton: 90, "portola-valley": 85,
+  "los-altos": 80, "los-gatos": 75, saratoga: 80, campbell: 75, "morgan-hill": 55,
+  gilroy: 90, "union-city": 80, newark: 75, "castro-valley": 85, dublin: 75,
+  "san-ramon": 80, danville: 85, lafayette: 95, orinda: 100, martinez: 115,
+  pittsburg: 125, antioch: 135, "american-canyon": 145, sonoma: 135, petaluma: 125,
+  novato: 140, "mill-valley": 150, sausalito: 145,
 };
 
 export const AIRPORT_RATES: Record<string, Rates> = {
@@ -68,11 +122,37 @@ export const AIRPORT_RATES: Record<string, Rates> = {
   sjc: SJC_RATES,
 };
 
+const EXTRA_CITY_ORDER = [
+  "burlingame","millbrae","san-bruno","pacifica","half-moon-bay","foster-city",
+  "belmont","san-carlos","atherton","portola-valley","los-altos","los-gatos",
+  "saratoga","campbell","morgan-hill","gilroy","union-city","newark","castro-valley",
+  "dublin","san-ramon","danville","lafayette","orinda","martinez","pittsburg",
+  "antioch","american-canyon","sonoma","petaluma","novato","mill-valley","sausalito",
+];
+
 // Display order per airport panel, matching the source page.
 export const AIRPORT_ORDER: Record<string, string[]> = {
-  sfo: ["san-francisco","daly-city","south-san-francisco","redwood-city","palo-alto","mountain-view","sunnyvale","santa-clara","san-jose","oakland","berkeley","fremont","walnut-creek","san-mateo","menlo-park","cupertino","milpitas","hayward","san-rafael","concord","pleasanton","livermore","vallejo","richmond","napa","santa-rosa"],
-  oak: ["oakland","berkeley","walnut-creek","fremont","san-francisco","daly-city","south-san-francisco","redwood-city","palo-alto","mountain-view","sunnyvale","santa-clara","san-jose","san-mateo","menlo-park","cupertino","milpitas","hayward","san-rafael","concord","pleasanton","livermore","vallejo","richmond","napa","santa-rosa"],
-  sjc: ["san-jose","santa-clara","sunnyvale","mountain-view","palo-alto","fremont","redwood-city","walnut-creek","oakland","berkeley","south-san-francisco","daly-city","san-francisco","san-mateo","menlo-park","cupertino","milpitas","hayward","san-rafael","concord","pleasanton","livermore","vallejo","richmond","napa","santa-rosa"],
+  sfo: [
+    "san-francisco","daly-city","south-san-francisco","redwood-city","palo-alto",
+    "mountain-view","sunnyvale","santa-clara","san-jose","oakland","berkeley",
+    "fremont","walnut-creek","san-mateo","menlo-park","cupertino","milpitas",
+    "hayward","san-rafael","concord","pleasanton","livermore","vallejo","richmond",
+    "napa","santa-rosa", ...EXTRA_CITY_ORDER,
+  ],
+  oak: [
+    "oakland","berkeley","walnut-creek","fremont","san-francisco","daly-city",
+    "south-san-francisco","redwood-city","palo-alto","mountain-view","sunnyvale",
+    "santa-clara","san-jose","san-mateo","menlo-park","cupertino","milpitas",
+    "hayward","san-rafael","concord","pleasanton","livermore","vallejo","richmond",
+    "napa","santa-rosa", ...EXTRA_CITY_ORDER,
+  ],
+  sjc: [
+    "san-jose","santa-clara","sunnyvale","mountain-view","palo-alto","fremont",
+    "redwood-city","walnut-creek","oakland","berkeley","south-san-francisco",
+    "daly-city","san-francisco","san-mateo","menlo-park","cupertino","milpitas",
+    "hayward","san-rafael","concord","pleasanton","livermore","vallejo","richmond",
+    "napa","santa-rosa", ...EXTRA_CITY_ORDER,
+  ],
 };
 
 export const AIRPORT_TO_AIRPORT: Record<string, number> = {
