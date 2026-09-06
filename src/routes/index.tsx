@@ -190,7 +190,9 @@ function BookingCard({ onReserve }: { onReserve: () => void }) {
 
       <div className={`fare-preview${hasPrice ? " has-price" : ""}`}>{content}</div>
 
-      <button className="btn btn-brass">Reserve this ride</button>
+      <button className="btn btn-brass" onClick={onReserve}>
+        Reserve this ride
+      </button>
     </div>
   );
 }
