@@ -66,6 +66,35 @@ function LocationOptions() {
   );
 }
 
+const EMAIL = "GLtrans10@gmail.com";
+const PHONE = "(415) 787-8776";
+const PHONE_HREF = "tel:+14157878776";
+const EMAIL_HREF = `mailto:${EMAIL}`;
+
+function ContactModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  if (!open) return null;
+  return (
+    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="modal-panel" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose} aria-label="Close">
+          ×
+        </button>
+        <h3 className="serif">How would you like to book?</h3>
+        <p className="modal-sub">Choose the fastest way to confirm your ride.</p>
+        <div className="modal-actions">
+          <a href={PHONE_HREF} className="btn btn-brass" onClick={onClose}>
+            Call {PHONE}
+          </a>
+          <a href={EMAIL_HREF} className="btn btn-outline-light" onClick={onClose}>
+            Email {EMAIL}
+          </a>
+        </div>
+        <p className="modal-note">Available 24/7 · No card required now</p>
+      </div>
+    </div>
+  );
+}
+
 function computeSedanBase(pickup: string, dropoff: string): number | "same" | "quote" | null {
   if (!pickup || !dropoff) return null;
   if (pickup === dropoff) return "same";
@@ -81,7 +110,7 @@ function computeSedanBase(pickup: string, dropoff: string): number | "same" | "q
   return "quote";
 }
 
-function BookingCard() {
+function BookingCard({ onReserve }: { onReserve: () => void }) {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [vehicle, setVehicle] = useState("sedan");
@@ -161,7 +190,9 @@ function BookingCard() {
 
       <div className={`fare-preview${hasPrice ? " has-price" : ""}`}>{content}</div>
 
-      <button className="btn btn-brass">Reserve this ride</button>
+      <button className="btn btn-brass" onClick={onReserve}>
+        Reserve this ride
+      </button>
     </div>
   );
 }
@@ -248,6 +279,9 @@ function CarIcon() {
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [airport, setAirport] = useState("sfo");
+  const [modalOpen, setModalOpen] = useState(false);
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   return (
     <>
@@ -276,9 +310,9 @@ function Index() {
             <a href="tel:+14157878776" className="btn btn-outline-dark">
               (415) 787-8776
             </a>
-            <a href="#book" className="btn btn-brass">
+            <button className="btn btn-brass" onClick={openModal}>
               Reserve a car
-            </a>
+            </button>
           </div>
           <button
             className="menu-toggle"
