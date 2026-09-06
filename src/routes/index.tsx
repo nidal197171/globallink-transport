@@ -334,9 +334,9 @@ function Index() {
               <a href="tel:+14157878776" className="btn btn-outline-dark">
                 Call (415) 787-8776
               </a>
-              <a href="#book" className="btn btn-brass">
+              <button className="btn btn-brass" onClick={openModal}>
                 Reserve a car
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -522,9 +522,9 @@ function Index() {
             <PriceRow name="Limousine" amount="From $235" />
             <PriceRow name="Sprinter van" amount="From $285" />
             <PriceRow name="Bus & coach" amount="Custom quote" />
-            <a href="#book" className="btn btn-brass">
+            <button className="btn btn-brass" onClick={openModal}>
               See your instant price
-            </a>
+            </button>
             <p className="disclaimer">
               No card required · No sales call · Just a clear number, in seconds
             </p>
@@ -776,9 +776,9 @@ function Index() {
               across the Bay Area.
             </p>
           </div>
-          <a href="#book" className="btn btn-brass">
+          <button className="btn btn-brass" onClick={openModal}>
             Talk to our team
-          </a>
+          </button>
         </div>
       </div>
 
@@ -815,9 +815,9 @@ function Index() {
       <section className="final-cta">
         <div className="wrap">
           <h2>Wherever you're headed next, a car is ready.</h2>
-          <a href="#book" className="btn btn-outline-light">
+          <button className="btn btn-outline-light" onClick={openModal}>
             Book now
-          </a>
+          </button>
           <p style={{ fontSize: 13, color: "rgba(15,27,45,0.65)", marginTop: 16 }}>
             No card required now · Support available 24/7
           </p>
@@ -877,6 +877,7 @@ function Index() {
           </div>
         </div>
       </footer>
+      <ContactModal open={modalOpen} onClose={closeModal} />
     </>
   );
 }
