@@ -523,11 +523,11 @@ function Index() {
 
           <div className="price-card airport-panel active">
             <div className="airport-rows">
-              {AIRPORT_ORDER[airport].map((slug) => (
+              {(AIRPORT_ORDER[airport] ?? []).map((slug) => (
                 <PriceRow
                   key={slug}
                   name={cityName(slug)}
-                  amount={`$${AIRPORT_RATES[airport][slug]}`}
+                  amount={`$${AIRPORT_RATES[airport]?.[slug] ?? ""}`}
                 />
               ))}
             </div>
