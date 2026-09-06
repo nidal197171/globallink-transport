@@ -110,7 +110,7 @@ function computeSedanBase(pickup: string, dropoff: string): number | "same" | "q
   return "quote";
 }
 
-function BookingCard() {
+function BookingCard({ onReserve }: { onReserve: () => void }) {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [vehicle, setVehicle] = useState("sedan");
