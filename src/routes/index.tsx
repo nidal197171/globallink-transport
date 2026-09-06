@@ -69,8 +69,8 @@ function LocationOptions() {
 function computeSedanBase(pickup: string, dropoff: string): number | "same" | "quote" | null {
   if (!pickup || !dropoff) return null;
   if (pickup === dropoff) return "same";
-  const [pType, pCode] = pickup.split(":");
-  const [dType, dCode] = dropoff.split(":");
+  const [pType, pCode = ""] = pickup.split(":");
+  const [dType, dCode = ""] = dropoff.split(":");
 
   if (pType === "airport" && dType === "airport") {
     const key = [pCode, dCode].sort().join("-");
