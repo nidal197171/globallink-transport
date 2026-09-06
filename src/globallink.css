@@ -324,15 +324,15 @@
 .modal-note{font-size:12px;opacity:.6;margin-top:16px}
 
 /* Booking form in modal */
-.booking-form h3 { margin: 0 0 4px; font-size: 26px; color: var(--paper); }
+.booking-form h3 { margin: 0 0 4px; font-size: 26px; color: var(--ink); }
+.booking-form .modal-sub { margin-bottom: 4px; }
 .bf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0 10px; }
 .booking-form input, .booking-form textarea {
   width: 100%; padding: 11px 12px; border-radius: 10px;
-  border: 1px solid rgba(246,244,239,.25); background: rgba(246,244,239,.06);
-  color: var(--paper); font: inherit; box-sizing: border-box;
+  border: 1px solid rgba(15,27,45,.25); background: #fff;
+  color: var(--ink); font: inherit; box-sizing: border-box;
 }
-.booking-form input::placeholder, .booking-form textarea::placeholder { color: rgba(246,244,239,.5); }
+.booking-form input::placeholder, .booking-form textarea::placeholder { color: rgba(15,27,45,.45); }
 .booking-form input:focus, .booking-form textarea:focus { outline: 2px solid var(--brass); border-color: transparent; }
 .booking-form textarea { resize: vertical; margin-bottom: 14px; }
-.booking-form input[type="date"], .booking-form input[type="time"] { color-scheme: dark; }
 @media (max-width: 520px) { .bf-grid { grid-template-columns: 1fr; } }
