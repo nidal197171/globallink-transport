@@ -71,25 +71,96 @@ const PHONE = "(415) 787-8776";
 const PHONE_HREF = "tel:+14157878776";
 const EMAIL_HREF = `mailto:${EMAIL}`;
 
-function ContactModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  if (!open) return null;
+function BookingForm({ onBack, onClose }: { onBack: () => void; onClose: () => void }) {
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    date: "",
+    time: "",
+    pickup: "",
+    dropoff: "",
+    notes: "",
+  });
+  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const body = [
+      `Name: ${form.name}`,
+      `Phone: ${form.phone}`,
+      `Date: ${form.date}`,
+      `Time: ${form.time}`,
+      `Pickup: ${form.pickup}`,
+      `Drop-off: ${form.dropoff}`,
+      form.notes ? `Notes: ${form.notes}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(
+      `Booking request — ${form.name || "New ride"}`,
+    )}&body=${encodeURIComponent(body)}`;
+    onClose();
+  };
+
   return (
-    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
+    <form className="booking-form" onSubmit={submit}>
+      <h3 className="serif">Book online</h3>
+      <p className="modal-sub">Fill this in and it goes straight to our inbox.</p>
+      <div className="bf-grid">
+        <input required placeholder="Your name" value={form.name} onChange={set("name")} />
+        <input required placeholder="Phone number" type="tel" value={form.phone} onChange={set("phone")} />
+        <input required type="date" value={form.date} onChange={set("date")} aria-label="Pickup date" />
+        <input required type="time" value={form.time} onChange={set("time")} aria-label="Pickup time" />
+        <input required placeholder="Pickup location" value={form.pickup} onChange={set("pickup")} />
+        <input required placeholder="Drop-off location" value={form.dropoff} onChange={set("dropoff")} />
+      </div>
+      <textarea placeholder="Notes (passengers, luggage, flight #…)" rows={3} value={form.notes} onChange={set("notes")} />
+      <div className="modal-actions">
+        <button type="submit" className="btn btn-brass">
+          Send booking request
+        </button>
+        <button type="button" className="btn btn-outline-light" onClick={onBack}>
+          Back
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function ContactModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [view, setView] = useState<"choose" | "form">("choose");
+  if (!open) return null;
+  const close = () => {
+    setView("choose");
+    onClose();
+  };
+  return (
+    <div className="modal-backdrop" onClick={close} role="dialog" aria-modal="true">
       <div className="modal-panel" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose} aria-label="Close">
+        <button className="modal-close" onClick={close} aria-label="Close">
           ×
         </button>
-        <h3 className="serif">How would you like to book?</h3>
-        <p className="modal-sub">Choose the fastest way to confirm your ride.</p>
-        <div className="modal-actions">
-          <a href={PHONE_HREF} className="btn btn-brass" onClick={onClose}>
-            Call {PHONE}
-          </a>
-          <a href={EMAIL_HREF} className="btn btn-outline-light" onClick={onClose}>
-            Email {EMAIL}
-          </a>
-        </div>
-        <p className="modal-note">Available 24/7 · No card required now</p>
+        {view === "choose" ? (
+          <>
+            <h3 className="serif">How would you like to book?</h3>
+            <p className="modal-sub">Choose the fastest way to confirm your ride.</p>
+            <div className="modal-actions">
+              <a href={PHONE_HREF} className="btn btn-brass" onClick={close}>
+                Call {PHONE}
+              </a>
+              <a href={EMAIL_HREF} className="btn btn-outline-light" onClick={close}>
+                Email {EMAIL}
+              </a>
+              <button className="btn btn-outline-light" onClick={() => setView("form")}>
+                Book online
+              </button>
+            </div>
+            <p className="modal-note">Available 24/7 · No card required now</p>
+          </>
+        ) : (
+          <BookingForm onBack={() => setView("choose")} onClose={close} />
+        )}
       </div>
     </div>
   );
