@@ -397,9 +397,6 @@ function Index() {
                   No card required to reserve
                 </p>
               </div>
-              <a href="#fleet" className="btn btn-outline-dark">
-                View the fleet
-              </a>
             </div>
             <div className="hero-stats">
               <div>
@@ -494,34 +491,6 @@ function Index() {
         </div>
       </section>
 
-      <section id="fleet">
-        <div className="wrap">
-          <div className="section-head">
-            <h2>Choose your ride</h2>
-            <p>
-              Five vehicle classes, each with its own vetted chauffeur pool — from a single airport
-              transfer to a fifty-person conference shuttle.
-            </p>
-          </div>
-
-          <div className="fleet-row">
-            {FLEET.map((f) => (
-              <div className="fleet-card" key={f.name}>
-                <div className="icon-box">
-                  <CarIcon />
-                </div>
-                <h3>{f.name}</h3>
-                <p className="desc">{f.desc}</p>
-                <div className="meta">
-                  {f.meta}
-                  <strong>{f.price}</strong>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="pricing" id="pricing">
         <div className="wrap pricing-grid">
           <div className="pricing-copy">
@@ -548,49 +517,6 @@ function Index() {
             </button>
             <p className="disclaimer">
               No card required · No sales call · Just a clear number, in seconds
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="pricing" id="airport-rates">
-        <div className="wrap">
-          <div className="section-head">
-            <h2>Airport transfer rates</h2>
-            <p>
-              Sedan pricing from SFO, OAK and SJC to every Bay Area city we serve. SUV, limousine and
-              sprinter fares scale up from these base rates — dispatch confirms your exact price at
-              booking.
-            </p>
-          </div>
-
-          <div className="airport-tabs">
-            {AIRPORTS.map((a) => (
-              <button
-                key={a.code}
-                className={`airport-tab${airport === a.code ? " active" : ""}`}
-                onClick={() => setAirport(a.code)}
-              >
-                {a.label} <span style={{ opacity: 0.6, fontWeight: 500 }}>({a.short})</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="price-card airport-panel active">
-            <div className="airport-rows">
-              {(AIRPORT_ORDER[airport] ?? []).map((slug) => (
-                <PriceRow
-                  key={slug}
-                  name={cityName(slug)}
-                  amount={`$${AIRPORT_RATES[airport]?.[slug] ?? ""}`}
-                />
-              ))}
-            </div>
-            <a href="#book" className="btn btn-brass">
-              Book from {airport.toUpperCase()}
-            </a>
-            <p className="disclaimer">
-              Flight tracked · No wait fee for delays · Sedan base rate
             </p>
           </div>
         </div>
@@ -858,9 +784,6 @@ function Index() {
             <div>
               <h4>Company</h4>
               <ul>
-                <li>
-                  <a href="#fleet">Fleet</a>
-                </li>
                 <li>
                   <a href="#how">How it works</a>
                 </li>
