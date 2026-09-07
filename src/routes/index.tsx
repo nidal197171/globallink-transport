@@ -2,12 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import {
   AIRPORTS,
-  AIRPORT_ORDER,
   AIRPORT_RATES,
   AIRPORT_TO_AIRPORT,
   CITIES,
   VEHICLES,
-  cityName,
 } from "@/data/globallink";
 
 export const Route = createFileRoute("/")({
@@ -35,9 +33,7 @@ export const Route = createFileRoute("/")({
 
 const NAV = [
   ["#about", "About"],
-  ["#fleet", "Fleet"],
   ["#pricing", "Pricing"],
-  ["#airport-rates", "Airport rates"],
   ["#hourly", "Hourly rates"],
   ["#how", "How it works"],
   ["#corporate", "Corporate"],
@@ -352,7 +348,7 @@ function CarIcon() {
 
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [airport, setAirport] = useState("sfo");
+  
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
