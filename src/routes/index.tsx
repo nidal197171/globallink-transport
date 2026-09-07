@@ -297,55 +297,6 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-const FLEET = [
-  {
-    name: "Sedan",
-    desc: "Airport runs and single meetings, understated and quick.",
-    meta: "Up to 3 passengers, 2 bags",
-    price: "From $85",
-  },
-  {
-    name: "SUV",
-    desc: "Small teams, extra luggage, or a more commanding presence.",
-    meta: "Up to 5 passengers, 4 bags",
-    price: "From $125",
-  },
-  {
-    name: "Limousine",
-    desc: "Weddings, galas and VIP arrivals that call for an entrance.",
-    meta: "Up to 6 passengers",
-    price: "From $235",
-  },
-  {
-    name: "Sprinter van",
-    desc: "Group transfers, roadshows and full teams travelling together.",
-    meta: "Up to 14 passengers",
-    price: "From $285",
-  },
-  {
-    name: "Bus & coach",
-    desc: "Conferences and large events, arriving on one schedule.",
-    meta: "Up to 56 passengers",
-    price: "Request a quote",
-  },
-];
-
-function CarIcon() {
-  return (
-    <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
-      <path
-        d="M4 22 L7 12 Q10 8 16 8 H30 Q36 8 39 12 L44 22"
-        stroke="#0F1B2D"
-        strokeWidth="1.6"
-        fill="none"
-      />
-      <rect x="2" y="20" width="44" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
-      <circle cx="13" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-      <circle cx="35" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-    </svg>
-  );
-}
-
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   
