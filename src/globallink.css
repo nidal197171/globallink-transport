@@ -338,3 +338,22 @@
 .booking-form input:focus, .booking-form textarea:focus { outline: 2px solid var(--brass); border-color: transparent; }
 .booking-form textarea { resize: vertical; margin-bottom: 14px; }
 @media (max-width: 520px) { .bf-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Affiliate page (private) ---------- */
+.affiliate-hero{background:var(--ink);color:#fff;padding:80px 0 90px;}
+.affiliate-hero h1{font-size:44px;line-height:1.1;margin-bottom:16px;max-width:640px;}
+.affiliate-hero .lead{font-size:17px;color:rgba(255,255,255,0.72);max-width:520px;}
+.affiliate-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:start;}
+.req-list{display:flex;flex-direction:column;}
+.req-item{display:flex;gap:22px;padding:26px 0;border-top:1px solid var(--hairline);}
+.req-item:last-child{border-bottom:1px solid var(--hairline);}
+.req-num{font-family:'Fraunces',serif;font-size:15px;color:var(--brass-dark);flex-shrink:0;padding-top:3px;}
+.req-item h3{font-size:19px;margin-bottom:8px;}
+.req-item p{font-size:15px;color:var(--steel);}
+.affiliate-form{background:#fff;border:1px solid var(--hairline);border-radius:var(--radius-card);padding:30px;}
+@media (max-width:900px){
+  .affiliate-hero{padding:56px 0 60px;}
+  .affiliate-hero h1{font-size:30px;}
+  .affiliate-grid{grid-template-columns:1fr;gap:36px;}
+  .affiliate-form{padding:22px;}
+}
