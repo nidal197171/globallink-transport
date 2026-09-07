@@ -122,37 +122,24 @@ export const AIRPORT_RATES: Record<string, Rates> = {
   sjc: SJC_RATES,
 };
 
-const EXTRA_CITY_ORDER = [
-  "burlingame","millbrae","san-bruno","pacifica","half-moon-bay","foster-city",
-  "belmont","san-carlos","atherton","portola-valley","los-altos","los-gatos",
-  "saratoga","campbell","morgan-hill","gilroy","union-city","newark","castro-valley",
-  "dublin","san-ramon","danville","lafayette","orinda","martinez","pittsburg",
-  "antioch","american-canyon","sonoma","petaluma","novato","mill-valley","sausalito",
+// Display order per airport panel — alphabetical by city name.
+const ALPHABETICAL_CITY_ORDER = [
+  "american-canyon","antioch","atherton","belmont","berkeley","burlingame",
+  "campbell","castro-valley","concord","cupertino","daly-city","danville",
+  "dublin","foster-city","fremont","gilroy","half-moon-bay","hayward",
+  "lafayette","livermore","los-altos","los-gatos","martinez","menlo-park",
+  "mill-valley","millbrae","milpitas","morgan-hill","mountain-view","napa",
+  "newark","novato","oakland","orinda","pacifica","palo-alto","petaluma",
+  "pittsburg","pleasanton","portola-valley","redwood-city","richmond","san-bruno",
+  "san-carlos","san-francisco","san-jose","san-mateo","san-rafael","san-ramon",
+  "santa-clara","santa-rosa","saratoga","sausalito","sonoma","south-san-francisco",
+  "sunnyvale","union-city","vallejo","walnut-creek",
 ];
 
-// Display order per airport panel, matching the source page.
 export const AIRPORT_ORDER: Record<string, string[]> = {
-  sfo: [
-    "san-francisco","daly-city","south-san-francisco","redwood-city","palo-alto",
-    "mountain-view","sunnyvale","santa-clara","san-jose","oakland","berkeley",
-    "fremont","walnut-creek","san-mateo","menlo-park","cupertino","milpitas",
-    "hayward","san-rafael","concord","pleasanton","livermore","vallejo","richmond",
-    "napa","santa-rosa", ...EXTRA_CITY_ORDER,
-  ],
-  oak: [
-    "oakland","berkeley","walnut-creek","fremont","san-francisco","daly-city",
-    "south-san-francisco","redwood-city","palo-alto","mountain-view","sunnyvale",
-    "santa-clara","san-jose","san-mateo","menlo-park","cupertino","milpitas",
-    "hayward","san-rafael","concord","pleasanton","livermore","vallejo","richmond",
-    "napa","santa-rosa", ...EXTRA_CITY_ORDER,
-  ],
-  sjc: [
-    "san-jose","santa-clara","sunnyvale","mountain-view","palo-alto","fremont",
-    "redwood-city","walnut-creek","oakland","berkeley","south-san-francisco",
-    "daly-city","san-francisco","san-mateo","menlo-park","cupertino","milpitas",
-    "hayward","san-rafael","concord","pleasanton","livermore","vallejo","richmond",
-    "napa","santa-rosa", ...EXTRA_CITY_ORDER,
-  ],
+  sfo: ALPHABETICAL_CITY_ORDER,
+  oak: ALPHABETICAL_CITY_ORDER,
+  sjc: ALPHABETICAL_CITY_ORDER,
 };
 
 export const AIRPORT_TO_AIRPORT: Record<string, number> = {
