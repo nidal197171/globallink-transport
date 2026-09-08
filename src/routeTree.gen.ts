@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AffiliateRouteImport } from './routes/affiliate'
+import { Route as AgreementRouteImport } from './routes/agreement'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const AffiliateRoute = AffiliateRouteImport.update({
   path: '/affiliate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgreementRoute = AgreementRouteImport.update({
+  id: '/agreement',
+  path: '/agreement',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
+  '/agreement': typeof AgreementRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
+  '/agreement': typeof AgreementRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
+  '/agreement': typeof AgreementRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/affiliate'
+  fullPaths: '/' | '/affiliate' | '/agreement'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/affiliate'
-  id: '__root__' | '/' | '/affiliate'
+  to: '/' | '/affiliate' | '/agreement'
+  id: '__root__' | '/' | '/affiliate' | '/agreement'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AffiliateRoute: typeof AffiliateRoute
+  AgreementRoute: typeof AgreementRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AffiliateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agreement': {
+      id: '/agreement'
+      path: '/agreement'
+      fullPath: '/agreement'
+      preLoaderRoute: typeof AgreementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AffiliateRoute: AffiliateRoute,
+  AgreementRoute: AgreementRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
