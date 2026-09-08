@@ -817,7 +817,9 @@ function Index() {
           </div>
           <div className="foot-bottom">
             <span>© 2026 Globallink Transportation. All rights reserved.</span>
-            <span>Licensed for-hire chauffeur network</span>
+            <span>
+              Licensed for-hire chauffeur network · <a href="/affiliate">Drive with us</a>
+            </span>
           </div>
         </div>
       </footer>
