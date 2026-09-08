@@ -39,6 +39,7 @@ const NAV = [
   ["#corporate", "Corporate"],
   ["#reviews", "Reviews"],
   ["#faq", "FAQ"],
+  ["/affiliate", "Drive with us"],
 ] as const;
 
 function LocationOptions() {
