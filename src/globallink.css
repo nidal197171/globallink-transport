@@ -392,3 +392,4 @@
   header,footer,.agree-print{display:none !important;}
   .agree-doc{padding:0;}
 }
+.fee-link{color:var(--brass-dark);text-decoration:underline;}
