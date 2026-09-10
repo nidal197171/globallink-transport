@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   AIRPORTS,
   AIRPORT_RATES,
@@ -11,246 +11,287 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Globallink — Chauffeured Cars for Bay Area Business Travel" },
+      { title: "Globallink — Chauffeured cars, wherever business takes you" },
       {
         name: "description",
         content:
           "Chauffeured sedans, SUVs, limousines, vans and coaches across the Bay Area and SFO, OAK and SJC. Fixed fares, vetted chauffeurs, one monthly invoice.",
       },
-      { property: "og:title", content: "Globallink — Chauffeured Cars, Wherever Business Takes You" },
+      { property: "og:title", content: "Globallink — Chauffeured cars, wherever business takes you" },
       {
         property: "og:description",
         content:
-          "One dispatch team for every ride your company books — sedan to coach, tracked live, invoiced once a month.",
+          "Chauffeured sedans, SUVs, limousines, vans and coaches across the Bay Area and SFO, OAK and SJC. Fixed fares, vetted chauffeurs, one monthly invoice.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "theme-color", content: "#0F1B2D" },
     ],
   }),
   component: Index,
 });
 
-const NAV = [
-  ["#about", "About"],
-  ["#pricing", "Pricing"],
-  ["#hourly", "Hourly rates"],
-  ["#how", "How it works"],
-  ["#corporate", "Corporate"],
-  ["#reviews", "Reviews"],
-  ["#faq", "FAQ"],
-  ["/affiliate", "Drive with us"],
-] as const;
-
-function LocationOptions() {
-  return (
-    <>
-      <optgroup label="Airports">
-        {AIRPORTS.map((a) => (
-          <option key={a.code} value={`airport:${a.code}`}>
-            {a.label} ({a.short})
-          </option>
-        ))}
-      </optgroup>
-      <optgroup label="Cities">
-        {CITIES.map((c) => (
-          <option key={c.slug} value={`city:${c.slug}`}>
-            {c.name}
-          </option>
-        ))}
-      </optgroup>
-    </>
-  );
-}
-
 const EMAIL = "GLtrans10@gmail.com";
 const PHONE = "(415) 787-8776";
 const PHONE_HREF = "tel:+14157878776";
-const EMAIL_HREF = `mailto:${EMAIL}`;
 
-function BookingForm({ onBack, onClose }: { onBack: () => void; onClose: () => void }) {
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    date: "",
-    time: "",
-    pickup: "",
-    dropoff: "",
-    notes: "",
-  });
-  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm((f) => ({ ...f, [key]: e.target.value }));
+const VEHICLE_LABEL: Record<string, string> = Object.fromEntries(
+  VEHICLES.map((v) => [v.value, v.label])
+);
+const VEHICLE_MULTIPLIER: Record<string, number | null> = Object.fromEntries(
+  VEHICLES.map((v) => [v.value, v.multiplier])
+);
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const body = [
-      `Name: ${form.name}`,
-      `Phone: ${form.phone}`,
-      `Date: ${form.date}`,
-      `Time: ${form.time}`,
-      `Pickup: ${form.pickup}`,
-      `Drop-off: ${form.dropoff}`,
-      form.notes ? `Notes: ${form.notes}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
-    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(
-      `Booking request — ${form.name || "New ride"}`,
-    )}&body=${encodeURIComponent(body)}`;
-    onClose();
-  };
+const AGREEMENT_TERMS: { title: string; body: string }[] = [
+  {
+    title: "Passenger capacity",
+    body: "The maximum capacity of the vehicle is the number of seat belts installed and must not be exceeded unless discussed and agreed upon with Globallink Transportation prior to pickup.",
+  },
+  {
+    title: "Personal belongings",
+    body: "Globallink Transportation is not liable or responsible for anything left in the vehicle. Please check your belongings before exiting.",
+  },
+  {
+    title: "Damage to the vehicle",
+    body: "You are financially responsible for any physical damage done to the vehicle by you or your guests.",
+  },
+  {
+    title: "Eating, drinking and smoking",
+    body: "Eating, drinking and smoking in the vehicle are prohibited in order to preserve the original upholstery and interior finishes.",
+  },
+  {
+    title: "Unsafe behavior",
+    body: "If, in the sole judgment of the driver, the behavior of you or your guests is out of control, unsafe, illegal, dangerous or irresponsible to lives and/or property, the driver may terminate the run and order all occupants out of the vehicle, with or without a prior warning. If this happens, no refund will be issued.",
+  },
+  {
+    title: "Cancellations",
+    body: "Cancellations must be made at least 48 hours before your scheduled pickup. Cancellations inside the 48-hour window, or no-shows, will be charged the full reservation amount.",
+  },
+  {
+    title: "Surprise pickups",
+    body: "If the arrival of the vehicle is meant as a surprise, please indicate this at the time of booking.",
+  },
+  {
+    title: "Payment authorization",
+    body: "By signing this agreement, you authorize Globallink Transportation to charge your credit card for any unpaid charges such as gratuity, overtime, cleaning charges and damages.",
+  },
+];
 
-  return (
-    <form className="booking-form" onSubmit={submit}>
-      <h3 className="serif">Book online</h3>
-      <p className="modal-sub">Fill this in and it goes straight to our inbox.</p>
-      <p className="fee-note">
-        A 20% gratuity and 10% booking fee will be added to all reservations. By booking you agree to our{" "}
-        <a href="/agreement" className="fee-link">rental agreement</a>.
-      </p>
-      <div className="bf-grid">
-        <input required placeholder="Your name" value={form.name} onChange={set("name")} />
-        <input required placeholder="Phone number" type="tel" value={form.phone} onChange={set("phone")} />
-        <input required type="date" value={form.date} onChange={set("date")} aria-label="Pickup date" />
-        <input required type="time" value={form.time} onChange={set("time")} aria-label="Pickup time" />
-        <input required placeholder="Pickup location" value={form.pickup} onChange={set("pickup")} />
-        <input required placeholder="Drop-off location" value={form.dropoff} onChange={set("dropoff")} />
-      </div>
-      <textarea placeholder="Notes (passengers, luggage, flight #…)" rows={3} value={form.notes} onChange={set("notes")} />
-      <div className="modal-actions">
-        <button type="submit" className="btn btn-brass">
-          Send booking request
-        </button>
-        <button type="button" className="btn btn-outline-light" onClick={onBack}>
-          Back
-        </button>
-      </div>
-    </form>
-  );
-}
+const FAQS: { q: string; a: React.ReactNode }[] = [
+  {
+    q: "Can I book a car for today?",
+    a: "Yes, across the Bay Area cities and airports we serve. Same-day requests are matched with the nearest available chauffeur; dispatch will confirm within minutes.",
+  },
+  {
+    q: "Do you cover airport pickups?",
+    a: "Yes — SFO, OAK and SJC all include flight tracking, so your chauffeur adjusts to delays or early landings at no extra charge.",
+  },
+  {
+    q: "Can we set up a corporate account?",
+    a: "Yes. Corporate accounts get monthly invoicing, cost-center tagging and a dedicated account manager. Reach out through the contact section to get started.",
+  },
+  {
+    q: "What happens if my flight is delayed?",
+    a: "Airport pickups are tracked against your flight automatically, so your chauffeur's arrival shifts with you and you're never charged a wait fee for a late landing.",
+  },
+  {
+    q: "Can I book multiple vehicles for a group?",
+    a: "Yes — sprinter vans and coaches are built for this. For large events, our team will coordinate multi-vehicle logistics directly with your point of contact.",
+  },
+  {
+    q: "What's your cancellation policy?",
+    a: (
+      <>
+        Cancellations must be made at least 48 hours before your scheduled pickup. Cancellations
+        inside the 48-hour window, or no-shows, will be charged the full reservation amount — see
+        the{" "}
+        <a href="#book" style={{ color: "var(--brass-dark)" }}>
+          rental agreement
+        </a>{" "}
+        in the booking form above for full details.
+      </>
+    ),
+  },
+];
 
-function ContactModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [view, setView] = useState<"choose" | "form">("choose");
-  if (!open) return null;
-  const close = () => {
-    setView("choose");
-    onClose();
-  };
-  return (
-    <div className="modal-backdrop" onClick={close} role="dialog" aria-modal="true">
-      <div className="modal-panel" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={close} aria-label="Close">
-          ×
-        </button>
-        {view === "choose" ? (
-          <>
-            <h3 className="serif">How would you like to book?</h3>
-            <p className="modal-sub">Choose the fastest way to confirm your ride.</p>
-            <div className="modal-actions">
-              <a href={PHONE_HREF} className="btn btn-brass" onClick={close}>
-                Call {PHONE}
-              </a>
-              <a href={EMAIL_HREF} className="btn btn-outline-light" onClick={close}>
-                Email {EMAIL}
-              </a>
-              <button className="btn btn-outline-light" onClick={() => setView("form")}>
-                Book online
-              </button>
-            </div>
-            <p className="fee-note">
-              A 20% gratuity and 10% booking fee will be added to all reservations. By booking you agree to our{" "}
-              <a href="/agreement" className="fee-link">rental agreement</a>.
-            </p>
-            <p className="modal-note">Available 24/7 · No card required now</p>
-          </>
-        ) : (
-          <BookingForm onBack={() => setView("choose")} onClose={close} />
-        )}
-      </div>
-    </div>
-  );
+const DRIVE_REQS = [
+  "Valid driver's license, age 21 or older",
+  "Clean driving record, verified at onboarding",
+  "Own or have access to a qualifying vehicle",
+  "Valid commercial insurance where required",
+  "Pass a background check",
+  "Professional appearance and communication",
+  "Smartphone for dispatch coordination",
+  "Based in or near the Bay Area",
+  "Proof of state license for company",
+];
+
+function placeLabel(value: string) {
+  if (!value) return "";
+  const [type, code] = value.split(":");
+  if (type === "airport") {
+    const a = AIRPORTS.find((x) => x.code === code);
+    return a ? `${a.label} (${a.short})` : code ?? "";
+  }
+  return CITIES.find((c) => c.slug === code)?.name ?? code ?? "";
 }
 
 function computeSedanBase(pickup: string, dropoff: string): number | "same" | "quote" | null {
   if (!pickup || !dropoff) return null;
   if (pickup === dropoff) return "same";
-  const [pType, pCode = ""] = pickup.split(":");
-  const [dType, dCode = ""] = dropoff.split(":");
-
+  const [pType, pCode] = pickup.split(":");
+  const [dType, dCode] = dropoff.split(":");
   if (pType === "airport" && dType === "airport") {
     const key = [pCode, dCode].sort().join("-");
     return AIRPORT_TO_AIRPORT[key] ?? null;
   }
-  if (pType === "airport" && dType === "city") return AIRPORT_RATES[pCode]?.[dCode] ?? null;
-  if (pType === "city" && dType === "airport") return AIRPORT_RATES[dCode]?.[pCode] ?? null;
+  if (pType === "airport" && dType === "city") {
+    return AIRPORT_RATES[pCode!]?.[dCode!] ?? null;
+  }
+  if (pType === "city" && dType === "airport") {
+    return AIRPORT_RATES[dCode!]?.[pCode!] ?? null;
+  }
   return "quote";
 }
 
-function BookingCard({ onReserve }: { onReserve: () => void }) {
+function LocationSelect({
+  id,
+  label,
+  value,
+  onChange,
+  placeholder,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder: string;
+}) {
+  return (
+    <div className="field">
+      <label htmlFor={id}>{label}</label>
+      <select id={id} value={value} onChange={(e) => onChange(e.target.value)}>
+        <option value="" disabled>
+          {placeholder}
+        </option>
+        <optgroup label="Airports">
+          {AIRPORTS.map((a) => (
+            <option key={a.code} value={`airport:${a.code}`}>
+              {a.label} ({a.short})
+            </option>
+          ))}
+        </optgroup>
+        <optgroup label="Cities">
+          {CITIES.map((c) => (
+            <option key={c.slug} value={`city:${c.slug}`}>
+              {c.name}
+            </option>
+          ))}
+        </optgroup>
+      </select>
+    </div>
+  );
+}
+
+function BookingCard() {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [vehicle, setVehicle] = useState("sedan");
+  const [dt, setDt] = useState("");
+  const [name, setName] = useState("");
+  const [signature, setSignature] = useState("");
+  const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
+  const [submitted, setSubmitted] = useState(false);
 
-  const veh = VEHICLES.find((v) => v.value === vehicle)!;
-  const base = computeSedanBase(pickup, dropoff);
+  const fare = useMemo(() => {
+    const base = computeSedanBase(pickup, dropoff);
+    if (!pickup || !dropoff)
+      return { cls: "", node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
+    if (base === "same")
+      return { cls: "", node: <span className="fare-label">Pickup and drop-off can't be the same place</span> };
+    if (base === "quote" || base === null)
+      return {
+        cls: "",
+        node: <span className="fare-label">Custom route — dispatch confirms your exact fare in minutes</span>,
+      };
+    const mult = VEHICLE_MULTIPLIER[vehicle];
+    if (mult === null || mult === undefined)
+      return {
+        cls: "has-price",
+        node: (
+          <>
+            <span className="fare-amount">Request a quote</span>
+            <span className="fare-sub">{VEHICLE_LABEL[vehicle]} pricing is quoted per group size</span>
+          </>
+        ),
+      };
+    const price = Math.round((base * mult) / 5) * 5;
+    return {
+      cls: "has-price",
+      node: (
+        <>
+          <span className="fare-amount">${price}</span>
+          <span className="fare-sub">Estimated one-way fare · {VEHICLE_LABEL[vehicle]}</span>
+        </>
+      ),
+    };
+  }, [pickup, dropoff, vehicle]);
 
-  let hasPrice = false;
-  let content: React.ReactNode;
-  if (!pickup || !dropoff) {
-    content = <span className="fare-label">Choose pickup and drop-off to see your fare</span>;
-  } else if (base === "same") {
-    content = <span className="fare-label">Pickup and drop-off can't be the same place</span>;
-  } else if (base === "quote" || base === null) {
-    content = (
-      <span className="fare-label">Custom route — dispatch confirms your exact fare in minutes</span>
+  const submit = () => {
+    if (!pickup || !dropoff || !dt || !name.trim() || !signature.trim()) {
+      setConfirm({
+        kind: "error",
+        text: "Please choose pickup, drop-off, date & time, and sign your name before submitting.",
+      });
+      return;
+    }
+    const fareText =
+      (typeof document !== "undefined" &&
+        document.getElementById("farePreview")?.textContent?.trim()) ||
+      "";
+    const today = new Date().toISOString().split("T")[0];
+    const subject = encodeURIComponent(`New Reservation & Signed Agreement — ${name.trim()}`);
+    const body = encodeURIComponent(
+      "Globallink Transportation — Reservation request\n\n" +
+        `Pickup: ${placeLabel(pickup)}\n` +
+        `Drop-off: ${placeLabel(dropoff)}\n` +
+        `Date & time: ${dt}\n` +
+        `Vehicle: ${VEHICLE_LABEL[vehicle]}\n` +
+        `Fare: ${fareText}\n\n` +
+        "Rental agreement acknowledgement\n" +
+        `Name: ${name.trim()}\n` +
+        `Signature: ${signature.trim()}\n` +
+        `Date signed: ${today}\n\n` +
+        "By signing, this person confirms they have read, understood and will comply with the provisions of the Globallink Transportation rental agreement, including the 48-hour cancellation policy."
     );
-  } else if (veh.multiplier === null) {
-    hasPrice = true;
-    content = (
-      <>
-        <span className="fare-amount">Request a quote</span>
-        <span className="fare-sub">{veh.label} pricing is quoted per group size</span>
-      </>
-    );
-  } else {
-    hasPrice = true;
-    const price = Math.round((base * veh.multiplier) / 5) * 5;
-    content = (
-      <>
-        <span className="fare-amount">${price}</span>
-        <span className="fare-sub">Estimated one-way fare · {veh.label}</span>
-      </>
-    );
-  }
+    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    setConfirm({
+      kind: "ok",
+      text: (
+        <>
+          Thanks, {name.trim()} — your reservation and signed agreement are ready to send. If your
+          email app didn't open automatically, please email a copy to{" "}
+          <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
+            {EMAIL}
+          </a>
+          .
+        </>
+      ),
+    });
+    setSubmitted(true);
+  };
 
   return (
     <div className="booking-card" id="book">
       <h3>Check your fare</h3>
       <p className="sub">No payment required to reserve.</p>
       <div className="field-row">
-        <div className="field">
-          <label htmlFor="pu">Pickup</label>
-          <select id="pu" value={pickup} onChange={(e) => setPickup(e.target.value)}>
-            <option value="" disabled>
-              Choose pickup
-            </option>
-            <LocationOptions />
-          </select>
-        </div>
-        <div className="field">
-          <label htmlFor="do">Drop-off</label>
-          <select id="do" value={dropoff} onChange={(e) => setDropoff(e.target.value)}>
-            <option value="" disabled>
-              Choose destination
-            </option>
-            <LocationOptions />
-          </select>
-        </div>
+        <LocationSelect id="pu" label="Pickup" value={pickup} onChange={setPickup} placeholder="Choose pickup" />
+        <LocationSelect id="do" label="Drop-off" value={dropoff} onChange={setDropoff} placeholder="Choose destination" />
       </div>
       <div className="field-row">
         <div className="field">
           <label htmlFor="dt">Date &amp; time</label>
-          <input id="dt" type="datetime-local" />
+          <input id="dt" type="datetime-local" value={dt} onChange={(e) => setDt(e.target.value)} />
         </div>
         <div className="field">
           <label htmlFor="veh">Vehicle</label>
@@ -264,55 +305,274 @@ function BookingCard({ onReserve }: { onReserve: () => void }) {
         </div>
       </div>
 
-      <div className={`fare-preview${hasPrice ? " has-price" : ""}`}>{content}</div>
-      <p className="fee-note">
-        A 20% gratuity and 10% booking fee will be added to all reservations. By booking you agree to our{" "}
-        <a href="/agreement" className="fee-link">rental agreement</a>.
+      <div className={`fare-preview ${fare.cls}`} id="farePreview">
+        {fare.node}
+      </div>
+
+      <div className="field-row">
+        <div className="field">
+          <label htmlFor="agName">Name</label>
+          <input
+            id="agName"
+            type="text"
+            autoComplete="name"
+            placeholder="Your full name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="field">
+          <label htmlFor="agSignature">Signature (type your full name)</label>
+          <input
+            id="agSignature"
+            type="text"
+            placeholder="Type to sign"
+            value={signature}
+            onChange={(e) => setSignature(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <details className="agreement-details">
+        <summary>Read the rental agreement</summary>
+        <div className="agreement-details-body">
+          <p style={{ fontSize: 13, color: "var(--steel)", paddingTop: 14 }}>
+            This agreement applies to every ride booked with Globallink Transportation. By signing
+            below, you agree to the terms here.
+          </p>
+          {AGREEMENT_TERMS.map((t, i) => (
+            <div className="agreement-item" key={t.title}>
+              <div className="num">{String(i + 1).padStart(2, "0")}</div>
+              <h3>{t.title}</h3>
+              <p>{t.body}</p>
+            </div>
+          ))}
+          <div className="agreement-box">
+            <h4>Additional charges</h4>
+            <p>
+              A <strong>20% gratuity</strong> and <strong>10% booking fee</strong> are added to all
+              reservations. Overtime is billed at the hourly rate of the reserved vehicle.
+            </p>
+          </div>
+          <div className="agreement-box">
+            <h4>Cleaning fees</h4>
+            <p>
+              A <strong>$600 cleaning fee</strong> applies if the vehicle must be cleaned due to
+              someone getting sick in the vehicle.
+            </p>
+          </div>
+          <div className="agreement-box">
+            <h4>Damages</h4>
+            <p>
+              <strong>$25</strong> for any broken glass. Other damage is billed at repair cost.
+            </p>
+          </div>
+        </div>
+      </details>
+
+      <p style={{ fontSize: 12, color: "var(--steel)", marginTop: 12, lineHeight: 1.5 }}>
+        By typing your name as a signature above, you agree to the rental agreement and authorize
+        the charges described in it.
       </p>
 
-      <button className="btn btn-brass" onClick={onReserve}>
-        Reserve this ride
+      <button className="btn btn-brass" id="reserveSubmit" onClick={submit}>
+        {submitted ? "Reserved & signed ✓" : "Reserve & sign agreement"}
       </button>
+      {confirm && (
+        <div
+          className="sign-confirm show"
+          style={
+            confirm.kind === "error"
+              ? { background: "rgba(200,60,60,0.08)", borderColor: "#c83c3c" }
+              : undefined
+          }
+        >
+          {confirm.text}
+        </div>
+      )}
     </div>
   );
 }
 
-function PriceRow({ name, amount }: { name: string; amount: string }) {
-  return (
-    <div className="price-row">
-      <span className="name">{name}</span>
-      <span className="leader" />
-      <span className="amount">{amount}</span>
-    </div>
-  );
-}
-
-function FaqItem({ q, a }: { q: string; a: string }) {
+function FaqItem({ q, a }: { q: string; a: React.ReactNode }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
   return (
-    <div className={`faq-item${open ? " open" : ""}`}>
-      <button className="faq-q" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
+    <div className={`faq-item ${open ? "open" : ""}`}>
+      <button className="faq-q" onClick={() => setOpen((o) => !o)}>
         {q}
         <span className="plus">+</span>
       </button>
-      <div
-        className="faq-a"
-        ref={ref}
-        style={{ maxHeight: open ? `${ref.current?.scrollHeight ?? 400}px` : undefined }}
-      >
+      <div className="faq-a" style={open ? { maxHeight: 400 } : undefined}>
         <p>{a}</p>
       </div>
     </div>
   );
 }
 
+function DriveForm() {
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    city: "",
+    vehicle: "sedan",
+    experience: "",
+    notes: "",
+  });
+  const [hasFiles, setHasFiles] = useState(false);
+  const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const onFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) setHasFiles(true);
+  };
+
+  const submit = () => {
+    if (!form.name.trim() || !form.phone.trim() || !form.email.trim() || !form.city.trim()) {
+      setConfirm({
+        kind: "error",
+        text: "Please fill in your name, phone, email and city before submitting.",
+      });
+      return;
+    }
+    const subject = encodeURIComponent(`Driver Application — ${form.name.trim()}`);
+    const body = encodeURIComponent(
+      "Globallink Transportation — Driver application\n\n" +
+        `Name: ${form.name.trim()}\n` +
+        `Phone: ${form.phone.trim()}\n` +
+        `Email: ${form.email.trim()}\n` +
+        `City: ${form.city.trim()}\n` +
+        `Vehicle: ${VEHICLE_LABEL[form.vehicle]}\n` +
+        `Years driving professionally: ${form.experience || "Not specified"}\n` +
+        `Notes: ${form.notes.trim() || "None"}\n\n` +
+        "Documents: please attach driver's license and proof of insurance to this email before sending."
+    );
+    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    setConfirm({
+      kind: "ok",
+      text: (
+        <>
+          Thanks, {form.name.trim()} — your application is ready to send.{" "}
+          {hasFiles
+            ? "Please attach your uploaded documents to the email before sending, since they can't attach automatically. "
+            : "Don't forget to attach your license and insurance to the email before sending. "}
+          If your email app didn't open automatically, please email a copy to{" "}
+          <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
+            {EMAIL}
+          </a>
+          .
+        </>
+      ),
+    });
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="drive-form">
+      <h3>Apply to drive</h3>
+      <div className="field-row">
+        <div className="field">
+          <label htmlFor="drvName">Full name</label>
+          <input id="drvName" type="text" autoComplete="name" value={form.name} onChange={set("name")} />
+        </div>
+        <div className="field">
+          <label htmlFor="drvPhone">Phone</label>
+          <input id="drvPhone" type="tel" autoComplete="tel" value={form.phone} onChange={set("phone")} />
+        </div>
+      </div>
+      <div className="field-row">
+        <div className="field">
+          <label htmlFor="drvEmail">Email</label>
+          <input id="drvEmail" type="email" autoComplete="email" value={form.email} onChange={set("email")} />
+        </div>
+        <div className="field">
+          <label htmlFor="drvCity">City</label>
+          <input id="drvCity" type="text" value={form.city} onChange={set("city")} />
+        </div>
+      </div>
+      <div className="field-row">
+        <div className="field">
+          <label htmlFor="drvVehicle">Vehicle you drive</label>
+          <select id="drvVehicle" value={form.vehicle} onChange={set("vehicle")}>
+            {VEHICLES.map((v) => (
+              <option key={v.value} value={v.value}>
+                {v.label}
+              </option>
+            ))}
+            <option value="none">Don't have one yet</option>
+          </select>
+        </div>
+        <div className="field">
+          <label htmlFor="drvExperience">Years driving professionally</label>
+          <input id="drvExperience" type="number" min={0} value={form.experience} onChange={set("experience")} />
+        </div>
+      </div>
+      <div className="field" style={{ marginBottom: 16 }}>
+        <label htmlFor="drvNotes">Anything else we should know?</label>
+        <textarea id="drvNotes" value={form.notes} onChange={set("notes")} />
+      </div>
+
+      <div className="drive-upload">
+        <h4>Upload documents</h4>
+        <p className="upload-note">
+          Attach a photo or PDF of each. These stay on your device until you send the email — they
+          don't upload automatically, so please attach them again in the email that opens if needed.
+        </p>
+        <div className="field-row">
+          <div className="field">
+            <label htmlFor="drvLicense">Driver's license (front &amp; back)</label>
+            <input id="drvLicense" type="file" accept="image/*,.pdf" multiple onChange={onFiles} />
+          </div>
+          <div className="field">
+            <label htmlFor="drvInsurance">Proof of insurance</label>
+            <input id="drvInsurance" type="file" accept="image/*,.pdf" multiple onChange={onFiles} />
+          </div>
+        </div>
+      </div>
+
+      <button type="button" className="btn btn-brass" id="drvSubmit" style={{ width: "100%", marginTop: 20 }} onClick={submit}>
+        {submitted ? "Application sent ✓" : "Submit application"}
+      </button>
+      {confirm && (
+        <div
+          className="sign-confirm show"
+          style={
+            confirm.kind === "error"
+              ? { background: "rgba(200,60,60,0.08)", borderColor: "#c83c3c" }
+              : undefined
+          }
+        >
+          {confirm.text}
+        </div>
+      )}
+    </div>
+  );
+}
+
+const CheckIcon = (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+    <circle cx="9" cy="9" r="8" stroke="#B08D3E" strokeWidth="1.4" />
+    <path d="M5.5 9l2.5 2.5L13 6" stroke="#B08D3E" strokeWidth="1.4" fill="none" />
+  </svg>
+);
+
+const NAV_LINKS: { href: string; label: string }[] = [
+  { href: "#about", label: "About" },
+  { href: "#fleet", label: "Fleet" },
+  { href: "#hourly", label: "Hourly rates" },
+  { href: "#how", label: "How it works" },
+  { href: "#corporate", label: "Corporate" },
+  { href: "#reviews", label: "Reviews" },
+  { href: "#faq", label: "FAQ" },
+  { href: "#drive", label: "Drive with us" },
+];
+
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
-  
-  const [modalOpen, setModalOpen] = useState(false);
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
 
   return (
     <>
@@ -321,29 +581,24 @@ function Index() {
           <div className="logo">
             <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
               <circle cx="13" cy="13" r="12" stroke="#B08D3E" strokeWidth="1.4" />
-              <path
-                d="M4 13H22M13 4V22M7 7L19 19M19 7L7 19"
-                stroke="#B08D3E"
-                strokeWidth="0.8"
-                opacity="0.5"
-              />
+              <path d="M4 13H22M13 4V22M7 7L19 19M19 7L7 19" stroke="#B08D3E" strokeWidth="0.8" opacity="0.5" />
             </svg>
             Globallink
           </div>
           <nav className="nav-links">
-            {NAV.map(([href, label]) => (
-              <a key={href} href={href}>
-                {label}
+            {NAV_LINKS.map((l) => (
+              <a key={l.href} href={l.href}>
+                {l.label}
               </a>
             ))}
           </nav>
           <div className="nav-cta">
-            <a href="tel:+14157878776" className="btn btn-outline-dark">
-              (415) 787-8776
+            <a href={PHONE_HREF} className="btn btn-outline-dark">
+              {PHONE}
             </a>
-            <button className="btn btn-brass" onClick={openModal}>
+            <a href="#book" className="btn btn-brass">
               Reserve a car
-            </button>
+            </a>
           </div>
           <button
             className="menu-toggle"
@@ -351,23 +606,23 @@ function Index() {
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((o) => !o)}
           >
-            {menuOpen ? "\u00d7" : "\u2630"}
+            {menuOpen ? "×" : "☰"}
           </button>
         </div>
-        <div className={`mobile-panel${menuOpen ? " open" : ""}`}>
-          <div className="mobile-panel-inner" onClick={() => setMenuOpen(false)}>
-            {NAV.map(([href, label]) => (
-              <a className="mp-link" key={href} href={href}>
-                {label}
+        <div className={`mobile-panel ${menuOpen ? "open" : ""}`}>
+          <div className="mobile-panel-inner">
+            {NAV_LINKS.map((l) => (
+              <a key={l.href} className="mp-link" href={l.href} onClick={() => setMenuOpen(false)}>
+                {l.label}
               </a>
             ))}
             <div className="mp-actions">
-              <a href="tel:+14157878776" className="btn btn-outline-dark">
-                Call (415) 787-8776
+              <a href={PHONE_HREF} className="btn btn-outline-dark">
+                Call {PHONE}
               </a>
-              <button className="btn btn-brass" onClick={openModal}>
+              <a href="#book" className="btn btn-brass" onClick={() => setMenuOpen(false)}>
                 Reserve a car
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -395,22 +650,34 @@ function Index() {
             </div>
             <h1>The last late driver cost you a meeting. Not this time.</h1>
             <p className="lead">
-              One dispatch team for every ride your company books — sedan to coach, tracked live,
-              invoiced once a month.
+              One dispatch team for every ride your company books — sedan to coach, invoiced once a
+              month.
             </p>
             <div className="hero-actions">
               <div>
                 <a href="#book" className="btn btn-brass">
                   Check availability
                 </a>
-                <p style={{ fontSize: "12.5px", color: "rgba(255,255,255,0.45)", marginTop: 8 }}>
-                  No card required to reserve
+                <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.45)", marginTop: 8 }}>
+                  No card required to reserve {"\u00A0·\u00A0"} or{" "}
+                  <a
+                    href={`mailto:${EMAIL}`}
+                    style={{ color: "rgba(255,255,255,0.65)", textDecoration: "underline" }}
+                  >
+                    email us
+                  </a>
                 </p>
               </div>
+              <a href="#fleet" className="btn btn-outline-dark">
+                View the fleet
+              </a>
+              <a href={PHONE_HREF} className="btn btn-outline-dark">
+                Call us: {PHONE}
+              </a>
             </div>
             <div className="hero-stats">
               <div>
-                <strong>29</strong>
+                <strong>62</strong>
                 <span>Bay Area cities &amp; airports</span>
               </div>
               <div>
@@ -428,7 +695,7 @@ function Index() {
             </div>
           </div>
 
-          <BookingCard onReserve={openModal} />
+          <BookingCard />
         </div>
       </section>
 
@@ -438,7 +705,7 @@ function Index() {
             <strong>98% on-time</strong> across the Bay Area — SFO, OAK and SJC included — not a
             marketing number, a dispatch metric we publish monthly
           </p>
-          <p>1,200+ vetted chauffeurs · Fixed pricing · One monthly invoice</p>
+          <p>1,200+ vetted chauffeurs {"\u00A0·\u00A0"} Fixed pricing {"\u00A0·\u00A0"} One monthly invoice</p>
         </div>
       </div>
 
@@ -447,9 +714,9 @@ function Index() {
           <div className="section-head">
             <h2>Booking rides for a team isn't a car problem. It's a trust problem.</h2>
             <p>
-              Every time you book a driver for a colleague or a guest, you're betting on something you
-              don't control: will they show up on time, in a clean car, and will you get one clear
-              bill at month's end — or twenty scattered receipts?
+              Every time you book a driver for a colleague or a guest, you're betting on something
+              you don't control: will they show up on time, in a clean car, and will you get one
+              clear bill at month's end — or twenty scattered receipts?
             </p>
           </div>
           <div className="problem-grid">
@@ -459,14 +726,6 @@ function Index() {
               <p>
                 Switching between apps and unknown drivers for each trip eats the hours it was
                 supposed to save.
-              </p>
-            </div>
-            <div className="problem-item">
-              <div className="tag">Predictability</div>
-              <h3>No guarantee on driver or price</h3>
-              <p>
-                Surge pricing and rotating drivers make it impossible to promise a guest — or your
-                CFO — what a ride will actually cost.
               </p>
             </div>
             <div className="problem-item">
@@ -501,33 +760,90 @@ function Index() {
         </div>
       </section>
 
-      <section className="pricing" id="pricing">
-        <div className="wrap pricing-grid">
-          <div className="pricing-copy">
-            <h2>One car or a whole fleet, the same fair price every time.</h2>
+      <section id="fleet">
+        <div className="wrap">
+          <div className="section-head">
+            <h2>Choose your ride</h2>
             <p>
-              From a quick airport run to coordinating a bus for a full event, one fleet and one set
-              of chauffeurs covers every trip type — no surprise fees, no re-negotiating your rate
-              each time you book.
+              Five vehicle classes, each with its own vetted chauffeur pool — from a single airport
+              transfer to a fifty-person conference shuttle.
             </p>
-            <p>
-              Your price is fixed at booking, not on arrival. The more you ride with us, the lower
-              your average cost — no long contracts, no monthly minimum.
-            </p>
-            <p className="note">Get your price now — no commitment.</p>
           </div>
-          <div className="price-card">
-            <PriceRow name="Sedan" amount="From $85" />
-            <PriceRow name="SUV" amount="From $125" />
-            <PriceRow name="Limousine" amount="From $235" />
-            <PriceRow name="Sprinter van" amount="From $285" />
-            <PriceRow name="Bus & coach" amount="Custom quote" />
-            <button className="btn btn-brass" onClick={openModal}>
-              See your instant price
-            </button>
-            <p className="disclaimer">
-              No card required · No sales call · Just a clear number, in seconds
-            </p>
+
+          <div className="fleet-row">
+            <div className="fleet-card">
+              <div className="icon-box">
+                <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
+                  <path d="M4 22 L7 12 Q10 8 16 8 H30 Q36 8 39 12 L44 22" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
+                  <rect x="2" y="20" width="44" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
+                  <circle cx="13" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
+                  <circle cx="35" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
+                </svg>
+              </div>
+              <h3>Sedan</h3>
+              <p className="desc">Airport runs and single meetings, understated and quick.</p>
+              <div className="meta">Up to 3 passengers, 2 bags</div>
+            </div>
+
+            <div className="fleet-card">
+              <div className="icon-box">
+                <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
+                  <path d="M4 22 L6 10 Q8 7 14 7 H32 Q38 7 41 12 L44 22" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
+                  <rect x="2" y="20" width="44" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
+                  <circle cx="13" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
+                  <circle cx="35" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
+                </svg>
+              </div>
+              <h3>SUV</h3>
+              <p className="desc">Small teams, extra luggage, or a more commanding presence.</p>
+              <div className="meta">Up to 5 passengers, 4 bags</div>
+            </div>
+
+            <div className="fleet-card">
+              <div className="icon-box">
+                <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
+                  <path d="M2 22 L4 13 Q6 9 12 9 H20 L23 8 H30 Q33 8 34 11 L36 13 Q40 13 42 17 L46 22" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
+                  <rect x="1" y="20" width="46" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
+                  <circle cx="11" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
+                  <circle cx="37" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
+                </svg>
+              </div>
+              <h3>Limousine</h3>
+              <p className="desc">Weddings, galas and VIP arrivals that call for an entrance.</p>
+              <div className="meta">Up to 6 passengers</div>
+            </div>
+
+            <div className="fleet-card">
+              <div className="icon-box">
+                <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
+                  <path d="M3 22 V11 Q3 8 6 8 H40 Q45 8 45 13 V22" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
+                  <rect x="2" y="20" width="44" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
+                  <line x1="18" y1="8" x2="18" y2="20" stroke="#0F1B2D" strokeWidth="1.2" />
+                  <line x1="30" y1="8" x2="30" y2="20" stroke="#0F1B2D" strokeWidth="1.2" />
+                  <circle cx="12" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
+                  <circle cx="37" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
+                </svg>
+              </div>
+              <h3>Sprinter van</h3>
+              <p className="desc">Group transfers, roadshows and full teams travelling together.</p>
+              <div className="meta">Up to 14 passengers</div>
+            </div>
+
+            <div className="fleet-card">
+              <div className="icon-box">
+                <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
+                  <rect x="2" y="8" width="44" height="14" rx="3" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
+                  <line x1="12" y1="8" x2="12" y2="22" stroke="#0F1B2D" strokeWidth="1.2" />
+                  <line x1="22" y1="8" x2="22" y2="22" stroke="#0F1B2D" strokeWidth="1.2" />
+                  <line x1="32" y1="8" x2="32" y2="22" stroke="#0F1B2D" strokeWidth="1.2" />
+                  <circle cx="11" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
+                  <circle cx="37" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
+                </svg>
+              </div>
+              <h3>Bus &amp; coach</h3>
+              <p className="desc">Conferences and large events, arriving on one schedule.</p>
+              <div className="meta">Up to 56 passengers</div>
+            </div>
           </div>
         </div>
       </section>
@@ -538,26 +854,24 @@ function Index() {
             <h2>Need the car to wait? Book by the hour.</h2>
             <p>
               For roadshows, city tours, or a day where your schedule keeps shifting, your chauffeur
-              and vehicle stay with you — no re-booking between stops, no separate fare for each leg.
+              and vehicle stay with you — no re-booking between stops, no separate fare for each
+              leg.
             </p>
             <p>
-              Hourly bookings have a <strong>4-hour minimum</strong>. After that, you're billed in
-              30-minute increments at the same rate.
+              Hourly bookings have a{" "}
+              <strong style={{ color: "var(--charcoal)" }}>4-hour minimum</strong>. After that,
+              you're billed in 30-minute increments at the same rate.
             </p>
             <p className="note">Get your hourly rate now — no commitment.</p>
           </div>
           <div className="price-card">
-            <PriceRow name="Sedan" amount="$75/hr" />
-            <PriceRow name="SUV" amount="$95/hr" />
-            <PriceRow name="Limousine" amount="$150/hr" />
-            <PriceRow name="Sprinter van" amount="$175/hr" />
-            <PriceRow name="Bus & coach" amount="Custom quote" />
-            <a href="#book" className="btn btn-brass">
-              Book by the hour
-            </a>
-            <p className="disclaimer">
-              4-hour minimum · No card required · Same chauffeur, all day
-            </p>
+            <div className="price-row"><span className="name">Sedan</span><span className="leader" /><span className="amount">$75/hr</span></div>
+            <div className="price-row"><span className="name">SUV</span><span className="leader" /><span className="amount">$95/hr</span></div>
+            <div className="price-row"><span className="name">Limousine</span><span className="leader" /><span className="amount">$150/hr</span></div>
+            <div className="price-row"><span className="name">Sprinter van</span><span className="leader" /><span className="amount">$175/hr</span></div>
+            <div className="price-row"><span className="name">Bus &amp; coach</span><span className="leader" /><span className="amount">Custom quote</span></div>
+            <a href="#book" className="btn btn-brass">Book by the hour</a>
+            <p className="disclaimer">4-hour minimum {"\u00A0·\u00A0"} No card required {"\u00A0·\u00A0"} Same chauffeur, all day</p>
           </div>
         </div>
       </section>
@@ -566,7 +880,7 @@ function Index() {
         <div className="wrap">
           <div className="section-head">
             <h2>How a reservation works</h2>
-            <p>Three steps, handled by a person, not just software.</p>
+            <p>Two steps, handled by a person, not just software.</p>
           </div>
           <div className="step-grid">
             <div className="step">
@@ -585,14 +899,6 @@ function Index() {
                 with their name and photo.
               </p>
             </div>
-            <div className="step">
-              <div className="num">03</div>
-              <h3>Track your ride live</h3>
-              <p>
-                Watch your chauffeur's route in real time and reach dispatch directly if your plans
-                change.
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -602,9 +908,9 @@ function Index() {
           <div className="section-head">
             <h2>One dispatch team, for every ride your company books</h2>
             <p>
-              Instead of switching between apps and unfamiliar drivers, your team gets a single fleet
-              — sedan to coach — with licensed chauffeurs, live tracking, and one invoice at the end
-              of the month. Booking takes a minute; the worrying stops.
+              Instead of switching between apps and unfamiliar drivers, your team gets a single
+              fleet — sedan to coach — with licensed, background-checked chauffeurs. Booking takes a
+              minute; the worrying stops.
             </p>
           </div>
           <div className="usp-grid">
@@ -612,76 +918,20 @@ function Index() {
               <div className="icon-box">
                 <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
                   <circle cx="17" cy="17" r="14" stroke="#B08D3E" strokeWidth="1.6" />
-                  <text
-                    x="17"
-                    y="22"
-                    textAnchor="middle"
-                    fontFamily="Fraunces, serif"
-                    fontSize="14"
-                    fill="#B08D3E"
-                  >
-                    $
-                  </text>
+                  <text x="17" y="22" textAnchor="middle" fontFamily="Fraunces, serif" fontSize="14" fill="#B08D3E">$</text>
                 </svg>
               </div>
               <h3>Fixed pricing</h3>
-              <p>
-                Your fare is confirmed at booking. No surge, no meter, no surprises on arrival —
-                solves the predictability problem.
-              </p>
+              <p>Your fare is confirmed at booking. No surge, no meter, no surprises on arrival.</p>
             </div>
             <div className="usp">
               <div className="icon-box">
                 <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-                  <path
-                    d="M17 4 L28 9 V17 C28 24 23 28 17 30 C11 28 6 24 6 17 V9 Z"
-                    stroke="#B08D3E"
-                    strokeWidth="1.6"
-                    fill="none"
-                  />
+                  <path d="M17 4 L28 9 V17 C28 24 23 28 17 30 C11 28 6 24 6 17 V9 Z" stroke="#B08D3E" strokeWidth="1.6" fill="none" />
                 </svg>
               </div>
               <h3>Licensed &amp; vetted</h3>
-              <p>
-                Every chauffeur passes a background check and a driving record review before their
-                first trip.
-              </p>
-            </div>
-            <div className="usp">
-              <div className="icon-box">
-                <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-                  <circle cx="17" cy="17" r="14" stroke="#B08D3E" strokeWidth="1.6" />
-                  <circle cx="17" cy="17" r="2.4" fill="#B08D3E" />
-                  <circle
-                    cx="17"
-                    cy="17"
-                    r="8"
-                    stroke="#B08D3E"
-                    strokeWidth="1"
-                    strokeDasharray="1.5 3"
-                  />
-                </svg>
-              </div>
-              <h3>Live tracking</h3>
-              <p>
-                Follow your chauffeur from dispatch to drop-off and hand off coordination — solves
-                the hands-on-time problem.
-              </p>
-            </div>
-            <div className="usp">
-              <div className="icon-box">
-                <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-                  <rect x="6" y="6" width="22" height="22" rx="2" stroke="#B08D3E" strokeWidth="1.6" />
-                  <line x1="10" y1="13" x2="24" y2="13" stroke="#B08D3E" strokeWidth="1.4" />
-                  <line x1="10" y1="18" x2="24" y2="18" stroke="#B08D3E" strokeWidth="1.4" />
-                  <line x1="10" y1="23" x2="18" y2="23" stroke="#B08D3E" strokeWidth="1.4" />
-                </svg>
-              </div>
-              <h3>Corporate billing</h3>
-              <p>
-                One monthly invoice with cost centers and ride reporting — solves the
-                scattered-receipts problem.
-              </p>
+              <p>Every chauffeur passes a background check and a driving record review before their first trip.</p>
             </div>
           </div>
         </div>
@@ -694,31 +944,16 @@ function Index() {
           </div>
           <div className="test-grid">
             <div className="test-card">
-              <p className="quote">
-                "Every chauffeur showed up early for our three-day roadshow across four cities. Not
-                one delay."
-              </p>
-              <div className="who">
-                <strong>Priya N.</strong>Event planner, London
-              </div>
+              <p className="quote">"Every chauffeur showed up early for our three-day roadshow across four cities. Not one delay."</p>
+              <div className="who"><strong>Priya N.</strong>Event planner, London</div>
             </div>
             <div className="test-card">
-              <p className="quote">
-                "We moved our whole travel program to Globallink for the invoicing alone. The service
-                held up just as well."
-              </p>
-              <div className="who">
-                <strong>Daniel R.</strong>COO, fintech startup
-              </div>
+              <p className="quote">"We moved our whole travel program to Globallink for the invoicing alone. The service held up just as well."</p>
+              <div className="who"><strong>Daniel R.</strong>COO, fintech startup</div>
             </div>
             <div className="test-card">
-              <p className="quote">
-                "The limousine arrived exactly on time and the driver knew the venue better than our
-                own coordinator did."
-              </p>
-              <div className="who">
-                <strong>Marisol T.</strong>Wedding client
-              </div>
+              <p className="quote">"The limousine arrived exactly on time and the driver knew the venue better than our own coordinator did."</p>
+              <div className="who"><strong>Marisol T.</strong>Wedding client</div>
             </div>
           </div>
         </div>
@@ -728,14 +963,17 @@ function Index() {
         <div className="corporate" id="corporate">
           <div>
             <h2>Managing travel for a team or event?</h2>
-            <p>
-              Get a dedicated account manager, volume rates, and a single invoice for every ride
-              across the Bay Area.
+            <p>Get a dedicated account manager, volume rates, and a single invoice for every ride across the Bay Area.</p>
+          </div>
+          <div>
+            <a href="#book" className="btn btn-brass">Talk to our team</a>
+            <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)", marginTop: 10, textAlign: "center" }}>
+              or{" "}
+              <a href={PHONE_HREF} style={{ color: "rgba(255,255,255,0.75)", textDecoration: "underline" }}>call us</a>
+              {" \u00A0·\u00A0 "}
+              <a href={`mailto:${EMAIL}`} style={{ color: "rgba(255,255,255,0.75)", textDecoration: "underline" }}>email us</a>
             </p>
           </div>
-          <button className="btn btn-brass" onClick={openModal}>
-            Talk to our team
-          </button>
         </div>
       </div>
 
@@ -745,26 +983,9 @@ function Index() {
             <h2>Questions before you book</h2>
           </div>
           <div className="faq-list">
-            <FaqItem
-              q="Can I book a car for today?"
-              a="Yes, across the Bay Area cities and airports we serve. Same-day requests are matched with the nearest available chauffeur; dispatch will confirm within minutes."
-            />
-            <FaqItem
-              q="Do you cover airport pickups?"
-              a="Yes — SFO, OAK and SJC all include flight tracking, so your chauffeur adjusts to delays or early landings at no extra charge."
-            />
-            <FaqItem
-              q="Can we set up a corporate account?"
-              a="Yes. Corporate accounts get monthly invoicing, cost-center tagging and a dedicated account manager. Reach out through the contact section to get started."
-            />
-            <FaqItem
-              q="What happens if my flight is delayed?"
-              a="Airport pickups are tracked against your flight automatically, so your chauffeur's arrival shifts with you and you're never charged a wait fee for a late landing."
-            />
-            <FaqItem
-              q="Can I book multiple vehicles for a group?"
-              a="Yes — sprinter vans and coaches are built for this. For large events, our team will coordinate multi-vehicle logistics directly with your point of contact."
-            />
+            {FAQS.map((f) => (
+              <FaqItem key={f.q} q={f.q} a={f.a} />
+            ))}
           </div>
         </div>
       </section>
@@ -772,12 +993,36 @@ function Index() {
       <section className="final-cta">
         <div className="wrap">
           <h2>Wherever you're headed next, a car is ready.</h2>
-          <button className="btn btn-outline-light" onClick={openModal}>
-            Book now
-          </button>
+          <a href="#book" className="btn btn-outline-light">Book now</a>
           <p style={{ fontSize: 13, color: "rgba(15,27,45,0.65)", marginTop: 16 }}>
-            No card required now · Support available 24/7
+            No card required now {"\u00A0·\u00A0"} Support available 24/7 {"\u00A0·\u00A0"} or{" "}
+            <a href={PHONE_HREF} style={{ color: "var(--ink)", textDecoration: "underline" }}>call us</a>
+            {" \u00A0·\u00A0 "}
+            <a href={`mailto:${EMAIL}`} style={{ color: "var(--ink)", textDecoration: "underline" }}>email us</a>
           </p>
+        </div>
+      </section>
+
+      <section id="drive">
+        <div className="wrap" style={{ maxWidth: 720 }}>
+          <div className="section-head">
+            <h2>Drive with Globallink</h2>
+            <p>
+              We're always looking for professional chauffeurs across the Bay Area. Here's what it
+              takes to join the fleet.
+            </p>
+          </div>
+
+          <div className="drive-req">
+            {DRIVE_REQS.map((r) => (
+              <div className="drive-req-item" key={r}>
+                {CheckIcon}
+                {r}
+              </div>
+            ))}
+          </div>
+
+          <DriveForm />
         </div>
       </section>
 
@@ -794,49 +1039,40 @@ function Index() {
             <div>
               <h4>Company</h4>
               <ul>
-                <li>
-                  <a href="#how">How it works</a>
-                </li>
-                <li>
-                  <a href="#corporate">Corporate</a>
-                </li>
-                <li>
-                  <a href="#faq">FAQ</a>
-                </li>
-                <li>
-                  <a href="/agreement">Rental agreement</a>
-                </li>
+                <li><a href="#fleet">Fleet</a></li>
+                <li><a href="#how">How it works</a></li>
+                <li><a href="#corporate">Corporate</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#book">Rental agreement</a></li>
               </ul>
             </div>
             <div>
               <h4>Contact</h4>
               <ul>
-                <li>(415) 787-8776</li>
-                <li>GLtrans10@gmail.com</li>
+                <li>{PHONE}</li>
+                <li>{EMAIL}</li>
                 <li>Available 24/7</li>
               </ul>
             </div>
             <div>
               <h4>Follow</h4>
               <ul>
-                <li>
-                  <a href="#">Instagram</a>
-                </li>
-                <li>
-                  <a href="#">LinkedIn</a>
-                </li>
+                <li><a href="#">Instagram</a></li>
+                <li><a href="#">LinkedIn</a></li>
               </ul>
             </div>
           </div>
           <div className="foot-bottom">
             <span>© 2026 Globallink Transportation. All rights reserved.</span>
             <span>
-              Licensed for-hire chauffeur network · <a href="/affiliate">Drive with us</a>
+              Licensed for-hire chauffeur network {"\u00A0·\u00A0"}{" "}
+              <a href="#drive" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>
+                Drive with us
+              </a>
             </span>
           </div>
         </div>
       </footer>
-      <ContactModal open={modalOpen} onClose={closeModal} />
     </>
   );
 }
