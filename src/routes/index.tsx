@@ -42,11 +42,15 @@ const VEHICLE_MULTIPLIER: Record<string, number | null> = Object.fromEntries(
 );
 const HOURLY_RATES: Record<string, number | null> = {
   sedan: 75,
-  suv: 95,
-  limousine: 150,
+  suv: 120,
+  limousine: 120,
   sprinter: 175,
   bus: null,
 };
+
+// TODO: paste your Stripe payment link here (e.g. "https://buy.stripe.com/xxxx").
+// Reservations will be sent to this link to pay before the reservation email opens.
+const PAYMENT_LINK = "";
 const HOUR_OPTIONS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 
@@ -305,13 +309,24 @@ function BookingCard() {
         `Date signed: ${today}\n\n` +
         "By signing, this person confirms they have read, understood and will comply with the provisions of the Globallink Transportation rental agreement, including the 48-hour cancellation policy."
     );
+    if (PAYMENT_LINK) {
+      window.open(PAYMENT_LINK, "_blank", "noopener");
+    }
     window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
     setConfirm({
       kind: "ok",
       text: (
         <>
-          Thanks, {name.trim()} — your reservation and signed agreement are ready to send. If your
-          email app didn't open automatically, please email a copy to{" "}
+          Thanks, {name.trim()} — {PAYMENT_LINK ? "please complete payment in the tab that just opened, then" : "your reservation and signed agreement are ready to send."}{" "}
+          {PAYMENT_LINK ? (
+            <>
+              <a href={PAYMENT_LINK} target="_blank" rel="noopener" style={{ color: "var(--brass-dark)" }}>
+                Reopen the payment page
+              </a>{" "}
+              if it didn't open.{" "}
+            </>
+          ) : null}
+          If your email app didn't open automatically, please email a copy to{" "}
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
             {EMAIL}
           </a>
@@ -940,8 +955,8 @@ function Index() {
           </div>
           <div className="price-card">
             <div className="price-row"><span className="name">Sedan</span><span className="leader" /><span className="amount">$75/hr</span></div>
-            <div className="price-row"><span className="name">SUV</span><span className="leader" /><span className="amount">$95/hr</span></div>
-            <div className="price-row"><span className="name">Limousine</span><span className="leader" /><span className="amount">$150/hr</span></div>
+            <div className="price-row"><span className="name">SUV</span><span className="leader" /><span className="amount">$120/hr</span></div>
+            <div className="price-row"><span className="name">Limousine</span><span className="leader" /><span className="amount">$120/hr</span></div>
             <div className="price-row"><span className="name">Sprinter van</span><span className="leader" /><span className="amount">$175/hr</span></div>
             <div className="price-row"><span className="name">Bus &amp; coach</span><span className="leader" /><span className="amount">Custom quote</span></div>
             <a href="#book" className="btn btn-brass">Book by the hour</a>
