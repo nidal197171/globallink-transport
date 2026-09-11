@@ -273,10 +273,14 @@ function BookingCard() {
 
 
   const submit = () => {
-    if (!pickup || !dropoff || !dt || !name.trim() || !signature.trim()) {
+    const missingRoute = service === "hourly" ? !pickup : !pickup || !dropoff;
+    if (missingRoute || !dt || !name.trim() || !signature.trim()) {
       setConfirm({
         kind: "error",
-        text: "Please choose pickup, drop-off, date & time, and sign your name before submitting.",
+        text:
+          service === "hourly"
+            ? "Please choose pickup, date & time, and sign your name before submitting."
+            : "Please choose pickup, drop-off, date & time, and sign your name before submitting.",
       });
       return;
     }
@@ -288,11 +292,13 @@ function BookingCard() {
     const subject = encodeURIComponent(`New Reservation & Signed Agreement — ${name.trim()}`);
     const body = encodeURIComponent(
       "Globallink Transportation — Reservation request\n\n" +
+        `Service: ${service === "hourly" ? `Hourly (${hours} hours, 4-hour minimum)` : "Pick up & drop off"}\n` +
         `Pickup: ${placeLabel(pickup)}\n` +
-        `Drop-off: ${placeLabel(dropoff)}\n` +
+        (service === "hourly" ? "" : `Drop-off: ${placeLabel(dropoff)}\n`) +
         `Date & time: ${dt}\n` +
         `Vehicle: ${VEHICLE_LABEL[vehicle]}\n` +
         `Fare: ${fareText}\n\n` +
+
         "Rental agreement acknowledgement\n" +
         `Name: ${name.trim()}\n` +
         `Signature: ${signature.trim()}\n` +
