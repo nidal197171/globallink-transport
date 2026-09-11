@@ -205,6 +205,8 @@ function BookingCard() {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [vehicle, setVehicle] = useState("sedan");
+  const [service, setService] = useState<"transfer" | "hourly">("transfer");
+  const [hours, setHours] = useState(4);
   const [dt, setDt] = useState("");
   const [name, setName] = useState("");
   const [signature, setSignature] = useState("");
@@ -212,6 +214,30 @@ function BookingCard() {
   const [submitted, setSubmitted] = useState(false);
 
   const fare = useMemo(() => {
+    if (service === "hourly") {
+      const rate = HOURLY_RATES[vehicle];
+      if (rate === null || rate === undefined)
+        return {
+          cls: "has-price",
+          node: (
+            <>
+              <span className="fare-amount">Request a quote</span>
+              <span className="fare-sub">{VEHICLE_LABEL[vehicle]} pricing is quoted per group size</span>
+            </>
+          ),
+        };
+      return {
+        cls: "has-price",
+        node: (
+          <>
+            <span className="fare-amount">${rate * hours}</span>
+            <span className="fare-sub">
+              {hours} hours × ${rate}/hr · {VEHICLE_LABEL[vehicle]} (4-hour minimum)
+            </span>
+          </>
+        ),
+      };
+    }
     const base = computeSedanBase(pickup, dropoff);
     if (!pickup || !dropoff)
       return { cls: "", node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
@@ -243,7 +269,8 @@ function BookingCard() {
         </>
       ),
     };
-  }, [pickup, dropoff, vehicle]);
+  }, [pickup, dropoff, vehicle, service, hours]);
+
 
   const submit = () => {
     if (!pickup || !dropoff || !dt || !name.trim() || !signature.trim()) {
