@@ -42,11 +42,15 @@ const VEHICLE_MULTIPLIER: Record<string, number | null> = Object.fromEntries(
 );
 const HOURLY_RATES: Record<string, number | null> = {
   sedan: 75,
-  suv: 95,
-  limousine: 150,
+  suv: 120,
+  limousine: 120,
   sprinter: 175,
   bus: null,
 };
+
+// TODO: paste your Stripe payment link here (e.g. "https://buy.stripe.com/xxxx").
+// Reservations will be sent to this link to pay before the reservation email opens.
+const PAYMENT_LINK = "";
 const HOUR_OPTIONS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 
@@ -940,8 +944,8 @@ function Index() {
           </div>
           <div className="price-card">
             <div className="price-row"><span className="name">Sedan</span><span className="leader" /><span className="amount">$75/hr</span></div>
-            <div className="price-row"><span className="name">SUV</span><span className="leader" /><span className="amount">$95/hr</span></div>
-            <div className="price-row"><span className="name">Limousine</span><span className="leader" /><span className="amount">$150/hr</span></div>
+            <div className="price-row"><span className="name">SUV</span><span className="leader" /><span className="amount">$120/hr</span></div>
+            <div className="price-row"><span className="name">Limousine</span><span className="leader" /><span className="amount">$120/hr</span></div>
             <div className="price-row"><span className="name">Sprinter van</span><span className="leader" /><span className="amount">$175/hr</span></div>
             <div className="price-row"><span className="name">Bus &amp; coach</span><span className="leader" /><span className="amount">Custom quote</span></div>
             <a href="#book" className="btn btn-brass">Book by the hour</a>
