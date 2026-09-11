@@ -744,6 +744,10 @@ function Index() {
               <a href={PHONE_HREF} className="btn btn-outline-dark">
                 Call us: {PHONE}
               </a>
+              <a href={`mailto:${EMAIL}`} className="btn btn-outline-dark">
+                Email us: {EMAIL}
+              </a>
+
             </div>
             <div className="hero-stats">
               <div>
