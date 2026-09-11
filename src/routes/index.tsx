@@ -327,8 +327,35 @@ function BookingCard() {
       <h3>Check your fare</h3>
       <p className="sub">No payment required to reserve.</p>
       <div className="field-row">
+        <div className="field">
+          <label htmlFor="svc">Reservation type</label>
+          <select
+            id="svc"
+            value={service}
+            onChange={(e) => setService(e.target.value as "transfer" | "hourly")}
+          >
+            <option value="transfer">Pick up &amp; drop off</option>
+            <option value="hourly">Hourly (4 hours minimum)</option>
+          </select>
+        </div>
+        {service === "hourly" && (
+          <div className="field">
+            <label htmlFor="hrs">Hours</label>
+            <select id="hrs" value={hours} onChange={(e) => setHours(Number(e.target.value))}>
+              {HOUR_OPTIONS.map((h) => (
+                <option key={h} value={h}>
+                  {h} hours
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
+      <div className="field-row">
         <LocationSelect id="pu" label="Pickup" value={pickup} onChange={setPickup} placeholder="Choose pickup" />
-        <LocationSelect id="do" label="Drop-off" value={dropoff} onChange={setDropoff} placeholder="Choose destination" />
+        {service === "transfer" && (
+          <LocationSelect id="do" label="Drop-off" value={dropoff} onChange={setDropoff} placeholder="Choose destination" />
+        )}
       </div>
       <div className="field-row">
         <div className="field">
@@ -346,6 +373,7 @@ function BookingCard() {
           </select>
         </div>
       </div>
+
 
       <div className={`fare-preview ${fare.cls}`} id="farePreview">
         {fare.node}
