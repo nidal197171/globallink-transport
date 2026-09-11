@@ -309,13 +309,24 @@ function BookingCard() {
         `Date signed: ${today}\n\n` +
         "By signing, this person confirms they have read, understood and will comply with the provisions of the Globallink Transportation rental agreement, including the 48-hour cancellation policy."
     );
+    if (PAYMENT_LINK) {
+      window.open(PAYMENT_LINK, "_blank", "noopener");
+    }
     window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
     setConfirm({
       kind: "ok",
       text: (
         <>
-          Thanks, {name.trim()} — your reservation and signed agreement are ready to send. If your
-          email app didn't open automatically, please email a copy to{" "}
+          Thanks, {name.trim()} — {PAYMENT_LINK ? "please complete payment in the tab that just opened, then" : "your reservation and signed agreement are ready to send."}{" "}
+          {PAYMENT_LINK ? (
+            <>
+              <a href={PAYMENT_LINK} target="_blank" rel="noopener" style={{ color: "var(--brass-dark)" }}>
+                Reopen the payment page
+              </a>{" "}
+              if it didn't open.{" "}
+            </>
+          ) : null}
+          If your email app didn't open automatically, please email a copy to{" "}
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
             {EMAIL}
           </a>
