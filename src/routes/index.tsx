@@ -40,6 +40,15 @@ const VEHICLE_LABEL: Record<string, string> = Object.fromEntries(
 const VEHICLE_MULTIPLIER: Record<string, number | null> = Object.fromEntries(
   VEHICLES.map((v) => [v.value, v.multiplier])
 );
+const HOURLY_RATES: Record<string, number | null> = {
+  sedan: 75,
+  suv: 95,
+  limousine: 150,
+  sprinter: 175,
+  bus: null,
+};
+const HOUR_OPTIONS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
+
 
 const AGREEMENT_TERMS: { title: string; body: string }[] = [
   {
@@ -196,6 +205,8 @@ function BookingCard() {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [vehicle, setVehicle] = useState("sedan");
+  const [service, setService] = useState<"transfer" | "hourly">("transfer");
+  const [hours, setHours] = useState(4);
   const [dt, setDt] = useState("");
   const [name, setName] = useState("");
   const [signature, setSignature] = useState("");
@@ -203,6 +214,30 @@ function BookingCard() {
   const [submitted, setSubmitted] = useState(false);
 
   const fare = useMemo(() => {
+    if (service === "hourly") {
+      const rate = HOURLY_RATES[vehicle];
+      if (rate === null || rate === undefined)
+        return {
+          cls: "has-price",
+          node: (
+            <>
+              <span className="fare-amount">Request a quote</span>
+              <span className="fare-sub">{VEHICLE_LABEL[vehicle]} pricing is quoted per group size</span>
+            </>
+          ),
+        };
+      return {
+        cls: "has-price",
+        node: (
+          <>
+            <span className="fare-amount">${rate * hours}</span>
+            <span className="fare-sub">
+              {hours} hours × ${rate}/hr · {VEHICLE_LABEL[vehicle]} (4-hour minimum)
+            </span>
+          </>
+        ),
+      };
+    }
     const base = computeSedanBase(pickup, dropoff);
     if (!pickup || !dropoff)
       return { cls: "", node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
@@ -234,13 +269,18 @@ function BookingCard() {
         </>
       ),
     };
-  }, [pickup, dropoff, vehicle]);
+  }, [pickup, dropoff, vehicle, service, hours]);
+
 
   const submit = () => {
-    if (!pickup || !dropoff || !dt || !name.trim() || !signature.trim()) {
+    const missingRoute = service === "hourly" ? !pickup : !pickup || !dropoff;
+    if (missingRoute || !dt || !name.trim() || !signature.trim()) {
       setConfirm({
         kind: "error",
-        text: "Please choose pickup, drop-off, date & time, and sign your name before submitting.",
+        text:
+          service === "hourly"
+            ? "Please choose pickup, date & time, and sign your name before submitting."
+            : "Please choose pickup, drop-off, date & time, and sign your name before submitting.",
       });
       return;
     }
@@ -252,11 +292,13 @@ function BookingCard() {
     const subject = encodeURIComponent(`New Reservation & Signed Agreement — ${name.trim()}`);
     const body = encodeURIComponent(
       "Globallink Transportation — Reservation request\n\n" +
+        `Service: ${service === "hourly" ? `Hourly (${hours} hours, 4-hour minimum)` : "Pick up & drop off"}\n` +
         `Pickup: ${placeLabel(pickup)}\n` +
-        `Drop-off: ${placeLabel(dropoff)}\n` +
+        (service === "hourly" ? "" : `Drop-off: ${placeLabel(dropoff)}\n`) +
         `Date & time: ${dt}\n` +
         `Vehicle: ${VEHICLE_LABEL[vehicle]}\n` +
         `Fare: ${fareText}\n\n` +
+
         "Rental agreement acknowledgement\n" +
         `Name: ${name.trim()}\n` +
         `Signature: ${signature.trim()}\n` +
@@ -285,8 +327,35 @@ function BookingCard() {
       <h3>Check your fare</h3>
       <p className="sub">No payment required to reserve.</p>
       <div className="field-row">
+        <div className="field">
+          <label htmlFor="svc">Reservation type</label>
+          <select
+            id="svc"
+            value={service}
+            onChange={(e) => setService(e.target.value as "transfer" | "hourly")}
+          >
+            <option value="transfer">Pick up &amp; drop off</option>
+            <option value="hourly">Hourly (4 hours minimum)</option>
+          </select>
+        </div>
+        {service === "hourly" && (
+          <div className="field">
+            <label htmlFor="hrs">Hours</label>
+            <select id="hrs" value={hours} onChange={(e) => setHours(Number(e.target.value))}>
+              {HOUR_OPTIONS.map((h) => (
+                <option key={h} value={h}>
+                  {h} hours
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
+      <div className="field-row">
         <LocationSelect id="pu" label="Pickup" value={pickup} onChange={setPickup} placeholder="Choose pickup" />
-        <LocationSelect id="do" label="Drop-off" value={dropoff} onChange={setDropoff} placeholder="Choose destination" />
+        {service === "transfer" && (
+          <LocationSelect id="do" label="Drop-off" value={dropoff} onChange={setDropoff} placeholder="Choose destination" />
+        )}
       </div>
       <div className="field-row">
         <div className="field">
@@ -304,6 +373,7 @@ function BookingCard() {
           </select>
         </div>
       </div>
+
 
       <div className={`fare-preview ${fare.cls}`} id="farePreview">
         {fare.node}
@@ -674,6 +744,10 @@ function Index() {
               <a href={PHONE_HREF} className="btn btn-outline-dark">
                 Call us: {PHONE}
               </a>
+              <a href={`mailto:${EMAIL}`} className="btn btn-outline-dark">
+                Email us: {EMAIL}
+              </a>
+
             </div>
             <div className="hero-stats">
               <div>
