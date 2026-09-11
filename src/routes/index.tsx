@@ -40,6 +40,15 @@ const VEHICLE_LABEL: Record<string, string> = Object.fromEntries(
 const VEHICLE_MULTIPLIER: Record<string, number | null> = Object.fromEntries(
   VEHICLES.map((v) => [v.value, v.multiplier])
 );
+const HOURLY_RATES: Record<string, number | null> = {
+  sedan: 75,
+  suv: 95,
+  limousine: 150,
+  sprinter: 175,
+  bus: null,
+};
+const HOUR_OPTIONS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
+
 
 const AGREEMENT_TERMS: { title: string; body: string }[] = [
   {
