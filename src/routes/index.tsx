@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
+import { createReservationCheckout } from "@/lib/checkout.functions";
 import {
   AIRPORTS,
   AIRPORT_RATES,
@@ -7,6 +9,7 @@ import {
   CITIES,
   VEHICLES,
 } from "@/data/globallink";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,8 +51,6 @@ const HOURLY_RATES: Record<string, number | null> = {
   bus: null,
 };
 
-// Stripe payment link opened before the reservation email is sent.
-const PAYMENT_LINK = "https://buy.stripe.com/8x26oG36edyygWWfV4gYU00";
 const HOUR_OPTIONS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 
@@ -215,6 +216,8 @@ function BookingCard() {
   const [signature, setSignature] = useState("");
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const createCheckout = useServerFn(createReservationCheckout);
 
   const fare = useMemo(() => {
     if (service === "hourly") {
@@ -222,6 +225,7 @@ function BookingCard() {
       if (rate === null || rate === undefined)
         return {
           cls: "has-price",
+          amount: null as number | null,
           node: (
             <>
               <span className="fare-amount">Request a quote</span>
@@ -231,6 +235,7 @@ function BookingCard() {
         };
       return {
         cls: "has-price",
+        amount: rate * hours,
         node: (
           <>
             <span className="fare-amount">${rate * hours}</span>
@@ -243,18 +248,20 @@ function BookingCard() {
     }
     const base = computeSedanBase(pickup, dropoff);
     if (!pickup || !dropoff)
-      return { cls: "", node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
+      return { cls: "", amount: null as number | null, node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
     if (base === "same")
-      return { cls: "", node: <span className="fare-label">Pickup and drop-off can't be the same place</span> };
+      return { cls: "", amount: null as number | null, node: <span className="fare-label">Pickup and drop-off can't be the same place</span> };
     if (base === "quote" || base === null)
       return {
         cls: "",
+        amount: null as number | null,
         node: <span className="fare-label">Custom route — dispatch confirms your exact fare in minutes</span>,
       };
     const mult = VEHICLE_MULTIPLIER[vehicle];
     if (mult === null || mult === undefined)
       return {
         cls: "has-price",
+        amount: null as number | null,
         node: (
           <>
             <span className="fare-amount">Request a quote</span>
@@ -265,6 +272,7 @@ function BookingCard() {
     const price = Math.round((base * mult) / 5) * 5;
     return {
       cls: "has-price",
+      amount: price,
       node: (
         <>
           <span className="fare-amount">${price}</span>
@@ -275,7 +283,8 @@ function BookingCard() {
   }, [pickup, dropoff, vehicle, service, hours]);
 
 
-  const submit = () => {
+
+  const submit = async () => {
     const missingRoute = service === "hourly" ? !pickup : !pickup || !dropoff;
     if (missingRoute || !dt || !name.trim() || !signature.trim()) {
       setConfirm({
@@ -301,30 +310,56 @@ function BookingCard() {
         `Date & time: ${dt}\n` +
         `Vehicle: ${VEHICLE_LABEL[vehicle]}\n` +
         `Fare: ${fareText}\n\n` +
-
         "Rental agreement acknowledgement\n" +
         `Name: ${name.trim()}\n` +
         `Signature: ${signature.trim()}\n` +
         `Date signed: ${today}\n\n` +
         "By signing, this person confirms they have read, understood and will comply with the provisions of the Globallink Transportation rental agreement, including the 48-hour cancellation policy."
     );
-    if (PAYMENT_LINK) {
-      window.open(PAYMENT_LINK, "_blank", "noopener");
+    const mailHref = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+
+    let paymentUrl: string | null = null;
+    let paymentError: string | null = null;
+    if (fare.amount && fare.amount > 0) {
+      setPaying(true);
+      try {
+        const description =
+          service === "hourly"
+            ? `${hours} hours hourly service · ${VEHICLE_LABEL[vehicle]} · pickup ${placeLabel(pickup)} · ${dt}`
+            : `${placeLabel(pickup)} to ${placeLabel(dropoff)} · ${VEHICLE_LABEL[vehicle]} · ${dt}`;
+        const result = await createCheckout({
+          data: { amount: fare.amount, description, origin: window.location.origin },
+        });
+        paymentUrl = result.url;
+        paymentError = result.error;
+      } catch {
+        paymentError = "We couldn't open the payment page.";
+      }
+      setPaying(false);
     }
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+
+    if (paymentUrl) window.open(paymentUrl, "_blank", "noopener");
+    window.location.href = mailHref;
     setConfirm({
       kind: "ok",
       text: (
         <>
-          Thanks, {name.trim()} — {PAYMENT_LINK ? "please complete payment in the tab that just opened, then" : "your reservation and signed agreement are ready to send."}{" "}
-          {PAYMENT_LINK ? (
+          Thanks, {name.trim()} —{" "}
+          {paymentUrl ? (
             <>
-              <a href={PAYMENT_LINK} target="_blank" rel="noopener" style={{ color: "var(--brass-dark)" }}>
+              your payment page for <strong>${fare.amount}</strong> opened in a new tab. Please complete
+              payment, then send the reservation email that just opened.{" "}
+              <a href={paymentUrl} target="_blank" rel="noopener" style={{ color: "var(--brass-dark)" }}>
                 Reopen the payment page
               </a>{" "}
-              if it didn't open.{" "}
+              if needed.{" "}
             </>
-          ) : null}
+          ) : (
+            <>
+              your reservation and signed agreement are ready to send.{" "}
+              {paymentError ? `${paymentError} We'll send you a secure payment link by email. ` : ""}
+            </>
+          )}
           If your email app didn't open automatically, please email a copy to{" "}
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
             {EMAIL}
@@ -335,6 +370,7 @@ function BookingCard() {
     });
     setSubmitted(true);
   };
+
 
   return (
     <div className="booking-card" id="book">
@@ -459,8 +495,12 @@ function BookingCard() {
         the charges described in it.
       </p>
 
-      <button className="btn btn-brass" id="reserveSubmit" onClick={submit}>
-        {submitted ? "Reserved & signed ✓" : "Reserve & sign agreement"}
+      <button className="btn btn-brass" id="reserveSubmit" onClick={submit} disabled={paying}>
+        {paying
+          ? "Opening secure payment…"
+          : submitted
+            ? "Reserved & signed ✓"
+            : "Reserve, sign & pay"}
       </button>
       {confirm && (
         <div
