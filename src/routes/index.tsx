@@ -51,8 +51,6 @@ const HOURLY_RATES: Record<string, number | null> = {
   bus: null,
 };
 
-// Stripe payment link opened before the reservation email is sent.
-const PAYMENT_LINK = "https://buy.stripe.com/8x26oG36edyygWWfV4gYU00";
 const HOUR_OPTIONS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 
@@ -218,6 +216,8 @@ function BookingCard() {
   const [signature, setSignature] = useState("");
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const createCheckout = useServerFn(createReservationCheckout);
 
   const fare = useMemo(() => {
     if (service === "hourly") {
@@ -495,8 +495,12 @@ function BookingCard() {
         the charges described in it.
       </p>
 
-      <button className="btn btn-brass" id="reserveSubmit" onClick={submit}>
-        {submitted ? "Reserved & signed ✓" : "Reserve & sign agreement"}
+      <button className="btn btn-brass" id="reserveSubmit" onClick={submit} disabled={paying}>
+        {paying
+          ? "Opening secure payment…"
+          : submitted
+            ? "Reserved & signed ✓"
+            : "Reserve, sign & pay"}
       </button>
       {confirm && (
         <div
