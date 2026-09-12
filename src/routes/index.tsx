@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
+import { createReservationCheckout } from "@/lib/checkout.functions";
 import {
   AIRPORTS,
   AIRPORT_RATES,
@@ -7,6 +9,7 @@ import {
   CITIES,
   VEHICLES,
 } from "@/data/globallink";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
