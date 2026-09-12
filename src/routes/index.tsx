@@ -281,7 +281,7 @@ function BookingCard() {
 
 
 
-  const submit = () => {
+  const submit = async () => {
     const missingRoute = service === "hourly" ? !pickup : !pickup || !dropoff;
     if (missingRoute || !dt || !name.trim() || !signature.trim()) {
       setConfirm({
@@ -307,30 +307,56 @@ function BookingCard() {
         `Date & time: ${dt}\n` +
         `Vehicle: ${VEHICLE_LABEL[vehicle]}\n` +
         `Fare: ${fareText}\n\n` +
-
         "Rental agreement acknowledgement\n" +
         `Name: ${name.trim()}\n` +
         `Signature: ${signature.trim()}\n` +
         `Date signed: ${today}\n\n` +
         "By signing, this person confirms they have read, understood and will comply with the provisions of the Globallink Transportation rental agreement, including the 48-hour cancellation policy."
     );
-    if (PAYMENT_LINK) {
-      window.open(PAYMENT_LINK, "_blank", "noopener");
+    const mailHref = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+
+    let paymentUrl: string | null = null;
+    let paymentError: string | null = null;
+    if (fare.amount && fare.amount > 0) {
+      setPaying(true);
+      try {
+        const description =
+          service === "hourly"
+            ? `${hours} hours hourly service · ${VEHICLE_LABEL[vehicle]} · pickup ${placeLabel(pickup)} · ${dt}`
+            : `${placeLabel(pickup)} to ${placeLabel(dropoff)} · ${VEHICLE_LABEL[vehicle]} · ${dt}`;
+        const result = await createCheckout({
+          data: { amount: fare.amount, description, origin: window.location.origin },
+        });
+        paymentUrl = result.url;
+        paymentError = result.error;
+      } catch {
+        paymentError = "We couldn't open the payment page.";
+      }
+      setPaying(false);
     }
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+
+    if (paymentUrl) window.open(paymentUrl, "_blank", "noopener");
+    window.location.href = mailHref;
     setConfirm({
       kind: "ok",
       text: (
         <>
-          Thanks, {name.trim()} — {PAYMENT_LINK ? "please complete payment in the tab that just opened, then" : "your reservation and signed agreement are ready to send."}{" "}
-          {PAYMENT_LINK ? (
+          Thanks, {name.trim()} —{" "}
+          {paymentUrl ? (
             <>
-              <a href={PAYMENT_LINK} target="_blank" rel="noopener" style={{ color: "var(--brass-dark)" }}>
+              your payment page for <strong>${fare.amount}</strong> opened in a new tab. Please complete
+              payment, then send the reservation email that just opened.{" "}
+              <a href={paymentUrl} target="_blank" rel="noopener" style={{ color: "var(--brass-dark)" }}>
                 Reopen the payment page
               </a>{" "}
-              if it didn't open.{" "}
+              if needed.{" "}
             </>
-          ) : null}
+          ) : (
+            <>
+              your reservation and signed agreement are ready to send.{" "}
+              {paymentError ? `${paymentError} We'll send you a secure payment link by email. ` : ""}
+            </>
+          )}
           If your email app didn't open automatically, please email a copy to{" "}
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
             {EMAIL}
@@ -341,6 +367,7 @@ function BookingCard() {
     });
     setSubmitted(true);
   };
+
 
   return (
     <div className="booking-card" id="book">
