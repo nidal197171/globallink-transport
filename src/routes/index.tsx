@@ -48,9 +48,8 @@ const HOURLY_RATES: Record<string, number | null> = {
   bus: null,
 };
 
-// TODO: paste your Stripe payment link here (e.g. "https://buy.stripe.com/xxxx").
-// Reservations will be sent to this link to pay before the reservation email opens.
-const PAYMENT_LINK = "";
+// Stripe payment link opened before the reservation email is sent.
+const PAYMENT_LINK = "https://buy.stripe.com/8x26oG36edyygWWfV4gYU00";
 const HOUR_OPTIONS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 
