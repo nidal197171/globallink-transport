@@ -222,6 +222,7 @@ function BookingCard() {
       if (rate === null || rate === undefined)
         return {
           cls: "has-price",
+          amount: null as number | null,
           node: (
             <>
               <span className="fare-amount">Request a quote</span>
@@ -231,6 +232,7 @@ function BookingCard() {
         };
       return {
         cls: "has-price",
+        amount: rate * hours,
         node: (
           <>
             <span className="fare-amount">${rate * hours}</span>
@@ -243,18 +245,20 @@ function BookingCard() {
     }
     const base = computeSedanBase(pickup, dropoff);
     if (!pickup || !dropoff)
-      return { cls: "", node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
+      return { cls: "", amount: null as number | null, node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
     if (base === "same")
-      return { cls: "", node: <span className="fare-label">Pickup and drop-off can't be the same place</span> };
+      return { cls: "", amount: null as number | null, node: <span className="fare-label">Pickup and drop-off can't be the same place</span> };
     if (base === "quote" || base === null)
       return {
         cls: "",
+        amount: null as number | null,
         node: <span className="fare-label">Custom route — dispatch confirms your exact fare in minutes</span>,
       };
     const mult = VEHICLE_MULTIPLIER[vehicle];
     if (mult === null || mult === undefined)
       return {
         cls: "has-price",
+        amount: null as number | null,
         node: (
           <>
             <span className="fare-amount">Request a quote</span>
@@ -265,6 +269,7 @@ function BookingCard() {
     const price = Math.round((base * mult) / 5) * 5;
     return {
       cls: "has-price",
+      amount: price,
       node: (
         <>
           <span className="fare-amount">${price}</span>
@@ -273,6 +278,7 @@ function BookingCard() {
       ),
     };
   }, [pickup, dropoff, vehicle, service, hours]);
+
 
 
   const submit = () => {
