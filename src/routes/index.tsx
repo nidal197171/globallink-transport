@@ -41,7 +41,7 @@ const VEHICLE_MULTIPLIER: Record<string, number | null> = Object.fromEntries(
   VEHICLES.map((v) => [v.value, v.multiplier])
 );
 const HOURLY_RATES: Record<string, number | null> = {
-  sedan: 75,
+  sedan: 85,
   suv: 120,
   limousine: 120,
   sprinter: 175,
@@ -954,7 +954,7 @@ function Index() {
             <p className="note">Get your hourly rate now — no commitment.</p>
           </div>
           <div className="price-card">
-            <div className="price-row"><span className="name">Sedan</span><span className="leader" /><span className="amount">$75/hr</span></div>
+            <div className="price-row"><span className="name">Sedan</span><span className="leader" /><span className="amount">$85/hr</span></div>
             <div className="price-row"><span className="name">SUV</span><span className="leader" /><span className="amount">$120/hr</span></div>
             <div className="price-row"><span className="name">Limousine</span><span className="leader" /><span className="amount">$120/hr</span></div>
             <div className="price-row"><span className="name">Sprinter van</span><span className="leader" /><span className="amount">$175/hr</span></div>
