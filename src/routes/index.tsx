@@ -219,6 +219,9 @@ function BookingCard() {
   const [paying, setPaying] = useState(false);
   const createCheckout = useServerFn(createReservationCheckout);
 
+  // All reservations add 20% gratuity + 10% booking fee on top of the base fare.
+  const withFees = (base: number) => Math.round(base * 1.3);
+
   const fare = useMemo(() => {
     if (service === "hourly") {
       const rate = HOURLY_RATES[vehicle];
@@ -233,14 +236,15 @@ function BookingCard() {
             </>
           ),
         };
+      const total = withFees(rate * hours);
       return {
         cls: "has-price",
-        amount: rate * hours,
+        amount: total,
         node: (
           <>
-            <span className="fare-amount">${rate * hours}</span>
+            <span className="fare-amount">${total}</span>
             <span className="fare-sub">
-              {hours} hours × ${rate}/hr · {VEHICLE_LABEL[vehicle]} (4-hour minimum)
+              {hours} hours × ${rate}/hr + 20% gratuity + 10% booking fee · {VEHICLE_LABEL[vehicle]} (4-hour minimum)
             </span>
           </>
         ),
@@ -269,14 +273,14 @@ function BookingCard() {
           </>
         ),
       };
-    const price = Math.round((base * mult) / 5) * 5;
+    const price = withFees(Math.round((base * mult) / 5) * 5);
     return {
       cls: "has-price",
       amount: price,
       node: (
         <>
           <span className="fare-amount">${price}</span>
-          <span className="fare-sub">Estimated one-way fare · {VEHICLE_LABEL[vehicle]}</span>
+          <span className="fare-sub">Estimated one-way fare, incl. 20% gratuity + 10% booking fee · {VEHICLE_LABEL[vehicle]}</span>
         </>
       ),
     };
@@ -325,8 +329,8 @@ function BookingCard() {
       try {
         const description =
           service === "hourly"
-            ? `${hours} hours hourly service · ${VEHICLE_LABEL[vehicle]} · pickup ${placeLabel(pickup)} · ${dt}`
-            : `${placeLabel(pickup)} to ${placeLabel(dropoff)} · ${VEHICLE_LABEL[vehicle]} · ${dt}`;
+            ? `${hours} hours hourly service · ${VEHICLE_LABEL[vehicle]} · pickup ${placeLabel(pickup)} · ${dt} · incl. 20% gratuity + 10% booking fee`
+            : `${placeLabel(pickup)} to ${placeLabel(dropoff)} · ${VEHICLE_LABEL[vehicle]} · ${dt} · incl. 20% gratuity + 10% booking fee`;
         const result = await createCheckout({
           data: { amount: fare.amount, description, origin: window.location.origin },
         });
