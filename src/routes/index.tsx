@@ -548,7 +548,7 @@ function BookingCard() {
   return (
     <div className="booking-card" id="book">
       <h3>Check your fare</h3>
-      <p className="sub">No payment required to reserve.</p>
+      <p className="sub">Payment is required to confirm your reservation.</p>
       <div className="field-row">
         <div className="field">
           <label htmlFor="svc">Reservation type</label>
@@ -1000,7 +1000,7 @@ function Index() {
                   Check availability
                 </a>
                 <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.45)", marginTop: 8 }}>
-                  No card required to reserve {"\u00A0·\u00A0"} or{" "}
+                  Payment confirms your reservation {"\u00A0·\u00A0"} or{" "}
                   <a
                     href={`mailto:${EMAIL}`}
                     style={{ color: "rgba(255,255,255,0.65)", textDecoration: "underline" }}
