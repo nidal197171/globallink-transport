@@ -28,11 +28,14 @@ export const getPayPalClientId = createServerFn({ method: "GET" }).handler(async
 
 const orderSchema = z.object({
   amount: z.number().int().positive().max(100000),
+  base: z.number().int().positive().max(100000).optional(),
+  gratuity: z.number().int().nonnegative().max(100000).optional(),
+  fee: z.number().int().nonnegative().max(100000).optional(),
   description: z.string().min(1).max(300),
 });
 
 export const createPayPalOrder = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => orderSchema.parse(data))
+  .validator((data: unknown) => orderSchema.parse(data))
   .handler(async ({ data }) => {
     try {
       const token = await getAccessToken();
@@ -45,10 +48,35 @@ export const createPayPalOrder = createServerFn({ method: "POST" })
         body: JSON.stringify({
           intent: "CAPTURE",
           purchase_units: [
-            {
-              amount: { currency_code: "USD", value: data.amount.toFixed(2) },
-              description: data.description,
-            },
+            (() => {
+              const unit: Record<string, unknown> = {
+                amount: { currency_code: "USD", value: data.amount.toFixed(2) },
+                description: data.description,
+              };
+              if (data.base !== undefined && data.gratuity !== undefined && data.fee !== undefined) {
+                (unit.amount as Record<string, unknown>).breakdown = {
+                  item_total: { currency_code: "USD", value: data.amount.toFixed(2) },
+                };
+                unit.items = [
+                  {
+                    name: "Base fare",
+                    unit_amount: { currency_code: "USD", value: data.base.toFixed(2) },
+                    quantity: "1",
+                  },
+                  {
+                    name: "Gratuity (20%)",
+                    unit_amount: { currency_code: "USD", value: data.gratuity.toFixed(2) },
+                    quantity: "1",
+                  },
+                  {
+                    name: "Booking fee (10%)",
+                    unit_amount: { currency_code: "USD", value: data.fee.toFixed(2) },
+                    quantity: "1",
+                  },
+                ];
+              }
+              return unit;
+            })(),
           ],
         }),
       });
@@ -63,7 +91,7 @@ export const createPayPalOrder = createServerFn({ method: "POST" })
   });
 
 export const capturePayPalOrder = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => z.object({ orderId: z.string().min(1).max(100) }).parse(data))
+  .validator((data: unknown) => z.object({ orderId: z.string().min(1).max(100) }).parse(data))
   .handler(async ({ data }) => {
     try {
       const token = await getAccessToken();

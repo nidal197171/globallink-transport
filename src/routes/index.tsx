@@ -210,6 +210,8 @@ function LocationSelect({
   );
 }
 
+type FeeParts = { base: number; gratuity: number; fee: number; total: number };
+
 type BookingState = {
   service: string;
   pickup: string;
@@ -279,8 +281,12 @@ function BookingCard() {
   const [ppClientId, setPpClientId] = useState<string | null>(null);
   const [ppChecked, setPpChecked] = useState(false);
 
-  // All reservations add 20% gratuity + 10% booking fee on top of the base fare.
-  const withFees = (base: number) => Math.round(base * 1.3);
+  // All reservations add 20% gratuity + 10% booking fee on top of the base fare at checkout.
+  const feeParts = (base: number): FeeParts => {
+    const total = Math.round(base * 1.3);
+    const gratuity = Math.round(base * 0.2);
+    return { base, gratuity, fee: total - base - gratuity, total };
+  };
 
   const fare = useMemo(() => {
     if (service === "hourly") {
@@ -289,6 +295,7 @@ function BookingCard() {
         return {
           cls: "has-price",
           amount: null as number | null,
+          parts: null as FeeParts | null,
           node: (
             <>
               <span className="fare-amount">Request a quote</span>
@@ -296,15 +303,16 @@ function BookingCard() {
             </>
           ),
         };
-      const total = withFees(rate * hours);
+      const parts = feeParts(rate * hours);
       return {
         cls: "has-price",
-        amount: total,
+        amount: parts.total,
+        parts,
         node: (
           <>
-            <span className="fare-amount">${total}</span>
+            <span className="fare-amount">${parts.base}</span>
             <span className="fare-sub">
-              {hours} hours × ${rate}/hr + 20% gratuity + 10% booking fee · {VEHICLE_LABEL[vehicle]} (4-hour minimum)
+              {hours} hours × ${rate}/hr · {VEHICLE_LABEL[vehicle]} (4-hour minimum) + 20% gratuity + 10% booking fee at checkout
             </span>
           </>
         ),
@@ -312,13 +320,14 @@ function BookingCard() {
     }
     const base = computeSedanBase(pickup, dropoff);
     if (!pickup || !dropoff)
-      return { cls: "", amount: null as number | null, node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
+      return { cls: "", amount: null as number | null, parts: null as FeeParts | null, node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
     if (base === "same")
-      return { cls: "", amount: null as number | null, node: <span className="fare-label">Pickup and drop-off can't be the same place</span> };
+      return { cls: "", amount: null as number | null, parts: null as FeeParts | null, node: <span className="fare-label">Pickup and drop-off can't be the same place</span> };
     if (base === "quote" || base === null)
       return {
         cls: "",
         amount: null as number | null,
+        parts: null as FeeParts | null,
         node: <span className="fare-label">Custom route — dispatch confirms your exact fare in minutes</span>,
       };
     const mult = VEHICLE_MULTIPLIER[vehicle];
@@ -326,6 +335,7 @@ function BookingCard() {
       return {
         cls: "has-price",
         amount: null as number | null,
+        parts: null as FeeParts | null,
         node: (
           <>
             <span className="fare-amount">Request a quote</span>
@@ -333,14 +343,15 @@ function BookingCard() {
           </>
         ),
       };
-    const price = withFees(Math.round((base * mult) / 5) * 5);
+    const parts = feeParts(Math.round((base * mult) / 5) * 5);
     return {
       cls: "has-price",
-      amount: price,
+      amount: parts.total,
+      parts,
       node: (
         <>
-          <span className="fare-amount">${price}</span>
-          <span className="fare-sub">Estimated one-way fare, incl. 20% gratuity + 10% booking fee · {VEHICLE_LABEL[vehicle]}</span>
+          <span className="fare-amount">${parts.base}</span>
+          <span className="fare-sub">Estimated one-way fare · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 10% booking fee at checkout</span>
         </>
       ),
     };
@@ -374,12 +385,14 @@ function BookingCard() {
 
     let paymentUrl: string | null = null;
     let paymentError: string | null = null;
-    if (fare.amount && fare.amount > 0) {
+    if (fare.amount && fare.amount > 0 && fare.parts) {
       setPaying(true);
       try {
         const result = await createCheckout({
           data: {
-            amount: fare.amount,
+            base: fare.parts.base,
+            gratuity: fare.parts.gratuity,
+            fee: fare.parts.fee,
             description: buildDescription(bookingSnapshot()),
             origin: window.location.origin,
           },
@@ -445,8 +458,8 @@ function BookingCard() {
   };
 
   // Latest values for the PayPal button callbacks (avoids stale closures).
-  const liveRef = useRef({ snapshot: bookingSnapshot(), fareAmount: fare.amount });
-  liveRef.current = { snapshot: bookingSnapshot(), fareAmount: fare.amount };
+  const liveRef = useRef({ snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts } });
+  liveRef.current = { snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts } };
   const completeRef = useRef(completePayPalReservation);
   completeRef.current = completePayPalReservation;
   const orderFnRef = useRef(createOrderFn);
@@ -487,22 +500,28 @@ function BookingCard() {
               setConfirmRef.current({ kind: "error", text: err });
               return actions.reject();
             }
-            if (!liveRef.current.fareAmount) {
+            if (!liveRef.current.fare.amount) {
               setConfirmRef.current({ kind: "error", text: "Choose your route to see the fare first." });
               return actions.reject();
             }
             return actions.resolve();
           },
           createOrder: async () => {
-            const { snapshot, fareAmount } = liveRef.current;
+            const { snapshot, fare } = liveRef.current;
             const res = await orderFnRef.current({
-              data: { amount: fareAmount ?? 0, description: buildDescription(snapshot) },
+              data: {
+                amount: fare.amount ?? 0,
+                base: fare.parts?.base,
+                gratuity: fare.parts?.gratuity,
+                fee: fare.parts?.fee,
+                description: buildDescription(snapshot),
+              },
             });
             if (!res.orderId) throw new Error(res.error ?? "PayPal failed");
             return res.orderId;
           },
           onApprove: async (data: { orderID: string }) => {
-            const cap = await captureFnRef.current({ data: { orderID: data.orderID } });
+            const cap = await captureFnRef.current({ data: { orderId: data.orderID } });
             if (!cap.ok) {
               setConfirmRef.current({
                 kind: "error",
@@ -510,8 +529,8 @@ function BookingCard() {
               });
               return;
             }
-            const { snapshot, fareAmount } = liveRef.current;
-            completeRef.current(fareAmount ?? 0, snapshot.name.trim());
+            const { snapshot, fare } = liveRef.current;
+            completeRef.current(fare.amount ?? 0, snapshot.name.trim());
           },
           onError: () =>
             setConfirmRef.current({
@@ -667,6 +686,29 @@ function BookingCard() {
         By typing your name as a signature above, you agree to the rental agreement and authorize
         the charges described in it.
       </p>
+
+      {fare.parts && (
+        <div className="field" style={{ marginTop: 14 }}>
+          <div style={{ border: "1px solid var(--brass)", borderRadius: 12, padding: "12px 14px", background: "rgba(176,141,62,0.06)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, padding: "2px 0" }}>
+              <span>Base fare</span>
+              <span>${fare.parts.base}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, padding: "2px 0" }}>
+              <span>Gratuity (20%)</span>
+              <span>${fare.parts.gratuity}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, padding: "2px 0" }}>
+              <span>Booking fee (10%)</span>
+              <span>${fare.parts.fee}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 15, borderTop: "1px solid var(--brass)", marginTop: 6, paddingTop: 8 }}>
+              <span>Total due</span>
+              <span>${fare.parts.total}</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="field" style={{ marginTop: 14 }}>
         <label>Payment method</label>
