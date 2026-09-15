@@ -1,7 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createReservationCheckout } from "@/lib/checkout.functions";
+import {
+  capturePayPalOrder,
+  createPayPalOrder,
+  getPayPalClientId,
+} from "@/lib/paypal.functions";
 import {
   AIRPORTS,
   AIRPORT_RATES,
@@ -205,6 +210,55 @@ function LocationSelect({
   );
 }
 
+type BookingState = {
+  service: string;
+  pickup: string;
+  dropoff: string;
+  dt: string;
+  vehicle: string;
+  hours: number;
+  name: string;
+  signature: string;
+};
+
+function validateBooking(s: BookingState): string | null {
+  const missingRoute = s.service === "hourly" ? !s.pickup : !s.pickup || !s.dropoff;
+  if (missingRoute || !s.dt || !s.name.trim() || !s.signature.trim()) {
+    return s.service === "hourly"
+      ? "Please choose pickup, date & time, and sign your name before submitting."
+      : "Please choose pickup, drop-off, date & time, and sign your name before submitting.";
+  }
+  return null;
+}
+
+function buildDescription(s: BookingState): string {
+  const base =
+    s.service === "hourly"
+      ? `${s.hours} hours hourly service · ${VEHICLE_LABEL[s.vehicle]} · pickup ${placeLabel(s.pickup)} · ${s.dt}`
+      : `${placeLabel(s.pickup)} to ${placeLabel(s.dropoff)} · ${VEHICLE_LABEL[s.vehicle]} · ${s.dt}`;
+  return `${base} · incl. 20% gratuity + 10% booking fee`;
+}
+
+function buildReservationMail(s: BookingState, fareText: string): string {
+  const today = new Date().toISOString().split("T")[0];
+  const subject = encodeURIComponent(`New Reservation & Signed Agreement — ${s.name.trim()}`);
+  const body = encodeURIComponent(
+    "Globallink Transportation — Reservation request\n\n" +
+      `Service: ${s.service === "hourly" ? `Hourly (${s.hours} hours, 4-hour minimum)` : "Pick up & drop off"}\n` +
+      `Pickup: ${placeLabel(s.pickup)}\n` +
+      (s.service === "hourly" ? "" : `Drop-off: ${placeLabel(s.dropoff)}\n`) +
+      `Date & time: ${s.dt}\n` +
+      `Vehicle: ${VEHICLE_LABEL[s.vehicle]}\n` +
+      `Fare: ${fareText}\n\n` +
+      "Rental agreement acknowledgement\n" +
+      `Name: ${s.name.trim()}\n` +
+      `Signature: ${s.signature.trim()}\n` +
+      `Date signed: ${today}\n\n` +
+      "By signing, this person confirms they have read, understood and will comply with the provisions of the Globallink Transportation rental agreement, including the 48-hour cancellation policy."
+  );
+  return `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+}
+
 function BookingCard() {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
@@ -218,6 +272,12 @@ function BookingCard() {
   const [submitted, setSubmitted] = useState(false);
   const [paying, setPaying] = useState(false);
   const createCheckout = useServerFn(createReservationCheckout);
+  const createOrderFn = useServerFn(createPayPalOrder);
+  const captureOrderFn = useServerFn(capturePayPalOrder);
+  const getClientIdFn = useServerFn(getPayPalClientId);
+  const [payMethod, setPayMethod] = useState<"card" | "paypal">("card");
+  const [ppClientId, setPpClientId] = useState<string | null>(null);
+  const [ppChecked, setPpChecked] = useState(false);
 
   // All reservations add 20% gratuity + 10% booking fee on top of the base fare.
   const withFees = (base: number) => Math.round(base * 1.3);
@@ -288,51 +348,41 @@ function BookingCard() {
 
 
 
-  const submit = async () => {
-    const missingRoute = service === "hourly" ? !pickup : !pickup || !dropoff;
-    if (missingRoute || !dt || !name.trim() || !signature.trim()) {
-      setConfirm({
-        kind: "error",
-        text:
-          service === "hourly"
-            ? "Please choose pickup, date & time, and sign your name before submitting."
-            : "Please choose pickup, drop-off, date & time, and sign your name before submitting.",
-      });
+  const bookingSnapshot = (): BookingState => ({
+    service,
+    pickup,
+    dropoff,
+    dt,
+    vehicle,
+    hours,
+    name,
+    signature,
+  });
+
+  const fareTextNow = () =>
+    (typeof document !== "undefined" &&
+      document.getElementById("farePreview")?.textContent?.trim()) ||
+    "";
+
+  const submitCard = async () => {
+    const err = validateBooking(bookingSnapshot());
+    if (err) {
+      setConfirm({ kind: "error", text: err });
       return;
     }
-    const fareText =
-      (typeof document !== "undefined" &&
-        document.getElementById("farePreview")?.textContent?.trim()) ||
-      "";
-    const today = new Date().toISOString().split("T")[0];
-    const subject = encodeURIComponent(`New Reservation & Signed Agreement — ${name.trim()}`);
-    const body = encodeURIComponent(
-      "Globallink Transportation — Reservation request\n\n" +
-        `Service: ${service === "hourly" ? `Hourly (${hours} hours, 4-hour minimum)` : "Pick up & drop off"}\n` +
-        `Pickup: ${placeLabel(pickup)}\n` +
-        (service === "hourly" ? "" : `Drop-off: ${placeLabel(dropoff)}\n`) +
-        `Date & time: ${dt}\n` +
-        `Vehicle: ${VEHICLE_LABEL[vehicle]}\n` +
-        `Fare: ${fareText}\n\n` +
-        "Rental agreement acknowledgement\n" +
-        `Name: ${name.trim()}\n` +
-        `Signature: ${signature.trim()}\n` +
-        `Date signed: ${today}\n\n` +
-        "By signing, this person confirms they have read, understood and will comply with the provisions of the Globallink Transportation rental agreement, including the 48-hour cancellation policy."
-    );
-    const mailHref = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    const mailHref = buildReservationMail(bookingSnapshot(), fareTextNow());
 
     let paymentUrl: string | null = null;
     let paymentError: string | null = null;
     if (fare.amount && fare.amount > 0) {
       setPaying(true);
       try {
-        const description =
-          service === "hourly"
-            ? `${hours} hours hourly service · ${VEHICLE_LABEL[vehicle]} · pickup ${placeLabel(pickup)} · ${dt} · incl. 20% gratuity + 10% booking fee`
-            : `${placeLabel(pickup)} to ${placeLabel(dropoff)} · ${VEHICLE_LABEL[vehicle]} · ${dt} · incl. 20% gratuity + 10% booking fee`;
         const result = await createCheckout({
-          data: { amount: fare.amount, description, origin: window.location.origin },
+          data: {
+            amount: fare.amount,
+            description: buildDescription(bookingSnapshot()),
+            origin: window.location.origin,
+          },
         });
         paymentUrl = result.url;
         paymentError = result.error;
@@ -374,6 +424,125 @@ function BookingCard() {
     });
     setSubmitted(true);
   };
+
+  const completePayPalReservation = (amount: number, payerName: string) => {
+    window.location.href = buildReservationMail(bookingSnapshot(), fareTextNow());
+    setConfirm({
+      kind: "ok",
+      text: (
+        <>
+          Thanks, {payerName} — your PayPal payment of <strong>${amount}</strong> is complete.
+          Please send the reservation email that just opened. If your email app didn't open
+          automatically, please email a copy to{" "}
+          <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
+            {EMAIL}
+          </a>
+          .
+        </>
+      ),
+    });
+    setSubmitted(true);
+  };
+
+  // Latest values for the PayPal button callbacks (avoids stale closures).
+  const liveRef = useRef({ snapshot: bookingSnapshot(), fareAmount: fare.amount });
+  liveRef.current = { snapshot: bookingSnapshot(), fareAmount: fare.amount };
+  const completeRef = useRef(completePayPalReservation);
+  completeRef.current = completePayPalReservation;
+  const orderFnRef = useRef(createOrderFn);
+  orderFnRef.current = createOrderFn;
+  const captureFnRef = useRef(captureOrderFn);
+  captureFnRef.current = captureOrderFn;
+  const setConfirmRef = useRef(setConfirm);
+  setConfirmRef.current = setConfirm;
+
+  // Check whether PayPal is configured (public client ID present).
+  useEffect(() => {
+    getClientIdFn()
+      .then((r) => {
+        setPpClientId(r.clientId);
+        setPpChecked(true);
+      })
+      .catch(() => setPpChecked(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Render PayPal buttons when PayPal is the chosen method.
+  useEffect(() => {
+    if (payMethod !== "paypal" || !ppClientId) return;
+    const container = document.getElementById("paypal-buttons");
+    if (!container) return;
+    container.innerHTML = "";
+
+    const renderButtons = () => {
+      const paypal = (window as unknown as { paypal?: any }).paypal;
+      if (!paypal || !container.isConnected) return;
+      paypal
+        .Buttons({
+          style: { layout: "vertical", color: "gold", shape: "rect", label: "paypal" },
+          onClick: (_data: unknown, actions: { resolve: () => void; reject: () => void }) => {
+            const { snapshot } = liveRef.current;
+            const err = validateBooking(snapshot);
+            if (err) {
+              setConfirmRef.current({ kind: "error", text: err });
+              return actions.reject();
+            }
+            if (!liveRef.current.fareAmount) {
+              setConfirmRef.current({ kind: "error", text: "Choose your route to see the fare first." });
+              return actions.reject();
+            }
+            return actions.resolve();
+          },
+          createOrder: async () => {
+            const { snapshot, fareAmount } = liveRef.current;
+            const res = await orderFnRef.current({
+              data: { amount: fareAmount ?? 0, description: buildDescription(snapshot) },
+            });
+            if (!res.orderId) throw new Error(res.error ?? "PayPal failed");
+            return res.orderId;
+          },
+          onApprove: async (data: { orderID: string }) => {
+            const cap = await captureFnRef.current({ data: { orderID: data.orderID } });
+            if (!cap.ok) {
+              setConfirmRef.current({
+                kind: "error",
+                text: cap.error ?? "The PayPal payment didn't go through.",
+              });
+              return;
+            }
+            const { snapshot, fareAmount } = liveRef.current;
+            completeRef.current(fareAmount ?? 0, snapshot.name.trim());
+          },
+          onError: () =>
+            setConfirmRef.current({
+              kind: "error",
+              text: "The PayPal payment was cancelled or failed. You can try again or pay by card.",
+            }),
+        })
+        .render(container);
+    };
+
+    const sdkId = "paypal-js-sdk";
+    if (!(window as unknown as { paypal?: unknown }).paypal) {
+      if (!document.getElementById(sdkId)) {
+        const s = document.createElement("script");
+        s.id = sdkId;
+        s.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(ppClientId)}&currency=USD&intent=capture`;
+        s.onload = renderButtons;
+        document.body.appendChild(s);
+      } else {
+        const t = setInterval(() => {
+          if ((window as unknown as { paypal?: unknown }).paypal) {
+            clearInterval(t);
+            renderButtons();
+          }
+        }, 300);
+        return () => clearInterval(t);
+      }
+    } else {
+      renderButtons();
+    }
+  }, [payMethod, ppClientId]);
 
 
   return (
@@ -499,13 +668,57 @@ function BookingCard() {
         the charges described in it.
       </p>
 
-      <button className="btn btn-brass" id="reserveSubmit" onClick={submit} disabled={paying}>
-        {paying
-          ? "Opening secure payment…"
-          : submitted
-            ? "Reserved & signed ✓"
-            : "Reserve, sign & pay"}
-      </button>
+      <div className="field" style={{ marginTop: 14 }}>
+        <label>Payment method</label>
+        <div style={{ display: "flex", gap: 20, marginTop: 8 }}>
+          <label style={{ display: "flex", gap: 8, alignItems: "center", fontWeight: 400, cursor: "pointer" }}>
+            <input
+              type="radio"
+              name="payMethod"
+              checked={payMethod === "card"}
+              onChange={() => setPayMethod("card")}
+            />
+            Card
+          </label>
+          <label
+            style={{
+              display: "flex",
+              gap: 8,
+              alignItems: "center",
+              fontWeight: 400,
+              cursor: ppChecked && !ppClientId ? "not-allowed" : "pointer",
+              opacity: ppChecked && !ppClientId ? 0.55 : 1,
+            }}
+          >
+            <input
+              type="radio"
+              name="payMethod"
+              checked={payMethod === "paypal"}
+              disabled={ppChecked && !ppClientId}
+              onChange={() => setPayMethod("paypal")}
+            />
+            PayPal{ppChecked && !ppClientId ? " (coming soon)" : ""}
+          </label>
+        </div>
+      </div>
+
+      {payMethod === "paypal" ? (
+        fare.amount && fare.amount > 0 ? (
+          <div id="paypal-buttons" style={{ marginTop: 12, minHeight: 100 }} />
+        ) : (
+          <p style={{ fontSize: 13, color: "var(--steel)", marginTop: 12 }}>
+            Choose your route to see the PayPal payment button.
+          </p>
+        )
+      ) : (
+        <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
+          {paying
+            ? "Opening secure payment…"
+            : submitted
+              ? "Reserved & signed ✓"
+              : "Reserve, sign & pay"}
+        </button>
+      )}
       {confirm && (
         <div
           className="sign-confirm show"
