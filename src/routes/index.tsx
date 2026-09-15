@@ -809,10 +809,6 @@ function Index() {
                 <span>Bay Area cities &amp; airports</span>
               </div>
               <div>
-                <strong>1,200+</strong>
-                <span>vetted chauffeurs</span>
-              </div>
-              <div>
                 <strong>98%</strong>
                 <span>on-time pickups</span>
               </div>
@@ -830,10 +826,9 @@ function Index() {
       <div className="trust">
         <div className="wrap trust-inner">
           <p>
-            <strong>98% on-time</strong> across the Bay Area — SFO, OAK and SJC included — not a
-            marketing number, a dispatch metric we publish monthly
+            <strong>98% on-time</strong> across the Bay Area — SFO, OAK and SJC included
           </p>
-          <p>1,200+ vetted chauffeurs {"\u00A0·\u00A0"} Fixed pricing {"\u00A0·\u00A0"} One monthly invoice</p>
+          <p>Fixed pricing {"\u00A0·\u00A0"} One monthly invoice</p>
         </div>
       </div>
 
