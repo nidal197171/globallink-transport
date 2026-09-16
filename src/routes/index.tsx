@@ -14,6 +14,7 @@ import {
   CITIES,
   VEHICLES,
 } from "@/data/globallink";
+import InstallAppButton from "@/components/InstallAppButton";
 
 
 export const Route = createFileRoute("/")({
@@ -1006,6 +1007,7 @@ function Index() {
               <a href="#book" className="btn btn-brass" onClick={() => setMenuOpen(false)}>
                 Reserve a car
               </a>
+              <InstallAppButton className="btn btn-outline-dark" />
             </div>
           </div>
         </div>
@@ -1446,11 +1448,16 @@ function Index() {
           </div>
           <div className="foot-bottom">
             <span>© 2026 Globallink Transportation. All rights reserved.</span>
-            <span>
-              Licensed for-hire chauffeur network {"\u00A0·\u00A0"}{" "}
-              <a href="#drive" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>
-                Drive with us
-              </a>
+            <span style={{ display: "inline-flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+              <InstallAppButton
+                className="btn btn-outline-dark"
+              />
+              <span>
+                Licensed for-hire chauffeur network {"\u00A0·\u00A0"}{" "}
+                <a href="#drive" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>
+                  Drive with us
+                </a>
+              </span>
             </span>
           </div>
         </div>
