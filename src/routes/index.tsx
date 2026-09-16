@@ -1063,6 +1063,7 @@ function Index() {
               <a href={`mailto:${EMAIL}`} className="btn btn-outline-dark">
                 Email us: {EMAIL}
               </a>
+              <InstallAppButton className="btn btn-outline-dark" />
 
             </div>
             <div className="hero-stats">
@@ -1436,9 +1437,6 @@ function Index() {
               <ul>
                 <li>{PHONE}</li>
                 <li>{EMAIL}</li>
-                <li>
-                  <InstallAppButton className="btn btn-outline-dark" />
-                </li>
                 <li>Available 24/7</li>
               </ul>
             </div>
