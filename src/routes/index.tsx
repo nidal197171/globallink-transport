@@ -1435,6 +1435,9 @@ function Index() {
               <ul>
                 <li>{PHONE}</li>
                 <li>{EMAIL}</li>
+                <li>
+                  <InstallAppButton className="btn btn-outline-dark" />
+                </li>
                 <li>Available 24/7</li>
               </ul>
             </div>
@@ -1448,16 +1451,11 @@ function Index() {
           </div>
           <div className="foot-bottom">
             <span>© 2026 Globallink Transportation. All rights reserved.</span>
-            <span style={{ display: "inline-flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-              <InstallAppButton
-                className="btn btn-outline-dark"
-              />
-              <span>
-                Licensed for-hire chauffeur network {"\u00A0·\u00A0"}{" "}
-                <a href="#drive" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>
-                  Drive with us
-                </a>
-              </span>
+            <span>
+              Licensed for-hire chauffeur network {"\u00A0·\u00A0"}{" "}
+              <a href="#drive" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>
+                Drive with us
+              </a>
             </span>
           </div>
         </div>
