@@ -960,6 +960,7 @@ function Index() {
 
   return (
     <>
+      <div className="announce-bar">Coming soon to Dubai</div>
       <header>
         <div className="wrap nav-inner">
           <div className="logo">

@@ -39,6 +39,13 @@
   .eyebrow-line{display:flex; align-items:center; gap:10px; color:var(--steel); font-size:14px; margin-bottom:14px;}
   .eyebrow-line .dot{width:6px; height:6px; border-radius:50%; background:var(--brass); flex-shrink:0;}
 
+  /* ---------- Announcement banner ---------- */
+  .announce-bar{
+    background:var(--brass); color:var(--ink);
+    text-align:center; font-size:13px; font-weight:600; letter-spacing:0.04em;
+    padding:9px 16px;
+  }
+
   /* ---------- Header ---------- */
   header{
     position:sticky; top:0; z-index:50;
