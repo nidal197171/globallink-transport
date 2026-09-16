@@ -65,7 +65,7 @@
     display:none; max-height:0; overflow:hidden; background:var(--ink);
     border-bottom:1px solid var(--hairline-dark); transition:max-height .28s ease;
   }
-  .mobile-panel.open{max-height:520px;}
+  .mobile-panel.open{max-height:520px; overflow-y:auto; -webkit-overflow-scrolling:touch;}
   .mobile-panel-inner{padding:8px 20px 20px;}
   .mobile-panel a.mp-link{
     display:flex; align-items:center; min-height:52px; font-size:16px;
