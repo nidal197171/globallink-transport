@@ -277,7 +277,6 @@ function BookingCard() {
   const [name, setName] = useState("");
   const [signature, setSignature] = useState("");
   const [email, setEmail] = useState("");
-  const [cardConsent, setCardConsent] = useState(false);
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [paying, setPaying] = useState(false);
@@ -388,13 +387,6 @@ function BookingCard() {
     const err = validateBooking(bookingSnapshot());
     if (err) {
       setConfirm({ kind: "error", text: err });
-      return;
-    }
-    if (!cardConsent) {
-      setConfirm({
-        kind: "error",
-        text: "Please tick the card-on-file authorization box to continue with card payment.",
-      });
       return;
     }
     const mailHref = buildReservationMail(bookingSnapshot(), fareTextNow());
@@ -784,30 +776,10 @@ function BookingCard() {
         )
       ) : (
         <>
-          <label
-            style={{
-              display: "flex",
-              gap: 10,
-              alignItems: "flex-start",
-              fontSize: 13,
-              color: "var(--steel)",
-              marginTop: 14,
-              cursor: "pointer",
-              lineHeight: 1.55,
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={cardConsent}
-              onChange={(e) => setCardConsent(e.target.checked)}
-              style={{ marginTop: 3, flexShrink: 0 }}
-            />
-            <span>
-              Keep my card on file. I authorize Globallink Transportation to charge this card for
-              tolls, overtime, waiting time, cleaning and damage fees as described in the rental
-              agreement.
-            </span>
-          </label>
+          <p style={{ fontSize: 12.5, color: "var(--steel)", marginTop: 14, lineHeight: 1.55 }}>
+            Your card will be kept on file and may be charged for tolls, overtime, waiting time,
+            cleaning and damage fees as described in the rental agreement.
+          </p>
           <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
           {paying
             ? "Opening secure payment…"
