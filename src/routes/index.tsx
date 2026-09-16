@@ -987,7 +987,7 @@ function Index() {
 
   return (
     <>
-      <div className="announce-bar">Coming soon to Dubai</div>
+      <div className="announce-bar">Coming soon to more US cities and Dubai</div>
       <header>
         <div className="wrap nav-inner">
           <div className="logo">
