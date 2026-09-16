@@ -1113,6 +1113,28 @@ function Index() {
         </div>
       </section>
 
+      <section className="promo-video">
+        <div className="wrap">
+          <div className="section-head">
+            <h2>Globallink in motion</h2>
+            <p>
+              A glimpse of what a Globallink ride feels like — from airport pickup to the final
+              drop-off, every trip handled by a vetted chauffeur.
+            </p>
+          </div>
+          <video
+            className="promo-video-frame"
+            src="/videos/global-link-promo.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            title="Globallink Transportation promo video"
+          />
+        </div>
+      </section>
+
       <div className="trust">
         <div className="wrap trust-inner">
           <p>
