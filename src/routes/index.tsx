@@ -91,7 +91,7 @@ const AGREEMENT_TERMS: { title: string; body: string }[] = [
   },
   {
     title: "Payment authorization",
-    body: "By signing this agreement, you authorize Globallink Transportation to charge your credit card for any unpaid charges such as gratuity, overtime, cleaning charges and damages.",
+    body: "By signing this agreement, you authorize Globallink Transportation to keep your credit card on file and charge it for any unpaid charges such as gratuity, overtime, tolls, waiting time, cleaning charges and damages.",
   },
 ];
 
@@ -222,6 +222,7 @@ type BookingState = {
   hours: number;
   name: string;
   signature: string;
+  email: string;
 };
 
 function validateBooking(s: BookingState): string | null {
@@ -230,6 +231,9 @@ function validateBooking(s: BookingState): string | null {
     return s.service === "hourly"
       ? "Please choose pickup, date & time, and sign your name before submitting."
       : "Please choose pickup, drop-off, date & time, and sign your name before submitting.";
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) {
+    return "Please enter a valid email address for your receipt.";
   }
   return null;
 }
@@ -255,6 +259,7 @@ function buildReservationMail(s: BookingState, fareText: string): string {
       `Fare: ${fareText}\n\n` +
       "Rental agreement acknowledgement\n" +
       `Name: ${s.name.trim()}\n` +
+      `Email: ${s.email.trim()}\n` +
       `Signature: ${s.signature.trim()}\n` +
       `Date signed: ${today}\n\n` +
       "By signing, this person confirms they have read, understood and will comply with the provisions of the Globallink Transportation rental agreement, including the 48-hour cancellation policy."
@@ -271,6 +276,8 @@ function BookingCard() {
   const [dt, setDt] = useState("");
   const [name, setName] = useState("");
   const [signature, setSignature] = useState("");
+  const [email, setEmail] = useState("");
+  const [cardConsent, setCardConsent] = useState(false);
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [paying, setPaying] = useState(false);
@@ -369,6 +376,7 @@ function BookingCard() {
     hours,
     name,
     signature,
+    email,
   });
 
   const fareTextNow = () =>
@@ -380,6 +388,13 @@ function BookingCard() {
     const err = validateBooking(bookingSnapshot());
     if (err) {
       setConfirm({ kind: "error", text: err });
+      return;
+    }
+    if (!cardConsent) {
+      setConfirm({
+        kind: "error",
+        text: "Please tick the card-on-file authorization box to continue with card payment.",
+      });
       return;
     }
     const mailHref = buildReservationMail(bookingSnapshot(), fareTextNow());
@@ -396,6 +411,8 @@ function BookingCard() {
             fee: fare.parts.fee,
             description: buildDescription(bookingSnapshot()),
             origin: window.location.origin,
+            customerName: name.trim(),
+            customerEmail: email.trim(),
           },
         });
         paymentUrl = result.url;
@@ -646,6 +663,18 @@ function BookingCard() {
         </div>
       </div>
 
+      <div className="field">
+        <label htmlFor="agEmail">Email (for your receipt)</label>
+        <input
+          id="agEmail"
+          type="email"
+          autoComplete="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+
       <details className="agreement-details">
         <summary>Read the rental agreement</summary>
         <div className="agreement-details-body">
@@ -754,6 +783,30 @@ function BookingCard() {
           </p>
         )
       ) : (
+        <label
+          style={{
+            display: "flex",
+            gap: 10,
+            alignItems: "flex-start",
+            fontSize: 13,
+            color: "var(--steel)",
+            marginTop: 14,
+            cursor: "pointer",
+            lineHeight: 1.55,
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={cardConsent}
+            onChange={(e) => setCardConsent(e.target.checked)}
+            style={{ marginTop: 3, flexShrink: 0 }}
+          />
+          <span>
+            Keep my card on file. I authorize Globallink Transportation to charge this card for
+            tolls, overtime, waiting time, cleaning and damage fees as described in the rental
+            agreement.
+          </span>
+        </label>
         <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
           {paying
             ? "Opening secure payment…"

@@ -7,6 +7,8 @@ const schema = z.object({
   fee: z.number().int().nonnegative().max(100000),
   description: z.string().min(1).max(300),
   origin: z.string().url(),
+  customerName: z.string().min(1).max(200),
+  customerEmail: z.string().email().max(200),
 });
 
 export const createReservationCheckout = createServerFn({ method: "POST" })
@@ -22,6 +24,14 @@ export const createReservationCheckout = createServerFn({ method: "POST" })
     ];
     const params = new URLSearchParams();
     params.set("mode", "payment");
+    // Card on file: attach the session to the booker's email and save the card
+    // for future off-session charges (tolls, overtime, cleaning, damages).
+    params.set("customer_email", data.customerEmail);
+    params.set("metadata[customer_name]", data.customerName);
+    params.set("metadata[reservation]", data.description);
+    params.set("payment_intent_data[setup_future_usage]", "off_session");
+    params.set("payment_intent_data[description]", data.description);
+    params.set("payment_intent_data[metadata][reservation]", data.description);
     params.set("success_url", `${data.origin}/?payment=success`);
     params.set("cancel_url", `${data.origin}/?payment=cancelled#book`);
     let i = 0;
