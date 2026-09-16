@@ -1253,7 +1253,7 @@ function Index() {
             <div className="price-row"><span className="name">Sprinter van</span><span className="leader" /><span className="amount">$175/hr</span></div>
             <div className="price-row"><span className="name">Bus &amp; coach</span><span className="leader" /><span className="amount">Custom quote</span></div>
             <a href="#book" className="btn btn-brass">Book by the hour</a>
-            <p className="disclaimer">4-hour minimum {"\u00A0·\u00A0"} No card required {"\u00A0·\u00A0"} Same chauffeur, all day</p>
+            <p className="disclaimer">4-hour minimum {"\u00A0·\u00A0"} Same chauffeur, all day</p>
           </div>
         </div>
       </section>
@@ -1377,7 +1377,7 @@ function Index() {
           <h2>Wherever you're headed next, a car is ready.</h2>
           <a href="#book" className="btn btn-outline-light">Book now</a>
           <p style={{ fontSize: 13, color: "rgba(15,27,45,0.65)", marginTop: 16 }}>
-            No card required now {"\u00A0·\u00A0"} Support available 24/7 {"\u00A0·\u00A0"} or{" "}
+            Support available 24/7 {"\u00A0·\u00A0"} or{" "}
             <a href={PHONE_HREF} style={{ color: "var(--ink)", textDecoration: "underline" }}>call us</a>
             {" \u00A0·\u00A0 "}
             <a href={`mailto:${EMAIL}`} style={{ color: "var(--ink)", textDecoration: "underline" }}>email us</a>
