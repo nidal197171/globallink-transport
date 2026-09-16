@@ -783,37 +783,39 @@ function BookingCard() {
           </p>
         )
       ) : (
-        <label
-          style={{
-            display: "flex",
-            gap: 10,
-            alignItems: "flex-start",
-            fontSize: 13,
-            color: "var(--steel)",
-            marginTop: 14,
-            cursor: "pointer",
-            lineHeight: 1.55,
-          }}
-        >
-          <input
-            type="checkbox"
-            checked={cardConsent}
-            onChange={(e) => setCardConsent(e.target.checked)}
-            style={{ marginTop: 3, flexShrink: 0 }}
-          />
-          <span>
-            Keep my card on file. I authorize Globallink Transportation to charge this card for
-            tolls, overtime, waiting time, cleaning and damage fees as described in the rental
-            agreement.
-          </span>
-        </label>
-        <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
+        <>
+          <label
+            style={{
+              display: "flex",
+              gap: 10,
+              alignItems: "flex-start",
+              fontSize: 13,
+              color: "var(--steel)",
+              marginTop: 14,
+              cursor: "pointer",
+              lineHeight: 1.55,
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={cardConsent}
+              onChange={(e) => setCardConsent(e.target.checked)}
+              style={{ marginTop: 3, flexShrink: 0 }}
+            />
+            <span>
+              Keep my card on file. I authorize Globallink Transportation to charge this card for
+              tolls, overtime, waiting time, cleaning and damage fees as described in the rental
+              agreement.
+            </span>
+          </label>
+          <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
           {paying
             ? "Opening secure payment…"
             : submitted
               ? "Reserved & signed ✓"
               : "Reserve, sign & pay"}
-        </button>
+          </button>
+        </>
       )}
       {confirm && (
         <div
