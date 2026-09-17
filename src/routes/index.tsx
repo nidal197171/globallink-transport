@@ -1492,8 +1492,8 @@ function Index() {
             <div>
               <h4>Follow</h4>
               <ul>
-                <li><a href="#">Instagram</a></li>
-                <li><a href="#">LinkedIn</a></li>
+                <li><a href="https://www.instagram.com/global.link1" target="_blank" rel="noopener">Instagram</a></li>
+                <li><a href="https://www.linkedin.com/company/global-link-transportation" target="_blank" rel="noopener">LinkedIn</a></li>
               </ul>
             </div>
           </div>
