@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AffiliateRouteImport } from './routes/affiliate'
 import { Route as AgreementRouteImport } from './routes/agreement'
+import { Route as PayRouteImport } from './routes/pay'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,11 +29,17 @@ const AgreementRoute = AgreementRouteImport.update({
   path: '/agreement',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PayRoute = PayRouteImport.update({
+  id: '/pay',
+  path: '/pay',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/pay': typeof PayRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -44,19 +51,21 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/pay': typeof PayRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/affiliate' | '/agreement'
+  fullPaths: '/' | '/affiliate' | '/agreement' | '/pay'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/affiliate' | '/agreement'
-  id: '__root__' | '/' | '/affiliate' | '/agreement'
+  to: '/' | '/affiliate' | '/agreement' | '/pay'
+  id: '__root__' | '/' | '/affiliate' | '/agreement' | '/pay'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AffiliateRoute: typeof AffiliateRoute
   AgreementRoute: typeof AgreementRoute
+  PayRoute: typeof PayRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -80,6 +89,13 @@ declare module '@tanstack/react-router' {
       path: '/agreement'
       fullPath: '/agreement'
       preLoaderRoute: typeof AgreementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pay': {
+      id: '/pay'
+      path: '/pay'
+      fullPath: '/pay'
+      preLoaderRoute: typeof PayRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
