@@ -104,7 +104,7 @@ function PayPage() {
             />
           </div>
           <div className="field">
-            <label htmlFor="payDetails">Reservation details</label>
+            <label htmlFor="payDetails">Reservation</label>
             <textarea
               id="payDetails"
               rows={3}
