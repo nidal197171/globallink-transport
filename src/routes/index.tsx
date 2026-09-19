@@ -1008,7 +1008,6 @@ const NAV_LINKS: { href: string; label: string }[] = [
   { href: "#reviews", label: "Reviews" },
   { href: "#faq", label: "FAQ" },
   { href: "#drive", label: "Drive with us" },
-  { href: "/pay", label: "Pay" },
 ];
 
 function Index() {
@@ -1037,9 +1036,14 @@ function Index() {
             <a href={PHONE_HREF} className="btn btn-outline-dark">
               {PHONE}
             </a>
-            <a href="#book" className="btn btn-brass">
-              Reserve a car
-            </a>
+            <div className="reserve-stack">
+              <a href="#book" className="btn btn-brass">
+                Reserve a car
+              </a>
+              <a href="/pay" className="pay-link">
+                Pay your reservation
+              </a>
+            </div>
           </div>
           <button
             className="menu-toggle"
@@ -1063,6 +1067,9 @@ function Index() {
               </a>
               <a href="#book" className="btn btn-brass" onClick={() => setMenuOpen(false)}>
                 Reserve a car
+              </a>
+              <a href="/pay" className="pay-link" onClick={() => setMenuOpen(false)}>
+                Pay your reservation
               </a>
               <InstallAppButton className="btn btn-outline-dark" />
             </div>
