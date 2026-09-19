@@ -1008,6 +1008,7 @@ const NAV_LINKS: { href: string; label: string }[] = [
   { href: "#reviews", label: "Reviews" },
   { href: "#faq", label: "FAQ" },
   { href: "#drive", label: "Drive with us" },
+  { href: "/pay", label: "Pay" },
 ];
 
 function Index() {
@@ -1524,6 +1525,7 @@ function Index() {
                 <li><a href="#corporate">Corporate</a></li>
                 <li><a href="#faq">FAQ</a></li>
                 <li><a href="#book">Rental agreement</a></li>
+                <li><a href="/pay">Pay your reservation</a></li>
               </ul>
             </div>
             <div>
