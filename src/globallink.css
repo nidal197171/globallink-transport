@@ -267,6 +267,14 @@
   .corporate p{color:rgba(255,255,255,0.65); margin-top:10px; max-width:420px; font-size:15px;}
   .corporate-wrap{max-width:1160px; margin:0 auto; padding:0;}
 
+  /* ---------- Services band ---------- */
+  .services-band{background:var(--ink); color:#fff;}
+  .services-band .section-head p{color:rgba(255,255,255,0.65);}
+  .services-grid{display:grid; grid-template-columns:repeat(5, 1fr); gap:20px;}
+  .service-card{background:linear-gradient(180deg, #E8C56D, #D6A944); border-radius:var(--radius-card); padding:24px 20px 20px; display:flex; flex-direction:column;}
+  .service-card h3{font-family:'Fraunces', serif; font-weight:500; font-size:16px; line-height:1.3; color:#1B1B18; text-align:center; margin-bottom:16px; min-height:42px; display:flex; align-items:center; justify-content:center;}
+  .service-card img{border-radius:8px; width:100%; aspect-ratio:4/3; object-fit:cover;}
+
   /* ---------- FAQ ---------- */
   .faq-list{max-width:760px;}
   .faq-item{border-bottom:1px solid var(--hairline);}
@@ -328,6 +336,8 @@
     .problem-item:first-child{border-top:none; margin-top:0;}
 
     .fleet-row{grid-template-columns:1fr; border:none; background:none; gap:14px;}
+    .services-grid{grid-template-columns:1fr; gap:16px;}
+    .service-card h3{min-height:0;}
     .fleet-card{border:1px solid var(--hairline); border-radius:8px; padding:24px 20px;}
 
     .pricing-grid{grid-template-columns:1fr; gap:30px;}

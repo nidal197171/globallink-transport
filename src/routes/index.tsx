@@ -990,9 +990,18 @@ const CheckIcon = (
   </svg>
 );
 
+const SERVICES: { title: string; img: string }[] = [
+  { title: "Corporate Transportation Service", img: "/images/services/corporate.jpg" },
+  { title: "Airport Limo Service", img: "/images/services/airport.jpg" },
+  { title: "Business Transportation", img: "/images/services/business.jpg" },
+  { title: "Prom & Wine Tours", img: "/images/services/prom-wine.jpg" },
+  { title: "Special Events & Occasions", img: "/images/services/events.jpg" },
+];
+
 const NAV_LINKS: { href: string; label: string }[] = [
   { href: "#about", label: "About" },
   { href: "#fleet", label: "Fleet" },
+  { href: "#services", label: "Services" },
   { href: "#hourly", label: "Hourly rates" },
   { href: "#how", label: "How it works" },
   { href: "#corporate", label: "Corporate" },
@@ -1162,6 +1171,23 @@ function Index() {
           <p>Fixed pricing {"\u00A0·\u00A0"} One monthly invoice</p>
         </div>
       </div>
+
+      <section className="services-band" id="services">
+        <div className="wrap">
+          <div className="section-head">
+            <h2>Our Services</h2>
+            <p>We offer a wide range of luxury vehicles to suit every need.</p>
+          </div>
+          <div className="services-grid">
+            {SERVICES.map((svc) => (
+              <div className="service-card" key={svc.title}>
+                <h3>{svc.title}</h3>
+                <img src={svc.img} alt={svc.title} loading="lazy" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section>
         <div className="wrap">
