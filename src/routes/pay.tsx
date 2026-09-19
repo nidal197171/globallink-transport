@@ -2,7 +2,20 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { createReservationCheckout } from "@/lib/checkout.functions";
 
+type PaySearch = {
+  amount?: string | undefined;
+  ref?: string | undefined;
+  name?: string | undefined;
+  email?: string | undefined;
+};
+
 export const Route = createFileRoute("/pay")({
+  validateSearch: (search: Record<string, unknown>): PaySearch => ({
+    amount: typeof search["amount"] === "string" ? search["amount"] : undefined,
+    ref: typeof search["ref"] === "string" ? search["ref"] : undefined,
+    name: typeof search["name"] === "string" ? search["name"] : undefined,
+    email: typeof search["email"] === "string" ? search["email"] : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Pay your reservation — Globallink Transportation" },

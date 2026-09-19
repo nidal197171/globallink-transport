@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createReservationCheckout } from "@/lib/checkout.functions";
@@ -1099,9 +1099,9 @@ function Index() {
                 <a href="#book" className="btn btn-brass">
                   Check availability
                 </a>
-                <a href="/pay" className="btn btn-brass">
+                <Link to="/pay" search={{}} className="btn btn-brass" preload="intent">
                   Custom reservations pay
-                </a>
+                </Link>
                 <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.45)", marginTop: 8 }}>
                   Payment confirms your reservation {"\u00A0·\u00A0"} or{" "}
                   <a
@@ -1527,7 +1527,7 @@ function Index() {
                 <li><a href="#corporate">Corporate</a></li>
                 <li><a href="#faq">FAQ</a></li>
                 <li><a href="#book">Rental agreement</a></li>
-                <li><a href="/pay">Custom reservations pay</a></li>
+                <li><Link to="/pay" search={{}} preload="intent">Custom reservations pay</Link></li>
               </ul>
             </div>
             <div>

@@ -45,6 +45,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/pay': typeof PayRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
