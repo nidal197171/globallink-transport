@@ -33,7 +33,7 @@ function PayPage() {
   const [name, setName] = useState(initial.name);
   const [email, setEmail] = useState(initial.email);
   const [address, setAddress] = useState("");
-  const [service, setService] = useState("transfer");
+  const [details, setDetails] = useState("");
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState("");
 
@@ -50,16 +50,10 @@ function PayPage() {
     setPaying(true);
     setError("");
     try {
-      const serviceLabel =
-        service === "hourly"
-          ? "Hourly (4 hours minimum)"
-          : service === "city"
-            ? "City to city"
-            : "Airport pick up & drop off";
-      const details = [serviceLabel, address.trim(), initial.ref]
+      const parts = [details.trim(), address.trim(), initial.ref]
         .filter((x) => x && x.length > 0)
         .join(" — ");
-      const description = `Custom reservation payment${details ? ` — ${details}` : ""}`;
+      const description = `Custom reservation payment${parts ? ` — ${parts}` : ""}`;
       const res = await createReservationCheckout({
         data: {
           base: cents,
@@ -109,30 +103,26 @@ function PayPage() {
               onChange={(e) => setAmount(e.target.value)}
             />
           </div>
-          <div className="field-row">
-            <div className="field">
-              <label htmlFor="payService">Reservation type</label>
-              <select
-                id="payService"
-                value={service}
-                onChange={(e) => setService(e.target.value)}
-              >
-                <option value="transfer">Airport pick up &amp; drop off</option>
-                <option value="city">City to city</option>
-                <option value="hourly">Hourly (4 hours minimum)</option>
-              </select>
-            </div>
-            <div className="field">
-              <label htmlFor="payAddress">Address</label>
-              <input
-                id="payAddress"
-                type="text"
-                autoComplete="street-address"
-                placeholder="Pickup address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </div>
+          <div className="field">
+            <label htmlFor="payDetails">Reservation details</label>
+            <textarea
+              id="payDetails"
+              rows={3}
+              placeholder="Explain your reservation — date, pickup, dropoff, passengers…"
+              value={details}
+              onChange={(e) => setDetails(e.target.value)}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="payAddress">Address</label>
+            <input
+              id="payAddress"
+              type="text"
+              autoComplete="street-address"
+              placeholder="Pickup address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
           </div>
           <div className="field-row">
             <div className="field">
