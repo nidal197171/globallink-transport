@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { SITE } from "@/config/site";
 import { z } from "zod";
 
 const schema = z.object({
@@ -18,7 +19,7 @@ export const createReservationCheckout = createServerFn({ method: "POST" })
     if (!key) return { url: null as string | null, error: "Payments are not configured yet." };
 
     const items: Array<[string, number]> = [
-      ["Globallink Transportation — base fare", data.base],
+      [`${SITE.brand.legalName} — base fare`, data.base],
       ["Gratuity (20%)", data.gratuity],
       ["Booking fee (10%)", data.fee],
     ];

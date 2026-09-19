@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SITE } from "@/config/site";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createReservationCheckout } from "@/lib/checkout.functions";
@@ -21,17 +22,17 @@ import InstallAppButton from "@/components/InstallAppButton";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Globallink — Chauffeured cars, wherever business takes you" },
+      { title: `${SITE.brand.shortName} — ${SITE.brand.tagline}` },
       {
         name: "description",
         content:
-          "Chauffeured sedans, SUVs, limousines, vans and coaches across the Bay Area and SFO, OAK and SJC. Fixed fares, vetted chauffeurs, one monthly invoice.",
+          "Chauffeured sedans, SUVs, limousines, vans and coaches across the " + SITE.market.metro + " and " + SITE.market.airports + ". Fixed fares, vetted chauffeurs, one monthly invoice.",
       },
-      { property: "og:title", content: "Globallink — Chauffeured cars, wherever business takes you" },
+      { property: "og:title", content: `${SITE.brand.shortName} — ${SITE.brand.tagline}` },
       {
         property: "og:description",
         content:
-          "Chauffeured sedans, SUVs, limousines, vans and coaches across the Bay Area and SFO, OAK and SJC. Fixed fares, vetted chauffeurs, one monthly invoice.",
+          "Chauffeured sedans, SUVs, limousines, vans and coaches across the " + SITE.market.metro + " and " + SITE.market.airports + ". Fixed fares, vetted chauffeurs, one monthly invoice.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -40,9 +41,9 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const EMAIL = "GLtrans10@gmail.com";
-const PHONE = "(415) 787-8776";
-const PHONE_HREF = "tel:+14157878776";
+const EMAIL = SITE.contact.email;
+const PHONE = SITE.contact.phoneDisplay;
+const PHONE_HREF = SITE.contact.phoneHref;
 
 const VEHICLE_LABEL: Record<string, string> = Object.fromEntries(
   VEHICLES.map((v) => [v.value, v.label])
@@ -64,11 +65,11 @@ const HOUR_OPTIONS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
 const AGREEMENT_TERMS: { title: string; body: string }[] = [
   {
     title: "Passenger capacity",
-    body: "The maximum capacity of the vehicle is the number of seat belts installed and must not be exceeded unless discussed and agreed upon with Globallink Transportation prior to pickup.",
+    body: `The maximum capacity of the vehicle is the number of seat belts installed and must not be exceeded unless discussed and agreed upon with ${SITE.brand.legalName} prior to pickup.`,
   },
   {
     title: "Personal belongings",
-    body: "Globallink Transportation is not liable or responsible for anything left in the vehicle. Please check your belongings before exiting.",
+    body: `${SITE.brand.legalName} is not liable or responsible for anything left in the vehicle. Please check your belongings before exiting.`,
   },
   {
     title: "Damage to the vehicle",
@@ -92,18 +93,18 @@ const AGREEMENT_TERMS: { title: string; body: string }[] = [
   },
   {
     title: "Payment authorization",
-    body: "By signing this agreement, you authorize Globallink Transportation to keep your credit card on file and charge it for any unpaid charges such as gratuity, overtime, tolls, waiting time, cleaning charges and damages.",
+    body: `By signing this agreement, you authorize ${SITE.brand.legalName} to keep your credit card on file and charge it for any unpaid charges such as gratuity, overtime, tolls, waiting time, cleaning charges and damages.`,
   },
 ];
 
 const FAQS: { q: string; a: React.ReactNode }[] = [
   {
     q: "Can I book a car for today?",
-    a: "Yes, across the Bay Area cities and airports we serve. Same-day requests are matched with the nearest available chauffeur; dispatch will confirm within minutes.",
+    a: `Yes, across the ${SITE.market.metro} cities and airports we serve. Same-day requests are matched with the nearest available chauffeur; dispatch will confirm within minutes.`,
   },
   {
     q: "Do you cover airport pickups?",
-    a: "Yes — SFO, OAK and SJC all include flight tracking, so your chauffeur adjusts to delays or early landings at no extra charge.",
+    a: `Yes — ${SITE.market.airports} all include flight tracking, so your chauffeur adjusts to delays or early landings at no extra charge.`,
   },
   {
     q: "Can we set up a corporate account?",
@@ -141,7 +142,7 @@ const DRIVE_REQS = [
   "Pass a background check",
   "Professional appearance and communication",
   "Smartphone for dispatch coordination",
-  "Based in or near the Bay Area",
+  "Based in or near " + SITE.market.metro,
   "Proof of state license for company",
 ];
 
@@ -258,7 +259,7 @@ function buildReservationMail(s: BookingState, fareText: string): string {
   const today = new Date().toISOString().split("T")[0];
   const subject = encodeURIComponent(`New Reservation & Signed Agreement — ${s.name.trim()}`);
   const body = encodeURIComponent(
-    "Globallink Transportation — Reservation request\n\n" +
+    `${SITE.brand.legalName} — Reservation request\n\n` +
       `Service: ${s.service === "hourly" ? `Hourly (${s.hours} hours, 4-hour minimum)` : s.service === "city" ? "City to city" : "Airport pick up & drop off"}\n` +
       `Pickup: ${placeLabel(s.pickup)}\n` +
       (s.service === "hourly" ? "" : `Drop-off: ${placeLabel(s.dropoff)}\n`) +
@@ -270,7 +271,7 @@ function buildReservationMail(s: BookingState, fareText: string): string {
       `Email: ${s.email.trim()}\n` +
       `Signature: ${s.signature.trim()}\n` +
       `Date signed: ${today}\n\n` +
-      "By signing, this person confirms they have read, understood and will comply with the provisions of the Globallink Transportation rental agreement, including the 48-hour cancellation policy."
+      `By signing, this person confirms they have read, understood and will comply with the provisions of the ${SITE.brand.legalName} rental agreement, including the 48-hour cancellation policy.`
   );
   return `mailto:${EMAIL}?subject=${subject}&body=${body}`;
 }
@@ -690,7 +691,7 @@ function BookingCard() {
         <summary>Read the rental agreement</summary>
         <div className="agreement-details-body">
           <p style={{ fontSize: 13, color: "var(--steel)", paddingTop: 14 }}>
-            This agreement applies to every ride booked with Globallink Transportation. By signing
+            This agreement applies to every ride booked with {SITE.brand.legalName}. By signing
             below, you agree to the terms here.
           </p>
           {AGREEMENT_TERMS.map((t, i) => (
@@ -871,7 +872,7 @@ function DriveForm() {
     }
     const subject = encodeURIComponent(`Driver Application — ${form.name.trim()}`);
     const body = encodeURIComponent(
-      "Globallink Transportation — Driver application\n\n" +
+      `${SITE.brand.legalName} — Driver application\n\n` +
         `Name: ${form.name.trim()}\n` +
         `Phone: ${form.phone.trim()}\n` +
         `Email: ${form.email.trim()}\n` +
@@ -1023,7 +1024,7 @@ function Index() {
               <circle cx="13" cy="13" r="12" stroke="#B08D3E" strokeWidth="1.4" />
               <path d="M4 13H22M13 4V22M7 7L19 19M19 7L7 19" stroke="#B08D3E" strokeWidth="0.8" opacity="0.5" />
             </svg>
-            Globallink
+            {SITE.brand.shortName}
           </div>
           <nav className="nav-links">
             {NAV_LINKS.map((l) => (
@@ -1127,7 +1128,7 @@ function Index() {
             <div className="hero-stats">
               <div>
                 <strong>62</strong>
-                <span>Bay Area cities &amp; airports</span>
+                <span>{SITE.market.metro} cities &amp; airports</span>
               </div>
               <div>
                 <strong>98%</strong>
@@ -1147,9 +1148,9 @@ function Index() {
       <section className="promo-video">
         <div className="wrap">
           <div className="section-head">
-            <h2>Globallink in motion</h2>
+            <h2>{SITE.brand.shortName} in motion</h2>
             <p>
-              A glimpse of what a Globallink ride feels like — from airport pickup to the final
+              A glimpse of what a {SITE.brand.shortName} ride feels like — from airport pickup to the final
               drop-off, every trip handled by a vetted chauffeur.
             </p>
           </div>
@@ -1161,7 +1162,7 @@ function Index() {
             loop
             playsInline
             preload="metadata"
-            title="Globallink Transportation promo video"
+            title={`${SITE.brand.legalName} promo video`}
           />
         </div>
       </section>
@@ -1169,7 +1170,7 @@ function Index() {
       <div className="trust">
         <div className="wrap trust-inner">
           <p>
-            <strong>98% on-time</strong> across the Bay Area — SFO, OAK and SJC included
+            <strong>98% on-time</strong> across the {SITE.market.metro} — {SITE.market.airports} included
           </p>
           <p>Fixed pricing {"\u00A0·\u00A0"} One monthly invoice</p>
         </div>
@@ -1228,15 +1229,14 @@ function Index() {
           <div className="about-inner">
             <h2>Transportation you stop having to think about</h2>
             <p>
-              Globallink isn't another ride-booking app. We're a full transportation coordination
+              {SITE.brand.shortName} isn't another ride-booking app. We're a full transportation coordination
               team — one unified fleet, individually vetted licensed chauffeurs, and support that
               answers as a person, not a routing bot.
             </p>
             <p>
               We started because travel managers and event planners were coordinating every ride by
               hand: one driver here, one invoice there, no guarantee on either. Today, we're the one
-              team your company needs for every kind of trip across the Bay Area — San Francisco,
-              Oakland, San Jose and the Peninsula, plus SFO, OAK and SJC — on a single invoice that
+              team your company needs for every kind of trip across the {SITE.market.metro} — {SITE.market.airports} — on a single invoice that
               ties it all together.
             </p>
           </div>
@@ -1431,7 +1431,7 @@ function Index() {
               <div className="who"><strong>Priya N.</strong>Event planner, London</div>
             </div>
             <div className="test-card">
-              <p className="quote">"We moved our whole travel program to Globallink for the invoicing alone. The service held up just as well."</p>
+              <p className="quote">"We moved our whole travel program to {SITE.brand.shortName} for the invoicing alone. The service held up just as well."</p>
               <div className="who"><strong>Daniel R.</strong>COO, fintech startup</div>
             </div>
             <div className="test-card">
@@ -1446,7 +1446,7 @@ function Index() {
         <div className="corporate" id="corporate">
           <div>
             <h2>Managing travel for a team or event?</h2>
-            <p>Get a dedicated account manager, volume rates, and a single invoice for every ride across the Bay Area.</p>
+            <p>Get a dedicated account manager, volume rates, and a single invoice for every ride across the {SITE.market.metro}.</p>
           </div>
           <div>
             <a href="#book" className="btn btn-brass">Talk to our team</a>
@@ -1489,9 +1489,9 @@ function Index() {
       <section id="drive">
         <div className="wrap" style={{ maxWidth: 720 }}>
           <div className="section-head">
-            <h2>Drive with Globallink</h2>
+            <h2>Drive with {SITE.brand.shortName}</h2>
             <p>
-              We're always looking for professional chauffeurs across the Bay Area. Here's what it
+              We're always looking for professional chauffeurs across the {SITE.market.metro}. Here's what it
               takes to join the fleet.
             </p>
           </div>
@@ -1513,10 +1513,10 @@ function Index() {
         <div className="wrap">
           <div className="foot-grid">
             <div>
-              <div className="foot-logo">Globallink</div>
+              <div className="foot-logo">{SITE.brand.shortName}</div>
               <p style={{ maxWidth: 260, fontSize: 14 }}>
-                Chauffeured sedans, SUVs, limousines, sprinter vans and coaches across the Bay Area,
-                including SFO, OAK and SJC.
+                Chauffeured sedans, SUVs, limousines, sprinter vans and coaches across the {SITE.market.metro},
+                including {SITE.market.airports}.
               </p>
             </div>
             <div>
@@ -1541,13 +1541,13 @@ function Index() {
             <div>
               <h4>Follow</h4>
               <ul>
-                <li><a href="https://www.instagram.com/global.link1" target="_blank" rel="noopener">Instagram</a></li>
-                <li><a href="https://www.linkedin.com/company/global-link-transportation" target="_blank" rel="noopener">LinkedIn</a></li>
+                <li><a href={SITE.social.instagram} target="_blank" rel="noopener">Instagram</a></li>
+                <li><a href={SITE.social.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
               </ul>
             </div>
           </div>
           <div className="foot-bottom">
-            <span>© 2026 Globallink Transportation. All rights reserved.</span>
+            <span>© 2026 {SITE.brand.legalName}. All rights reserved.</span>
             <span>
               Licensed for-hire chauffeur network {"\u00A0·\u00A0"}{" "}
               <a href="#drive" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>

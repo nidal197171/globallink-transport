@@ -1,19 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SITE } from "@/config/site";
 import { useState } from "react";
 
 export const Route = createFileRoute("/affiliate")({
   head: () => ({
     meta: [
-      { title: "Affiliate Partner Sign-Up — Globallink" },
+      { title: `Affiliate Partner Sign-Up — ${SITE.brand.shortName}` },
       { name: "robots", content: "noindex, nofollow" },
-      { name: "description", content: "Partner with Globallink as an affiliate driver." },
+      { name: "description", content: `Partner with ${SITE.brand.shortName} as an affiliate driver.` },
     ],
   }),
   component: AffiliatePage,
 });
 
-const EMAIL = "GLtrans10@gmail.com";
-const PHONE = "(415) 787-8776";
+const EMAIL = SITE.contact.email;
+const PHONE = SITE.contact.phoneDisplay;
 const PHONE_HREF = "tel:+14157878776";
 
 function AffiliatePage() {
@@ -54,7 +55,7 @@ function AffiliatePage() {
     <>
       <header>
         <div className="wrap nav-inner">
-          <a href="/" className="logo">Globallink</a>
+          <a href="/" className="logo">{SITE.brand.shortName}</a>
           <div className="nav-cta">
             <a className="btn btn-outline-dark" href={PHONE_HREF}>{PHONE}</a>
           </div>
@@ -66,7 +67,7 @@ function AffiliatePage() {
           <p className="eyebrow-line" style={{ color: "rgba(255,255,255,0.6)" }}>
             <span className="dot" /> Private — affiliate partners
           </p>
-          <h1>Drive with Globallink</h1>
+          <h1>Drive with {SITE.brand.shortName}</h1>
           <p className="lead">
             Join our affiliate network and receive pre-booked, pre-paid rides across the Bay Area.
             Review the requirements below, then send us your application.
@@ -141,7 +142,7 @@ function AffiliatePage() {
 
       <footer>
         <div className="wrap foot-bottom" style={{ borderTop: "none" }}>
-          <span>© {new Date().getFullYear()} Globallink. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} {SITE.brand.shortName}. All rights reserved.</span>
           <span>{PHONE} · {EMAIL}</span>
         </div>
       </footer>

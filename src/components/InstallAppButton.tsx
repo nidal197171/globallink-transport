@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { SITE } from "@/config/site";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -95,7 +96,7 @@ export default function InstallAppButton({ className = "" }: { className?: strin
               padding: "20px 22px",
             }}
           >
-            <h3 style={{ margin: "0 0 10px", fontSize: 18 }}>Install Globallink</h3>
+            <h3 style={{ margin: "0 0 10px", fontSize: 18 }}>Install {SITE.brand.shortName}</h3>
             {ios ? (
               <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, lineHeight: 1.7 }}>
                 <li>

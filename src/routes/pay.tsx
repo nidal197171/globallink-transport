@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SITE } from "@/config/site";
 import { useState } from "react";
 import { createReservationCheckout } from "@/lib/checkout.functions";
 
@@ -18,11 +19,11 @@ export const Route = createFileRoute("/pay")({
   }),
   head: () => ({
     meta: [
-      { title: "Pay your reservation — Globallink Transportation" },
+      { title: `Pay your reservation — ${SITE.brand.legalName}` },
       {
         name: "description",
         content:
-          "Complete your Globallink Transportation reservation payment securely by card.",
+          `Complete your ${SITE.brand.legalName} reservation payment securely by card.`,
       },
     ],
   }),
@@ -94,7 +95,7 @@ function PayPage() {
       <div className="wrap" style={{ maxWidth: 560 }}>
         <div className="section-head">
           <h2>Complete your payment</h2>
-          <p>Globallink Transportation — secure card payment.</p>
+          <p>{SITE.brand.legalName} — secure card payment.</p>
         </div>
         <div className="booking-card">
           {initial.ref && (

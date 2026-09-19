@@ -1,36 +1,37 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SITE } from "@/config/site";
 
 export const Route = createFileRoute("/agreement")({
   head: () => ({
     meta: [
-      { title: "Rental Agreement — Globallink Transportation" },
+      { title: `Rental Agreement — ${SITE.brand.legalName}` },
       {
         name: "description",
         content:
-          "Globallink Transportation rental agreement: passenger responsibilities, cleaning and damage fees, cancellation policy, and payment authorization.",
+          `${SITE.brand.legalName} rental agreement: passenger responsibilities, cleaning and damage fees, cancellation policy, and payment authorization.`,
       },
-      { property: "og:title", content: "Rental Agreement — Globallink Transportation" },
+      { property: "og:title", content: `Rental Agreement — ${SITE.brand.legalName}` },
       {
         property: "og:description",
-        content: "Terms and conditions for rides booked with Globallink Transportation.",
+        content: `Terms and conditions for rides booked with ${SITE.brand.legalName}.`,
       },
     ],
   }),
   component: AgreementPage,
 });
 
-const PHONE = "(415) 787-8776";
+const PHONE = SITE.contact.phoneDisplay;
 const PHONE_HREF = "tel:+14157878776";
-const EMAIL = "GLtrans10@gmail.com";
+const EMAIL = SITE.contact.email;
 
 const TERMS: { title: string; body: string }[] = [
   {
     title: "Passenger capacity",
-    body: "The maximum capacity of the vehicle is the number of seat belts installed and must not be exceeded unless discussed and agreed upon with Globallink Transportation prior to pickup.",
+    body: `The maximum capacity of the vehicle is the number of seat belts installed and must not be exceeded unless discussed and agreed upon with ${SITE.brand.legalName} prior to pickup.`,
   },
   {
     title: "Personal belongings",
-    body: "Globallink Transportation is not liable or responsible for anything left in the vehicle. Please check your belongings before exiting.",
+    body: `${SITE.brand.legalName} is not liable or responsible for anything left in the vehicle. Please check your belongings before exiting.`,
   },
   {
     title: "Damage to the vehicle",
@@ -54,7 +55,7 @@ const TERMS: { title: string; body: string }[] = [
   },
   {
     title: "Payment authorization",
-    body: "By signing this agreement, you authorize Globallink Transportation to charge your credit card for any unpaid charges such as gratuity, overtime, cleaning charges and damages.",
+    body: `By signing this agreement, you authorize ${SITE.brand.legalName} to charge your credit card for any unpaid charges such as gratuity, overtime, cleaning charges and damages.`,
   },
 ];
 
@@ -63,7 +64,7 @@ function AgreementPage() {
     <>
       <header>
         <div className="wrap nav-inner">
-          <a href="/" className="logo">Globallink</a>
+          <a href="/" className="logo">{SITE.brand.shortName}</a>
           <div className="nav-cta">
             <a className="btn btn-outline-dark" href={PHONE_HREF}>{PHONE}</a>
           </div>
@@ -73,10 +74,10 @@ function AgreementPage() {
       <section className="agree-doc">
         <div className="wrap agree-wrap">
           <div className="agree-head">
-            <p className="eyebrow-line"><span className="dot" /> Globallink Transportation</p>
+            <p className="eyebrow-line"><span className="dot" /> {SITE.brand.legalName}</p>
             <h1>Rental Agreement</h1>
             <p className="lead">
-              This agreement applies to every ride booked with Globallink Transportation by phone,
+              This agreement applies to every ride booked with {SITE.brand.legalName} by phone,
               email or online. Please read it before confirming your reservation.
             </p>
             <button className="btn btn-brass agree-print" onClick={() => window.print()}>
@@ -137,7 +138,7 @@ function AgreementPage() {
 
       <footer>
         <div className="wrap foot-bottom" style={{ borderTop: "none" }}>
-          <span>© {new Date().getFullYear()} Globallink Transportation. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} {SITE.brand.legalName}. All rights reserved.</span>
           <span>{PHONE} · {EMAIL}</span>
         </div>
       </footer>
