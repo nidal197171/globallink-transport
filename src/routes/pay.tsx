@@ -32,6 +32,8 @@ function PayPage() {
   const [amount, setAmount] = useState(initial.amount);
   const [name, setName] = useState(initial.name);
   const [email, setEmail] = useState(initial.email);
+  const [address, setAddress] = useState("");
+  const [service, setService] = useState("transfer");
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState("");
 
@@ -48,9 +50,16 @@ function PayPage() {
     setPaying(true);
     setError("");
     try {
-      const description = initial.ref
-        ? `Custom reservation payment — ${initial.ref}`
-        : "Custom reservation payment";
+      const serviceLabel =
+        service === "hourly"
+          ? "Hourly (4 hours minimum)"
+          : service === "city"
+            ? "City to city"
+            : "Airport pick up & drop off";
+      const details = [serviceLabel, address.trim(), initial.ref]
+        .filter((x) => x && x.length > 0)
+        .join(" — ");
+      const description = `Custom reservation payment${details ? ` — ${details}` : ""}`;
       const res = await createReservationCheckout({
         data: {
           base: cents,
@@ -99,6 +108,31 @@ function PayPage() {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
+          </div>
+          <div className="field-row">
+            <div className="field">
+              <label htmlFor="payService">Reservation type</label>
+              <select
+                id="payService"
+                value={service}
+                onChange={(e) => setService(e.target.value)}
+              >
+                <option value="transfer">Airport pick up &amp; drop off</option>
+                <option value="city">City to city</option>
+                <option value="hourly">Hourly (4 hours minimum)</option>
+              </select>
+            </div>
+            <div className="field">
+              <label htmlFor="payAddress">Address</label>
+              <input
+                id="payAddress"
+                type="text"
+                autoComplete="street-address"
+                placeholder="Pickup address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </div>
           </div>
           <div className="field-row">
             <div className="field">
