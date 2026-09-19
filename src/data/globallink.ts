@@ -280,6 +280,91 @@ export const AIRPORT_ORDER: Record<string, string[]> = {
   sjc: ALPHABETICAL_CITY_ORDER,
 };
 
+// City coordinates (for city-to-city distance pricing).
+export const CITY_COORDS: Record<string, { lat: number; lon: number }> = {
+  "american-canyon": { lat: 38.16805, lon: -122.25277 },
+  "antioch": { lat: 37.9981, lon: -121.81094 },
+  "atherton": { lat: 37.46354, lon: -122.19704 },
+  "belmont": { lat: 37.52125, lon: -122.26905 },
+  "berkeley": { lat: 37.87146, lon: -122.26039 },
+  "burlingame": { lat: 37.57969, lon: -122.34522 },
+  "campbell": { lat: 37.2821, lon: -121.95422 },
+  "castro-valley": { lat: 37.70841, lon: -122.07634 },
+  "concord": { lat: 37.97734, lon: -122.04022 },
+  "cupertino": { lat: 37.32367, lon: -122.07399 },
+  "daly-city": { lat: 37.69109, lon: -122.47241 },
+  "danville": { lat: 37.82312, lon: -122.00139 },
+  "dublin": { lat: 37.70423, lon: -121.91635 },
+  "foster-city": { lat: 37.56114, lon: -122.26888 },
+  "fremont": { lat: 37.54748, lon: -121.98221 },
+  "gilroy": { lat: 37.01549, lon: -121.56142 },
+  "half-moon-bay": { lat: 37.48125, lon: -122.44459 },
+  "hayward": { lat: 37.67134, lon: -122.08556 },
+  "lafayette": { lat: 37.89077, lon: -122.12813 },
+  "livermore": { lat: 37.68217, lon: -121.75174 },
+  "los-altos": { lat: 37.38308, lon: -122.11423 },
+  "los-gatos": { lat: 37.22131, lon: -121.97927 },
+  "martinez": { lat: 38.01393, lon: -122.13494 },
+  "menlo-park": { lat: 37.4555, lon: -122.17878 },
+  "mill-valley": { lat: 37.90774, lon: -122.54822 },
+  "millbrae": { lat: 37.59842, lon: -122.386 },
+  "milpitas": { lat: 37.45348, lon: -121.92092 },
+  "morgan-hill": { lat: 37.12608, lon: -121.66194 },
+  "mountain-view": { lat: 37.39945, lon: -122.10092 },
+  "napa": { lat: 38.31449, lon: -122.3045 },
+  "newark": { lat: 37.53682, lon: -122.03032 },
+  "novato": { lat: 38.10609, lon: -122.5679 },
+  "oakland": { lat: 37.80508, lon: -122.27307 },
+  "orinda": { lat: 37.88363, lon: -122.18942 },
+  "pacifica": { lat: 37.63527, lon: -122.492 },
+  "palo-alto": { lat: 37.44466, lon: -122.16079 },
+  "petaluma": { lat: 38.23262, lon: -122.64426 },
+  "pittsburg": { lat: 38.01946, lon: -121.88851 },
+  "pleasanton": { lat: 37.65825, lon: -121.87711 },
+  "portola-valley": { lat: 37.38236, lon: -122.22868 },
+  "redwood-city": { lat: 37.4845, lon: -122.22772 },
+  "richmond": { lat: 37.93784, lon: -122.34293 },
+  "san-bruno": { lat: 37.62517, lon: -122.41431 },
+  "san-carlos": { lat: 37.50494, lon: -122.26281 },
+  "san-francisco": { lat: 37.77712, lon: -122.41966 },
+  "san-jose": { lat: 37.33865, lon: -121.88542 },
+  "san-mateo": { lat: 37.54704, lon: -122.31485 },
+  "san-rafael": { lat: 37.97463, lon: -122.53289 },
+  "san-ramon": { lat: 37.77945, lon: -121.96901 },
+  "santa-clara": { lat: 37.34834, lon: -121.94223 },
+  "santa-rosa": { lat: 38.43807, lon: -122.71247 },
+  "saratoga": { lat: 37.27107, lon: -122.01402 },
+  "sausalito": { lat: 37.85924, lon: -122.48859 },
+  "sonoma": { lat: 38.29188, lon: -122.45728 },
+  "south-san-francisco": { lat: 37.65607, lon: -122.4142 },
+  "sunnyvale": { lat: 37.37188, lon: -122.03751 },
+  "union-city": { lat: 37.58883, lon: -122.02751 },
+  "vallejo": { lat: 38.10095, lon: -122.25495 },
+  "walnut-creek": { lat: 37.90162, lon: -122.06189 },
+};
+
+// City-to-city sedan base fare: $60 base + $3/mile (road miles estimated
+// from straight-line distance), $60 minimum, rounded to the nearest $5.
+const CITY_BASE_FARE = 60;
+const CITY_PER_MILE = 3;
+const CITY_MIN_FARE = 60;
+const CITY_CIRCUITY = 1.15;
+
+export function cityToCityQuote(fromSlug: string, toSlug: string): { base: number; miles: number } {
+  const a = CITY_COORDS[fromSlug];
+  const b = CITY_COORDS[toSlug];
+  if (!a || !b) return { base: CITY_MIN_FARE, miles: 0 };
+  const la1 = (a.lat * Math.PI) / 180;
+  const la2 = (b.lat * Math.PI) / 180;
+  const lo1 = (a.lon * Math.PI) / 180;
+  const lo2 = (b.lon * Math.PI) / 180;
+  const h =
+    Math.sin((la2 - la1) / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin((lo2 - lo1) / 2) ** 2;
+  const miles = 2 * 3959 * Math.asin(Math.sqrt(h)) * CITY_CIRCUITY;
+  const base = Math.max(CITY_MIN_FARE, Math.round((CITY_BASE_FARE + CITY_PER_MILE * miles) / 5) * 5);
+  return { base, miles };
+}
+
 export const AIRPORT_TO_AIRPORT: Record<string, number> = {
   "oak-sfo": 100,
   "sfo-sjc": 165,

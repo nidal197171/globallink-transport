@@ -13,6 +13,7 @@ import {
   AIRPORT_TO_AIRPORT,
   CITIES,
   VEHICLES,
+  cityToCityQuote,
 } from "@/data/globallink";
 import InstallAppButton from "@/components/InstallAppButton";
 
@@ -169,6 +170,9 @@ function computeSedanBase(pickup: string, dropoff: string): number | "same" | "q
   if (pType === "city" && dType === "airport") {
     return AIRPORT_RATES[dCode!]?.[pCode!] ?? null;
   }
+  if (pType === "city" && dType === "city") {
+    return cityToCityQuote(pCode!, dCode!).base;
+  }
   return "quote";
 }
 
@@ -178,12 +182,14 @@ function LocationSelect({
   value,
   onChange,
   placeholder,
+  citiesOnly,
 }: {
   id: string;
   label: string;
   value: string;
   onChange: (v: string) => void;
   placeholder: string;
+  citiesOnly?: boolean;
 }) {
   return (
     <div className="field">
@@ -192,13 +198,15 @@ function LocationSelect({
         <option value="" disabled>
           {placeholder}
         </option>
-        <optgroup label="Airports">
-          {AIRPORTS.map((a) => (
-            <option key={a.code} value={`airport:${a.code}`}>
-              {a.label} ({a.short})
-            </option>
-          ))}
-        </optgroup>
+        {!citiesOnly && (
+          <optgroup label="Airports">
+            {AIRPORTS.map((a) => (
+              <option key={a.code} value={`airport:${a.code}`}>
+                {a.label} ({a.short})
+              </option>
+            ))}
+          </optgroup>
+        )}
         <optgroup label="Cities">
           {CITIES.map((c) => (
             <option key={c.slug} value={`city:${c.slug}`}>
@@ -251,7 +259,7 @@ function buildReservationMail(s: BookingState, fareText: string): string {
   const subject = encodeURIComponent(`New Reservation & Signed Agreement — ${s.name.trim()}`);
   const body = encodeURIComponent(
     "Globallink Transportation — Reservation request\n\n" +
-      `Service: ${s.service === "hourly" ? `Hourly (${s.hours} hours, 4-hour minimum)` : "Pick up & drop off"}\n` +
+      `Service: ${s.service === "hourly" ? `Hourly (${s.hours} hours, 4-hour minimum)` : s.service === "city" ? "City to city" : "Airport pick up & drop off"}\n` +
       `Pickup: ${placeLabel(s.pickup)}\n` +
       (s.service === "hourly" ? "" : `Drop-off: ${placeLabel(s.dropoff)}\n`) +
       `Date & time: ${s.dt}\n` +
@@ -271,7 +279,7 @@ function BookingCard() {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [vehicle, setVehicle] = useState("sedan");
-  const [service, setService] = useState<"transfer" | "hourly">("transfer");
+  const [service, setService] = useState<"transfer" | "city" | "hourly">("transfer");
   const [hours, setHours] = useState(4);
   const [dt, setDt] = useState("");
   const [name, setName] = useState("");
@@ -351,6 +359,12 @@ function BookingCard() {
         ),
       };
     const parts = feeParts(Math.round((base * mult) / 5) * 5);
+    const [pType, pCode] = pickup.split(":");
+    const [dType, dCode] = dropoff.split(":");
+    const milesText =
+      pType === "city" && dType === "city" && pCode && dCode
+        ? ` · ${Math.round(cityToCityQuote(pCode, dCode).miles)} miles`
+        : "";
     return {
       cls: "has-price",
       amount: parts.total,
@@ -358,7 +372,7 @@ function BookingCard() {
       node: (
         <>
           <span className="fare-amount">${parts.base}</span>
-          <span className="fare-sub">Estimated one-way fare · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 10% booking fee at checkout</span>
+          <span className="fare-sub">Estimated one-way fare{milesText} · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 10% booking fee at checkout</span>
         </>
       ),
     };
@@ -584,9 +598,14 @@ function BookingCard() {
           <select
             id="svc"
             value={service}
-            onChange={(e) => setService(e.target.value as "transfer" | "hourly")}
+            onChange={(e) => {
+              setService(e.target.value as "transfer" | "city" | "hourly");
+              setPickup("");
+              setDropoff("");
+            }}
           >
-            <option value="transfer">Pick up &amp; drop off</option>
+            <option value="transfer">Airport pick up &amp; drop off</option>
+            <option value="city">City to city</option>
             <option value="hourly">Hourly (4 hours minimum)</option>
           </select>
         </div>
@@ -604,9 +623,9 @@ function BookingCard() {
         )}
       </div>
       <div className="field-row">
-        <LocationSelect id="pu" label="Pickup" value={pickup} onChange={setPickup} placeholder="Choose pickup" />
-        {service === "transfer" && (
-          <LocationSelect id="do" label="Drop-off" value={dropoff} onChange={setDropoff} placeholder="Choose destination" />
+        <LocationSelect id="pu" label="Pickup" value={pickup} onChange={setPickup} placeholder="Choose pickup" citiesOnly={service === "city"} />
+        {service !== "hourly" && (
+          <LocationSelect id="do" label="Drop-off" value={dropoff} onChange={setDropoff} placeholder="Choose destination" citiesOnly={service === "city"} />
         )}
       </div>
       <div className="field-row">
