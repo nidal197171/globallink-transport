@@ -1036,14 +1036,9 @@ function Index() {
             <a href={PHONE_HREF} className="btn btn-outline-dark">
               {PHONE}
             </a>
-            <div className="reserve-stack">
-              <a href="#book" className="btn btn-brass">
-                Reserve a car
-              </a>
-              <a href="/pay" className="pay-link">
-                Pay your reservation
-              </a>
-            </div>
+            <a href="#book" className="btn btn-brass">
+              Reserve a car
+            </a>
           </div>
           <button
             className="menu-toggle"
@@ -1067,9 +1062,6 @@ function Index() {
               </a>
               <a href="#book" className="btn btn-brass" onClick={() => setMenuOpen(false)}>
                 Reserve a car
-              </a>
-              <a href="/pay" className="pay-link" onClick={() => setMenuOpen(false)}>
-                Pay your reservation
               </a>
               <InstallAppButton className="btn btn-outline-dark" />
             </div>
@@ -1106,6 +1098,9 @@ function Index() {
               <div>
                 <a href="#book" className="btn btn-brass">
                   Check availability
+                </a>
+                <a href="/pay" className="pay-link hero-pay">
+                  Custom reservations pay
                 </a>
                 <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.45)", marginTop: 8 }}>
                   Payment confirms your reservation {"\u00A0·\u00A0"} or{" "}
@@ -1532,7 +1527,7 @@ function Index() {
                 <li><a href="#corporate">Corporate</a></li>
                 <li><a href="#faq">FAQ</a></li>
                 <li><a href="#book">Rental agreement</a></li>
-                <li><a href="/pay">Pay your reservation</a></li>
+                <li><a href="/pay">Custom reservations pay</a></li>
               </ul>
             </div>
             <div>
