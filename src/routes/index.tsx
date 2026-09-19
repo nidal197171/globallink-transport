@@ -1095,11 +1095,11 @@ function Index() {
               month.
             </p>
             <div className="hero-actions">
-              <div>
+              <div className="hero-cta-stack">
                 <a href="#book" className="btn btn-brass">
                   Check availability
                 </a>
-                <a href="/pay" className="pay-link hero-pay">
+                <a href="/pay" className="btn btn-brass">
                   Custom reservations pay
                 </a>
                 <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.45)", marginTop: 8 }}>

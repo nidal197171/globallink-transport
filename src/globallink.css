@@ -278,7 +278,7 @@
 
   /* ---------- Custom reservations pay link ---------- */
   .pay-link{font-size:13px; font-weight:600; color:var(--brass-dark); text-decoration:underline; text-underline-offset:3px;}
-  .hero-pay{display:block; margin-top:10px; color:#E8C56D; font-size:13.5px;}
+  .hero-cta-stack{display:flex; flex-direction:column; gap:10px; align-items:flex-start;}
 
   /* ---------- FAQ ---------- */
   .faq-list{max-width:760px;}
