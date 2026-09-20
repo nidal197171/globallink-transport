@@ -346,7 +346,13 @@ function BookingCard() {
         parts: null as FeeParts | null,
         node: <span className="fare-label">Custom route — dispatch confirms your exact fare in minutes</span>,
       };
-    const mult = VEHICLE_MULTIPLIER[vehicle];
+    const [pType, pCode] = pickup.split(":");
+    const [dType, dCode] = dropoff.split(":");
+    // Limousine matches SUV pricing on city-to-city routes; airport limo rates unchanged.
+    const mult =
+      vehicle === "limousine" && pType === "city" && dType === "city"
+        ? VEHICLE_MULTIPLIER["suv"]
+        : VEHICLE_MULTIPLIER[vehicle];
     if (mult === null || mult === undefined)
       return {
         cls: "has-price",
@@ -360,8 +366,6 @@ function BookingCard() {
         ),
       };
     const parts = feeParts(Math.round((base * mult) / 5) * 5);
-    const [pType, pCode] = pickup.split(":");
-    const [dType, dCode] = dropoff.split(":");
     const milesText =
       pType === "city" && dType === "city" && pCode && dCode
         ? ` · ${Math.round(cityToCityQuote(pCode, dCode).miles)} miles`
