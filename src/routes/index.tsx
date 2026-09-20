@@ -349,10 +349,9 @@ function BookingCard() {
     const [pType, pCode] = pickup.split(":");
     const [dType, dCode] = dropoff.split(":");
     const isCityToCity = pType === "city" && dType === "city";
-    // City-to-city: limousine matches SUV, sprinter uses the old limousine rate.
-    // Airport rates unchanged.
+    // City-to-city: sprinter uses the old limousine rate minus 10%.
+    // Airport rates use the global multipliers (limo = SUV everywhere now).
     let mult = VEHICLE_MULTIPLIER[vehicle];
-    if (isCityToCity && vehicle === "limousine") mult = VEHICLE_MULTIPLIER["suv"];
     if (isCityToCity && vehicle === "sprinter") mult = ((235 / 85) * 0.9);
     if (mult === null || mult === undefined)
       return {
