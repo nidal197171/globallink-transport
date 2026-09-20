@@ -348,11 +348,12 @@ function BookingCard() {
       };
     const [pType, pCode] = pickup.split(":");
     const [dType, dCode] = dropoff.split(":");
-    // Limousine matches SUV pricing on city-to-city routes; airport limo rates unchanged.
-    const mult =
-      vehicle === "limousine" && pType === "city" && dType === "city"
-        ? VEHICLE_MULTIPLIER["suv"]
-        : VEHICLE_MULTIPLIER[vehicle];
+    const isCityToCity = pType === "city" && dType === "city";
+    // City-to-city: limousine matches SUV, sprinter uses the old limousine rate.
+    // Airport rates unchanged.
+    let mult = VEHICLE_MULTIPLIER[vehicle];
+    if (isCityToCity && vehicle === "limousine") mult = VEHICLE_MULTIPLIER["suv"];
+    if (isCityToCity && vehicle === "sprinter") mult = 235 / 85;
     if (mult === null || mult === undefined)
       return {
         cls: "has-price",
