@@ -353,7 +353,7 @@ function BookingCard() {
     // Airport rates unchanged.
     let mult = VEHICLE_MULTIPLIER[vehicle];
     if (isCityToCity && vehicle === "limousine") mult = VEHICLE_MULTIPLIER["suv"];
-    if (isCityToCity && vehicle === "sprinter") mult = 235 / 85;
+    if (isCityToCity && vehicle === "sprinter") mult = ((235 / 85) * 0.9);
     if (mult === null || mult === undefined)
       return {
         cls: "has-price",
