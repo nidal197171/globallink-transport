@@ -375,7 +375,7 @@ export const VEHICLES: { value: string; label: string; multiplier: number | null
   { value: "sedan", label: "Sedan", multiplier: 1 },
   { value: "suv", label: "SUV", multiplier: 125 / 85 },
   { value: "limousine", label: "Limousine", multiplier: 235 / 85 },
-  { value: "sprinter", label: "Sprinter van", multiplier: 285 / 85 },
+  { value: "sprinter", label: "Sprinter van", multiplier: (285 / 85) * 0.9 },
   { value: "bus", label: "Bus & coach", multiplier: null },
 ];
 
