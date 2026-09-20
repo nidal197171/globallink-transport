@@ -66,6 +66,12 @@ export const AIRPORTS: { code: string; label: string; short: string }[] = [
   { code: "sjc", label: "San Jose Airport", short: "SJC" },
 ];
 
+export const AIRPORT_COORDS: Record<string, { lat: number; lon: number }> = {
+  sfo: { lat: 37.6213, lon: -122.379 },
+  oak: { lat: 37.7126, lon: -122.2197 },
+  sjc: { lat: 37.3639, lon: -121.929 },
+};
+
 type Rates = Record<string, number>;
 
 export const SFO_RATES: Rates = {
@@ -363,6 +369,29 @@ export function cityToCityQuote(fromSlug: string, toSlug: string): { base: numbe
   const miles = 2 * 3959 * Math.asin(Math.sqrt(h)) * CITY_CIRCUITY;
   const base = Math.max(CITY_MIN_FARE, Math.round((CITY_BASE_FARE + CITY_PER_MILE * miles) / 5) * 5);
   return { base, miles };
+}
+
+// Sprinter van base fare: Global Link's own per-mile formula —
+// $300 base + $4.50 per road mile, rounded to the nearest $5.
+// (Benchmarked ~5% under Buster's instant-quote curve, Sep 2026.)
+export const SPRINTER_BASE_FARE = 300;
+export const SPRINTER_PER_MILE = 4.5;
+
+export function estimateRoadMiles(
+  a: { lat: number; lon: number },
+  b: { lat: number; lon: number }
+): number {
+  const la1 = (a.lat * Math.PI) / 180;
+  const la2 = (b.lat * Math.PI) / 180;
+  const lo1 = (a.lon * Math.PI) / 180;
+  const lo2 = (b.lon * Math.PI) / 180;
+  const h =
+    Math.sin((la2 - la1) / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin((lo2 - lo1) / 2) ** 2;
+  return 2 * 3959 * Math.asin(Math.sqrt(h)) * CITY_CIRCUITY;
+}
+
+export function sprinterBaseFare(miles: number): number {
+  return Math.round((SPRINTER_BASE_FARE + SPRINTER_PER_MILE * miles) / 5) * 5;
 }
 
 export const AIRPORT_TO_AIRPORT: Record<string, number> = {

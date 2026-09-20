@@ -10,11 +10,15 @@ import {
 } from "@/lib/paypal.functions";
 import {
   AIRPORTS,
+  AIRPORT_COORDS,
   AIRPORT_RATES,
   AIRPORT_TO_AIRPORT,
   CITIES,
+  CITY_COORDS,
   VEHICLES,
   cityToCityQuote,
+  estimateRoadMiles,
+  sprinterBaseFare,
 } from "@/data/globallink";
 import InstallAppButton from "@/components/InstallAppButton";
 
@@ -154,6 +158,15 @@ function placeLabel(value: string) {
     return a ? `${a.label} (${a.short})` : code ?? "";
   }
   return CITIES.find((c) => c.slug === code)?.name ?? code ?? "";
+}
+
+function sprinterRouteMiles(pType: string | undefined, pCode: string | undefined, dType: string | undefined, dCode: string | undefined): number | null {
+  const point = (t: string | undefined, c: string | undefined) =>
+    !t || !c ? undefined : t === "airport" ? AIRPORT_COORDS[c] : t === "city" ? CITY_COORDS[c] : undefined;
+  const a = point(pType, pCode);
+  const b = point(dType, dCode);
+  if (!a || !b) return null;
+  return estimateRoadMiles(a, b);
 }
 
 function computeSedanBase(pickup: string, dropoff: string): number | "same" | "quote" | null {
@@ -348,18 +361,16 @@ function BookingCard() {
       };
     const [pType, pCode] = pickup.split(":");
     const [dType, dCode] = dropoff.split(":");
-    const isCityToCity = pType === "city" && dType === "city";
-    // City-to-city: sprinter uses the old limousine rate minus 10%.
-    // Airport rates use the global multipliers (limo = SUV everywhere now).
-    let mult = VEHICLE_MULTIPLIER[vehicle];
-    if (isCityToCity && vehicle === "sprinter") mult = ((235 / 85) * 0.9);
-    // SFO ↔ San Francisco: sprinter gets a +20% premium over the global airport
-    // multiplier (Buster-benchmarked; all other airport sprinter rates unchanged).
-    const isSfoSfPair =
-      (pType === "airport" && dType === "city" && pCode === "sfo" && dCode === "san-francisco") ||
-      (pType === "city" && dType === "airport" && pCode === "san-francisco" && dCode === "sfo");
-    if (isSfoSfPair && vehicle === "sprinter" && mult !== null && mult !== undefined) mult = mult * 1.2;
-    if (mult === null || mult === undefined)
+    // Sprinter vans use Global Link's own per-mile formula ($300 + $4.50/mile)
+    // for every route type — airport, city-to-city, and airport-to-airport.
+    let sprinterBase: number | null = null;
+    let routeMiles: number | null = null;
+    if (vehicle === "sprinter") {
+      routeMiles = sprinterRouteMiles(pType, pCode, dType, dCode);
+      if (routeMiles !== null) sprinterBase = sprinterBaseFare(routeMiles);
+    }
+    const mult = VEHICLE_MULTIPLIER[vehicle];
+    if ((vehicle === "sprinter" && sprinterBase === null) || (vehicle !== "sprinter" && (mult === null || mult === undefined)))
       return {
         cls: "has-price",
         amount: null as number | null,
@@ -371,11 +382,14 @@ function BookingCard() {
           </>
         ),
       };
-    const parts = feeParts(Math.round((base * mult) / 5) * 5);
+    const pricedBase = vehicle === "sprinter" ? (sprinterBase as number) : Math.round(((base as number) * (mult as number)) / 5) * 5;
+    const parts = feeParts(pricedBase);
     const milesText =
-      pType === "city" && dType === "city" && pCode && dCode
-        ? ` · ${Math.round(cityToCityQuote(pCode, dCode).miles)} miles`
-        : "";
+      routeMiles !== null
+        ? ` · ${Math.round(routeMiles)} miles`
+        : pType === "city" && dType === "city" && pCode && dCode
+          ? ` · ${Math.round(cityToCityQuote(pCode, dCode).miles)} miles`
+          : "";
     return {
       cls: "has-price",
       amount: parts.total,
