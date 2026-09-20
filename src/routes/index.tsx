@@ -353,6 +353,12 @@ function BookingCard() {
     // Airport rates use the global multipliers (limo = SUV everywhere now).
     let mult = VEHICLE_MULTIPLIER[vehicle];
     if (isCityToCity && vehicle === "sprinter") mult = ((235 / 85) * 0.9);
+    // SFO ↔ San Francisco: sprinter gets a +20% premium over the global airport
+    // multiplier (Buster-benchmarked; all other airport sprinter rates unchanged).
+    const isSfoSfPair =
+      (pType === "airport" && dType === "city" && pCode === "sfo" && dCode === "san-francisco") ||
+      (pType === "city" && dType === "airport" && pCode === "san-francisco" && dCode === "sfo");
+    if (isSfoSfPair && vehicle === "sprinter" && mult !== null && mult !== undefined) mult = mult * 1.2;
     if (mult === null || mult === undefined)
       return {
         cls: "has-price",
