@@ -33,7 +33,7 @@ export const SITE = {
     /** Click-to-call link, e.g. "tel:+14157878776". */
     phoneHref: "tel:+14157878776",
     /** Public contact email. */
-    email: "GLtrans10@gmail.com",
+    email: "info@globallinktransport.com",
   },
   market: {
     /** Metro/region name used in marketing copy, e.g. "Bay Area". */
