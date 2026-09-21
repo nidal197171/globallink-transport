@@ -454,6 +454,9 @@ function BookingCard() {
       document.getElementById("farePreview")?.textContent?.trim()) ||
     "";
 
+  // Bus & coach have no instant price — the request goes straight to email for a manual quote.
+  const isQuoteOnly = !(fare.amount && fare.amount > 0);
+
   const submitCard = async () => {
     const err = validateBooking(bookingSnapshot());
     if (err) {
@@ -501,6 +504,11 @@ function BookingCard() {
                 Reopen the payment page
               </a>{" "}
               if needed.{" "}
+            </>
+          ) : isQuoteOnly ? (
+            <>
+              your quote request and signed agreement are ready to send. Our dispatch team will
+              reply with your price shortly.{" "}
             </>
           ) : (
             <>
@@ -812,6 +820,18 @@ function BookingCard() {
         </div>
       )}
 
+      {isQuoteOnly ? (
+        <>
+          <p style={{ fontSize: 12.5, color: "var(--steel)", marginTop: 14, lineHeight: 1.55 }}>
+            {VEHICLE_LABEL[vehicle]} trips are quoted per group — no payment is due now. Send your
+            request and our dispatch team will reply with your price.
+          </p>
+          <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
+            {submitted ? "Request sent ✓" : "Send reservation request"}
+          </button>
+        </>
+      ) : (
+        <>
       <div className="field" style={{ marginTop: 14 }}>
         <label>Payment method</label>
         <div style={{ display: "flex", gap: 20, marginTop: 8 }}>
@@ -867,6 +887,8 @@ function BookingCard() {
               ? "Reserved & signed ✓"
               : "Reserve, sign & pay"}
           </button>
+        </>
+      )}
         </>
       )}
       {confirm && (
