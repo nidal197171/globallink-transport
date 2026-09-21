@@ -268,25 +268,57 @@ function buildDescription(s: BookingState): string {
   return `${base} · incl. 20% gratuity + 10% booking fee`;
 }
 
-function buildReservationMail(s: BookingState, fareText: string): string {
+function reservationDetailsText(s: BookingState, fareText: string): string {
   const today = new Date().toISOString().split("T")[0];
-  const subject = encodeURIComponent(`New Reservation & Signed Agreement — ${s.name.trim()}`);
-  const body = encodeURIComponent(
+  return (
     `${SITE.brand.legalName} — Reservation request\n\n` +
-      `Service: ${s.service === "hourly" ? `Hourly (${s.hours} hours, 4-hour minimum)` : s.service === "city" ? "City to city" : "Airport pick up & drop off"}\n` +
-      `Pickup: ${placeLabel(s.pickup)}\n` +
-      (s.service === "hourly" ? "" : `Drop-off: ${placeLabel(s.dropoff)}\n`) +
-      `Date & time: ${s.dt}\n` +
-      `Vehicle: ${VEHICLE_LABEL[s.vehicle]}\n` +
-      `Fare: ${fareText}\n\n` +
-      "Rental agreement acknowledgement\n" +
-      `Name: ${s.name.trim()}\n` +
-      `Email: ${s.email.trim()}\n` +
-      `Signature: ${s.signature.trim()}\n` +
-      `Date signed: ${today}\n\n` +
-      `By signing, this person confirms they have read, understood and will comply with the provisions of the ${SITE.brand.legalName} rental agreement, including the 48-hour cancellation policy.`
+    `Service: ${s.service === "hourly" ? `Hourly (${s.hours} hours, 4-hour minimum)` : s.service === "city" ? "City to city" : "Airport pick up & drop off"}\n` +
+    `Pickup: ${placeLabel(s.pickup)}\n` +
+    (s.service === "hourly" ? "" : `Drop-off: ${placeLabel(s.dropoff)}\n`) +
+    `Date & time: ${s.dt}\n` +
+    `Vehicle: ${VEHICLE_LABEL[s.vehicle]}\n` +
+    `Fare: ${fareText}\n\n` +
+    "Rental agreement acknowledgement\n" +
+    `Name: ${s.name.trim()}\n` +
+    `Email: ${s.email.trim()}\n` +
+    `Signature: ${s.signature.trim()}\n` +
+    `Date signed: ${today}\n\n` +
+    `By signing, this person confirms they have read, understood and will comply with the provisions of the ${SITE.brand.legalName} rental agreement, including the 48-hour cancellation policy.`
   );
+}
+
+function buildReservationMail(s: BookingState, fareText: string): string {
+  const subject = encodeURIComponent(`New Reservation & Signed Agreement — ${s.name.trim()}`);
+  const body = encodeURIComponent(reservationDetailsText(s, fareText));
   return `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+}
+
+function CopyDetailsButton({ getText }: { getText: () => string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      className="btn btn-outline-dark"
+      style={{ marginTop: 10 }}
+      onClick={async () => {
+        const text = getText();
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+        }
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+      }}
+    >
+      {copied ? "Copied ✓ — paste it into any email or WhatsApp" : "Copy reservation details"}
+    </button>
+  );
 }
 
 function BookingCard() {
@@ -480,6 +512,8 @@ function BookingCard() {
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
             {EMAIL}
           </a>
+          , or{" "}
+          <CopyDetailsButton getText={() => reservationDetailsText(bookingSnapshot(), fareTextNow())} />
           .
         </>
       ),
@@ -499,6 +533,8 @@ function BookingCard() {
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
             {EMAIL}
           </a>
+          , or{" "}
+          <CopyDetailsButton getText={() => reservationDetailsText(bookingSnapshot(), fareTextNow())} />
           .
         </>
       ),
