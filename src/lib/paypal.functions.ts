@@ -69,7 +69,7 @@ export const createPayPalOrder = createServerFn({ method: "POST" })
                     quantity: "1",
                   },
                   {
-                    name: "Booking fee (10%)",
+                    name: "Booking fee (5%)",
                     unit_amount: { currency_code: "USD", value: data.fee.toFixed(2) },
                     quantity: "1",
                   },

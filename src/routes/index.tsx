@@ -265,7 +265,7 @@ function buildDescription(s: BookingState): string {
     s.service === "hourly"
       ? `${s.hours} hours hourly service · ${VEHICLE_LABEL[s.vehicle]} · pickup ${placeLabel(s.pickup)} · ${s.dt}`
       : `${placeLabel(s.pickup)} to ${placeLabel(s.dropoff)} · ${VEHICLE_LABEL[s.vehicle]} · ${s.dt}`;
-  return `${base} · incl. 20% gratuity + 10% booking fee`;
+  return `${base} · incl. 20% gratuity + 5% booking fee`;
 }
 
 function reservationDetailsText(s: BookingState, fareText: string): string {
@@ -342,9 +342,9 @@ function BookingCard() {
   const [ppClientId, setPpClientId] = useState<string | null>(null);
   const [ppChecked, setPpChecked] = useState(false);
 
-  // All reservations add 20% gratuity + 10% booking fee on top of the base fare at checkout.
+  // All reservations add 20% gratuity + 5% booking fee on top of the base fare at checkout.
   const feeParts = (base: number): FeeParts => {
-    const total = Math.round(base * 1.3);
+    const total = Math.round(base * 1.25);
     const gratuity = Math.round(base * 0.2);
     return { base, gratuity, fee: total - base - gratuity, total };
   };
@@ -373,7 +373,7 @@ function BookingCard() {
           <>
             <span className="fare-amount">${parts.base}</span>
             <span className="fare-sub">
-              {hours} hours × ${rate}/hr · {VEHICLE_LABEL[vehicle]} (4-hour minimum) + 20% gratuity + 10% booking fee at checkout
+              {hours} hours × ${rate}/hr · {VEHICLE_LABEL[vehicle]} (4-hour minimum) + 20% gratuity + 5% booking fee at checkout
             </span>
           </>
         ),
@@ -429,7 +429,7 @@ function BookingCard() {
       node: (
         <>
           <span className="fare-amount">${parts.base}</span>
-          <span className="fare-sub">Estimated one-way fare{milesText} · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 10% booking fee at checkout</span>
+          <span className="fare-sub">Estimated one-way fare{milesText} · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 5% booking fee at checkout</span>
         </>
       ),
     };
@@ -772,7 +772,7 @@ function BookingCard() {
           <div className="agreement-box">
             <h4>Additional charges</h4>
             <p>
-              A <strong>20% gratuity</strong> and <strong>10% booking fee</strong> are added to all
+              A <strong>20% gratuity</strong> and <strong>5% booking fee</strong> are added to all
               reservations. Overtime is billed at the hourly rate of the reserved vehicle.
             </p>
           </div>
@@ -809,7 +809,7 @@ function BookingCard() {
               <span>${fare.parts.gratuity}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, padding: "2px 0" }}>
-              <span>Booking fee (10%)</span>
+              <span>Booking fee (5%)</span>
               <span>${fare.parts.fee}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 15, borderTop: "1px solid var(--brass)", marginTop: 6, paddingTop: 8 }}>

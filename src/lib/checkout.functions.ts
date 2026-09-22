@@ -21,7 +21,7 @@ export const createReservationCheckout = createServerFn({ method: "POST" })
     const items: Array<[string, number]> = [
       [`${SITE.brand.legalName} — base fare`, data.base],
       ["Gratuity (20%)", data.gratuity],
-      ["Booking fee (10%)", data.fee],
+      ["Booking fee (5%)", data.fee],
     ];
     const params = new URLSearchParams();
     params.set("mode", "payment");
