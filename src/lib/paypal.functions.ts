@@ -31,6 +31,7 @@ const orderSchema = z.object({
   base: z.number().int().positive().max(100000).optional(),
   gratuity: z.number().int().nonnegative().max(100000).optional(),
   fee: z.number().int().nonnegative().max(100000).optional(),
+  greetMeet: z.number().int().nonnegative().max(100000).optional(),
   description: z.string().min(1).max(300),
 });
 
@@ -73,6 +74,15 @@ export const createPayPalOrder = createServerFn({ method: "POST" })
                     unit_amount: { currency_code: "USD", value: data.fee.toFixed(2) },
                     quantity: "1",
                   },
+                  ...(data.greetMeet && data.greetMeet > 0
+                    ? [
+                        {
+                          name: "Greet & meet service",
+                          unit_amount: { currency_code: "USD", value: data.greetMeet.toFixed(2) },
+                          quantity: "1",
+                        },
+                      ]
+                    : []),
                 ];
               }
               return unit;

@@ -235,6 +235,9 @@ function LocationSelect({
 
 type FeeParts = { base: number; gratuity: number; fee: number; total: number };
 
+// Greet & meet add-on: airport pickups only, flat $40 added to the total (no gratuity/fee on it).
+const GREET_MEET_PRICE = 40;
+
 type BookingState = {
   service: string;
   pickup: string;
@@ -242,6 +245,7 @@ type BookingState = {
   dt: string;
   vehicle: string;
   hours: number;
+  greetMeet: boolean;
   name: string;
   signature: string;
   email: string;
@@ -265,7 +269,7 @@ function buildDescription(s: BookingState): string {
     s.service === "hourly"
       ? `${s.hours} hours hourly service · ${VEHICLE_LABEL[s.vehicle]} · pickup ${placeLabel(s.pickup)} · ${s.dt}`
       : `${placeLabel(s.pickup)} to ${placeLabel(s.dropoff)} · ${VEHICLE_LABEL[s.vehicle]} · ${s.dt}`;
-  return `${base} · incl. 20% gratuity + 5% booking fee`;
+  return `${base} · incl. 20% gratuity + 5% booking fee${s.greetMeet ? ` + greet & meet ($${GREET_MEET_PRICE})` : ""}`;
 }
 
 function reservationDetailsText(s: BookingState, fareText: string): string {
@@ -277,6 +281,7 @@ function reservationDetailsText(s: BookingState, fareText: string): string {
     (s.service === "hourly" ? "" : `Drop-off: ${placeLabel(s.dropoff)}\n`) +
     `Date & time: ${s.dt}\n` +
     `Vehicle: ${VEHICLE_LABEL[s.vehicle]}\n` +
+    (s.greetMeet ? `Greet & meet: Yes ($${GREET_MEET_PRICE})\n` : "") +
     `Fare: ${fareText}\n\n` +
     "Rental agreement acknowledgement\n" +
     `Name: ${s.name.trim()}\n` +
@@ -327,6 +332,7 @@ function BookingCard() {
   const [vehicle, setVehicle] = useState("sedan");
   const [service, setService] = useState<"transfer" | "city" | "hourly">("transfer");
   const [hours, setHours] = useState(4);
+  const [greetMeet, setGreetMeet] = useState(false);
   const [dt, setDt] = useState("");
   const [name, setName] = useState("");
   const [signature, setSignature] = useState("");
@@ -357,6 +363,7 @@ function BookingCard() {
           cls: "has-price",
           amount: null as number | null,
           parts: null as FeeParts | null,
+          greetMeet: 0,
           node: (
             <>
               <span className="fare-amount">Request a quote</span>
@@ -369,6 +376,7 @@ function BookingCard() {
         cls: "has-price",
         amount: parts.total,
         parts,
+        greetMeet: 0,
         node: (
           <>
             <span className="fare-amount">${parts.base}</span>
@@ -381,14 +389,17 @@ function BookingCard() {
     }
     const base = computeSedanBase(pickup, dropoff);
     if (!pickup || !dropoff)
-      return { cls: "", amount: null as number | null, parts: null as FeeParts | null, node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
+      return { cls: "", amount: null as number | null, parts: null as FeeParts | null,
+          greetMeet: 0, node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
     if (base === "same")
-      return { cls: "", amount: null as number | null, parts: null as FeeParts | null, node: <span className="fare-label">Pickup and drop-off can't be the same place</span> };
+      return { cls: "", amount: null as number | null, parts: null as FeeParts | null,
+          greetMeet: 0, node: <span className="fare-label">Pickup and drop-off can't be the same place</span> };
     if (base === "quote" || base === null)
       return {
         cls: "",
         amount: null as number | null,
         parts: null as FeeParts | null,
+          greetMeet: 0,
         node: <span className="fare-label">Custom route — dispatch confirms your exact fare in minutes</span>,
       };
     const [pType, pCode] = pickup.split(":");
@@ -407,6 +418,7 @@ function BookingCard() {
         cls: "has-price",
         amount: null as number | null,
         parts: null as FeeParts | null,
+          greetMeet: 0,
         node: (
           <>
             <span className="fare-amount">Request a quote</span>
@@ -415,6 +427,8 @@ function BookingCard() {
         ),
       };
     const pricedBase = vehicle === "sprinter" ? (sprinterBase as number) : Math.round(((base as number) * (mult as number)) / 5) * 5;
+    // Greet & meet is a flat $40 add-on, only when an airport pickup is selected for an airport transfer.
+    const gm = service === "transfer" && greetMeet && pickup.startsWith("airport:") ? GREET_MEET_PRICE : 0;
     const parts = feeParts(pricedBase);
     const milesText =
       routeMiles !== null
@@ -424,16 +438,17 @@ function BookingCard() {
           : "";
     return {
       cls: "has-price",
-      amount: parts.total,
+      amount: parts.total + gm,
       parts,
+      greetMeet: gm,
       node: (
         <>
-          <span className="fare-amount">${parts.base}</span>
-          <span className="fare-sub">Estimated one-way fare{milesText} · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 5% booking fee at checkout</span>
+          <span className="fare-amount">${parts.base + gm}</span>
+          <span className="fare-sub">Estimated one-way fare{milesText} · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 5% booking fee at checkout{gm > 0 ? ` · incl. greet & meet ($${GREET_MEET_PRICE})` : ""}</span>
         </>
       ),
     };
-  }, [pickup, dropoff, vehicle, service, hours]);
+  }, [pickup, dropoff, vehicle, service, hours, greetMeet]);
 
 
 
@@ -444,6 +459,7 @@ function BookingCard() {
     dt,
     vehicle,
     hours,
+    greetMeet: fare.greetMeet > 0,
     name,
     signature,
     email,
@@ -475,6 +491,7 @@ function BookingCard() {
             base: fare.parts.base,
             gratuity: fare.parts.gratuity,
             fee: fare.parts.fee,
+            greetMeet: fare.greetMeet,
             description: buildDescription(bookingSnapshot()),
             origin: window.location.origin,
             customerName: name.trim(),
@@ -607,6 +624,7 @@ function BookingCard() {
                 base: fare.parts?.base,
                 gratuity: fare.parts?.gratuity,
                 fee: fare.parts?.fee,
+                greetMeet: fare.greetMeet,
                 description: buildDescription(snapshot),
               },
             });
@@ -671,6 +689,7 @@ function BookingCard() {
               setService(e.target.value as "transfer" | "city" | "hourly");
               setPickup("");
               setDropoff("");
+              setGreetMeet(false);
             }}
           >
             <option value="transfer">Airport pick up &amp; drop off</option>
@@ -692,7 +711,7 @@ function BookingCard() {
         )}
       </div>
       <div className="field-row">
-        <LocationSelect id="pu" label="Pickup" value={pickup} onChange={setPickup} placeholder="Choose pickup" citiesOnly={service === "city"} />
+        <LocationSelect id="pu" label="Pickup" value={pickup} onChange={(v) => { setPickup(v); if (!v.startsWith("airport:")) setGreetMeet(false); }} placeholder="Choose pickup" citiesOnly={service === "city"} />
         {service !== "hourly" && (
           <LocationSelect id="do" label="Drop-off" value={dropoff} onChange={setDropoff} placeholder="Choose destination" citiesOnly={service === "city"} />
         )}
@@ -714,6 +733,22 @@ function BookingCard() {
         </div>
       </div>
 
+
+      {service === "transfer" && pickup.startsWith("airport:") && (
+        <div className="field-row">
+          <label className="check-field">
+            <input
+              type="checkbox"
+              checked={greetMeet}
+              onChange={(e) => setGreetMeet(e.target.checked)}
+            />
+            <span>
+              Add greet &amp; meet — your driver meets you inside the terminal with a name sign{" "}
+              <strong>+${GREET_MEET_PRICE}</strong>
+            </span>
+          </label>
+        </div>
+      )}
 
       <div className={`fare-preview ${fare.cls}`} id="farePreview">
         {fare.node}
