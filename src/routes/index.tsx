@@ -1098,7 +1098,11 @@ function Index() {
 
   return (
     <>
-      <div className="disclaimer-bar">We are a global ground transportation arranger (we are not a limo company)</div>
+      <div className="disclaimer-bar">
+        We are a global ground transportation arranger
+        <br />
+        <span className="disclaimer-sub">(we are not a limo company)</span>
+      </div>
       <div className="announce-bar">Coming soon to more US cities and Dubai</div>
       <header>
         <div className="wrap nav-inner">
