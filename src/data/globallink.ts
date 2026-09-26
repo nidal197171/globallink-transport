@@ -463,17 +463,18 @@ export const CITY_COORDS: Record<string, { lat: number; lon: number }> = {
   "yountville": { lat: 38.40354, lon: -122.3619 },
 };
 
-// City-to-city sedan base fare: $60 base + $3/mile (road miles estimated
-// from straight-line distance), $60 minimum, rounded to the nearest $5.
-const CITY_BASE_FARE = 60;
-const CITY_PER_MILE = 3;
-const CITY_MIN_FARE = 60;
+// City-to-city sedan fare: $6 per road mile (road miles estimated from
+// straight-line distance), +$45 on trips under 10 miles, rounded to the
+// nearest $5.
+const CITY_PER_MILE = 6;
+const CITY_SHORT_TRIP_MILES = 10;
+const CITY_SHORT_TRIP_FEE = 45;
 const CITY_CIRCUITY = 1.15;
 
 export function cityToCityQuote(fromSlug: string, toSlug: string): { base: number; miles: number } {
   const a = CITY_COORDS[fromSlug];
   const b = CITY_COORDS[toSlug];
-  if (!a || !b) return { base: CITY_MIN_FARE, miles: 0 };
+  if (!a || !b) return { base: CITY_SHORT_TRIP_FEE, miles: 0 };
   const la1 = (a.lat * Math.PI) / 180;
   const la2 = (b.lat * Math.PI) / 180;
   const lo1 = (a.lon * Math.PI) / 180;
@@ -481,7 +482,8 @@ export function cityToCityQuote(fromSlug: string, toSlug: string): { base: numbe
   const h =
     Math.sin((la2 - la1) / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin((lo2 - lo1) / 2) ** 2;
   const miles = 2 * 3959 * Math.asin(Math.sqrt(h)) * CITY_CIRCUITY;
-  const base = Math.max(CITY_MIN_FARE, Math.round((CITY_BASE_FARE + CITY_PER_MILE * miles) / 5) * 5);
+  const raw = CITY_PER_MILE * miles + (miles < CITY_SHORT_TRIP_MILES ? CITY_SHORT_TRIP_FEE : 0);
+  const base = Math.round(raw / 5) * 5;
   return { base, miles };
 }
 
