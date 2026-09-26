@@ -155,7 +155,7 @@ export const SFO_RATES: Rates = {
   sacramento: 565,
   "san-bruno": 60,
   "san-carlos": 70,
-  "san-francisco": 75,
+  "san-francisco": 85,
   "san-jose": 230,
   "san-leandro": 100,
   "san-mateo": 90,
