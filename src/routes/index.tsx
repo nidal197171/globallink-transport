@@ -1137,6 +1137,10 @@ function DriveForm() {
             <label htmlFor="drvInsurance">Proof of insurance</label>
             <input id="drvInsurance" type="file" accept="image/*,.pdf" multiple onChange={onFiles} />
           </div>
+          <div className="field">
+            <label htmlFor="drvPuc">PUC documents</label>
+            <input id="drvPuc" type="file" accept="image/*,.pdf" multiple onChange={onFiles} />
+          </div>
         </div>
       </div>
 
