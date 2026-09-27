@@ -596,8 +596,8 @@ export const CITY_COORDS: Record<string, { lat: number; lon: number }> = {
 // straight-line distance), +$45 on trips under 10 miles, rounded to the
 // nearest $5.
 const CITY_PER_MILE = 5.75;
-const CITY_SHORT_TRIP_MILES = 10;
-const CITY_SHORT_TRIP_FEE = 45;
+const CITY_SHORT_TRIP_MILES = 16;
+const CITY_SHORT_TRIP_FEE = 60;
 const CITY_CIRCUITY = 1.15;
 
 export function cityToCityQuote(fromSlug: string, toSlug: string): { base: number; miles: number } {
