@@ -243,6 +243,9 @@ function LocationSelect({
 
 type FeeParts = { base: number; gratuity: number; fee: number; total: number };
 
+// Google Sheet receiver for driver applications (Apps Script web app).
+const DRIVER_SHEET_URL =
+  "https://script.google.com/macros/s/AKfycbzyzeb93FXBIs1GKtmrYcg1pHKy-f-3Acq3lJbqMVi_AtZoBPk7Ea4_psTkayhXhl5-Gw/exec";
 // Greet & meet add-on: airport pickups only, flat $40 added to the total (no gratuity/fee on it).
 const GREET_MEET_PRICE = 40;
 // Extra pickups: $35 per additional stop, added to the total (no gratuity/fee on it).
@@ -1045,6 +1048,25 @@ function DriveForm() {
       });
       return;
     }
+    // Send the application to the Google Sheet (fire-and-forget; the email below still goes out).
+    try {
+      fetch(DRIVER_SHEET_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          email: form.email.trim(),
+          city: form.city.trim(),
+          vehicle: VEHICLE_LABEL[form.vehicle] ?? form.vehicle,
+          experience: form.experience || "",
+          notes: form.notes.trim(),
+        }),
+      }).catch(() => {});
+    } catch {
+      /* sheet write failed — the email application still goes out */
+    }
     const subject = encodeURIComponent(`Driver Application — ${form.name.trim()}`);
     const body = encodeURIComponent(
       `${SITE.brand.legalName} — Driver application\n\n` +
@@ -1055,7 +1077,7 @@ function DriveForm() {
         `Vehicle: ${VEHICLE_LABEL[form.vehicle]}\n` +
         `Years driving professionally: ${form.experience || "Not specified"}\n` +
         `Notes: ${form.notes.trim() || "None"}\n\n` +
-        "Documents: please attach driver's license and proof of insurance to this email before sending."
+        "Documents: please attach driver's license, proof of insurance and PUC documents to this email before sending."
     );
     window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
     setConfirm({
@@ -1065,7 +1087,7 @@ function DriveForm() {
           Thanks, {form.name.trim()} — your application is ready to send.{" "}
           {hasFiles
             ? "Please attach your uploaded documents to the email before sending, since they can't attach automatically. "
-            : "Don't forget to attach your license and insurance to the email before sending. "}
+            : "Don't forget to attach your license, insurance and PUC documents to the email before sending. "}
           If your email app didn't open automatically, please email a copy to{" "}
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
             {EMAIL}
