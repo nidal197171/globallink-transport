@@ -65,8 +65,6 @@ const HOURLY_RATES: Record<string, number | null> = {
 
 const HOUR_OPTIONS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-// Flat $40 added on top of the multiplier price for SUV and Limousine (all route types).
-const SUV_LIMO_SURCHARGE = 40;
 
 
 const AGREEMENT_TERMS: { title: string; body: string }[] = [
@@ -429,9 +427,15 @@ function BookingCard() {
           </>
         ),
       };
-    let pricedBase = vehicle === "sprinter" ? (sprinterBase as number) : Math.round(((base as number) * (mult as number)) / 5) * 5;
-    // Flat $40 SUV/Limousine surcharge on top of the multiplier price (all route types).
-    if (vehicle === "suv" || vehicle === "limousine") pricedBase += SUV_LIMO_SURCHARGE;
+    let pricedBase: number;
+    if (vehicle === "sprinter") {
+      pricedBase = sprinterBase as number;
+    } else if (vehicle === "suv" || vehicle === "limousine") {
+      // SUV and Limousine are a flat $60 over the sedan base fare.
+      pricedBase = (base as number) + 60;
+    } else {
+      pricedBase = Math.round(((base as number) * (mult as number)) / 5) * 5;
+    }
     // Greet & meet is a flat $40 add-on, only when an airport pickup is selected for an airport transfer.
     const gm = service === "transfer" && greetMeet && pickup.startsWith("airport:") ? GREET_MEET_PRICE : 0;
     const parts = feeParts(pricedBase);
