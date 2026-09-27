@@ -96,6 +96,10 @@ const AGREEMENT_TERMS: { title: string; body: string }[] = [
     body: "Cancellations must be made at least 48 hours before your scheduled pickup. Cancellations inside the 48-hour window, or no-shows, will be charged the full reservation amount.",
   },
   {
+    title: "Waiting time",
+    body: "Waiting time up to 10 minutes is included. Any waiting time over 10 minutes will be charged at $2 per minute.",
+  },
+  {
     title: "Surprise pickups",
     body: "If the arrival of the vehicle is meant as a surprise, please indicate this at the time of booking.",
   },
