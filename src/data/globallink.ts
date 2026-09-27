@@ -639,8 +639,20 @@ export function sprinterBaseFare(miles: number): number {
   return Math.round((SPRINTER_BASE_FARE + SPRINTER_PER_MILE * miles) / 5) * 5;
 }
 
-export const AIRPORT_TO_AIRPORT: Record<string, number> = {
-  "oak-sfo": 100,
+// $50 added to the fare whenever the pickup is in an East Bay city
+// (Alameda + Contra Costa counties).
+export const EAST_BAY_PICKUP_SURCHARGE = 50;
+export const EAST_BAY_CITIES: Set<string> = new Set([
+  "alameda", "albany", "berkeley", "castro-valley", "dublin", "emeryville",
+  "fremont", "hayward", "livermore", "newark", "oakland", "piedmont",
+  "pleasanton", "san-leandro", "union-city",
+  "antioch", "brentwood", "clayton", "concord", "danville", "el-cerrito",
+  "hercules", "lafayette", "martinez", "moraga", "oakley", "orinda",
+  "pinole", "pittsburg", "pleasant-hill", "richmond", "san-pablo",
+  "san-ramon", "walnut-creek",
+]);
+
+export const AIRPORT_TO_AIRPORT: Record<string, number> = {  "oak-sfo": 100,
   "sfo-sjc": 165,
   "oak-sjc": 160,
 };
