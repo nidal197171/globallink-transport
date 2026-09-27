@@ -1048,11 +1048,13 @@ function DriveForm() {
       });
       return;
     }
-    // Send the application to the Google Sheet (fire-and-forget; the email below still goes out).
+    // Send the application to the Google Sheet. keepalive lets the request
+    // finish even though we navigate to the email app right after.
     try {
       fetch(DRIVER_SHEET_URL, {
         method: "POST",
         mode: "no-cors",
+        keepalive: true,
         headers: { "Content-Type": "text/plain" },
         body: JSON.stringify({
           name: form.name.trim(),
@@ -1079,7 +1081,10 @@ function DriveForm() {
         `Notes: ${form.notes.trim() || "None"}\n\n` +
         "Documents: please attach driver's license, proof of insurance and PUC documents to this email before sending."
     );
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    // Give the sheet request a head start before opening the email app.
+    setTimeout(() => {
+      window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    }, 800);
     setConfirm({
       kind: "ok",
       text: (
