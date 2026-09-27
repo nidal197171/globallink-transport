@@ -767,6 +767,9 @@ function BookingCard() {
               <strong>+${GREET_MEET_PRICE}</strong>
             </span>
           </label>
+          <div className="fare-sub" style={{ marginTop: "4px" }}>
+            Waiting time up to 10 minutes is included. Any waiting time over 10 minutes is charged at $2 per minute.
+          </div>
         </div>
       )}
 
