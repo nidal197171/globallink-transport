@@ -7,6 +7,7 @@ const schema = z.object({
   gratuity: z.number().int().nonnegative().max(100000),
   fee: z.number().int().nonnegative().max(100000),
   greetMeet: z.number().int().nonnegative().max(100000).default(0),
+  extraPickups: z.number().int().nonnegative().max(100000).default(0),
   description: z.string().min(1).max(300),
   origin: z.string().url(),
   customerName: z.string().min(1).max(200),
@@ -24,6 +25,7 @@ export const createReservationCheckout = createServerFn({ method: "POST" })
       ["Gratuity (20%)", data.gratuity],
       ["Booking fee (5%)", data.fee],
       ["Greet & meet service", data.greetMeet],
+      ["Extra pickups", data.extraPickups],
     ];
     const params = new URLSearchParams();
     params.set("mode", "payment");
