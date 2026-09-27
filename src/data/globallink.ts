@@ -640,7 +640,7 @@ export function sprinterBaseFare(miles: number): number {
 }
 
 // $50 added to the fare whenever the pickup is in an East Bay city
-// (Alameda + Contra Costa counties).
+// (Alameda + Contra Costa counties) or a South Bay city (Santa Clara county).
 export const EAST_BAY_PICKUP_SURCHARGE = 50;
 export const EAST_BAY_CITIES: Set<string> = new Set([
   "alameda", "albany", "berkeley", "castro-valley", "dublin", "emeryville",
@@ -650,6 +650,11 @@ export const EAST_BAY_CITIES: Set<string> = new Set([
   "hercules", "lafayette", "martinez", "moraga", "oakley", "orinda",
   "pinole", "pittsburg", "pleasant-hill", "richmond", "san-pablo",
   "san-ramon", "walnut-creek",
+]);
+export const SOUTH_BAY_CITIES: Set<string> = new Set([
+  "campbell", "cupertino", "gilroy", "los-altos", "los-altos-hills",
+  "los-gatos", "milpitas", "monte-sereno", "morgan-hill", "mountain-view",
+  "palo-alto", "san-jose", "santa-clara", "saratoga", "sunnyvale",
 ]);
 
 export const AIRPORT_TO_AIRPORT: Record<string, number> = {  "oak-sfo": 100,

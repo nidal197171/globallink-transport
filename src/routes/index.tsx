@@ -17,6 +17,7 @@ import {
   CITY_COORDS,
   EAST_BAY_CITIES,
   EAST_BAY_PICKUP_SURCHARGE,
+  SOUTH_BAY_CITIES,
   VEHICLES,
   cityToCityQuote,
   estimateRoadMiles,
@@ -438,8 +439,8 @@ function BookingCard() {
     } else {
       pricedBase = Math.round(((base as number) * (mult as number)) / 5) * 5;
     }
-    // $50 surcharge whenever the pickup is in an East Bay city (all vehicles).
-    if (pType === "city" && pCode && EAST_BAY_CITIES.has(pCode)) {
+    // $50 surcharge whenever the pickup is in an East Bay or South Bay city (all vehicles).
+    if (pType === "city" && pCode && (EAST_BAY_CITIES.has(pCode) || SOUTH_BAY_CITIES.has(pCode))) {
       pricedBase += EAST_BAY_PICKUP_SURCHARGE;
     }
     // Greet & meet is a flat $40 add-on, only when an airport pickup is selected for an airport transfer.
