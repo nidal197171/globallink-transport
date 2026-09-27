@@ -245,7 +245,7 @@ type FeeParts = { base: number; gratuity: number; fee: number; total: number };
 
 // Google Sheet receiver for driver applications (Apps Script web app).
 const DRIVER_SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbzyzeb93FXBIs1GKtmrYcg1pHKy-f-3Acq3lJbqMVi_AtZoBPk7Ea4_psTkayhXhl5-Gw/exec";
+  "https://script.google.com/macros/s/AKfycbzq-eR8c-sf75drBisHvdtazMuWoki6xpYynfyoXKvV75425z5FTz5r9enaBf5DbqOAIw/exec";
 // Greet & meet add-on: airport pickups only, flat $40 added to the total (no gratuity/fee on it).
 const GREET_MEET_PRICE = 40;
 // Extra pickups: $35 per additional stop, added to the total (no gratuity/fee on it).
