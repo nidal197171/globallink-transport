@@ -57,8 +57,8 @@ const VEHICLE_MULTIPLIER: Record<string, number | null> = Object.fromEntries(
 );
 const HOURLY_RATES: Record<string, number | null> = {
   sedan: 85,
-  suv: 160,
-  limousine: 160,
+  suv: 140,
+  limousine: 140,
   sprinter: 175,
   bus: null,
 };
