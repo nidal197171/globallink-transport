@@ -1315,8 +1315,7 @@ function Index() {
             </div>
             <h1>The last late driver cost you a meeting. Not this time.</h1>
             <p className="lead">
-              One dispatch team for every ride your company books — sedan to coach, invoiced once a
-              month.
+              One dispatch team for every ride your company books — sedan to coach.
             </p>
             <div className="hero-actions">
               <div className="hero-cta-stack">
