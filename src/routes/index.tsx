@@ -386,7 +386,7 @@ function BookingCard() {
           extraPickups: 0,
           node: (
             <>
-              <span className="fare-amount">Request a quote</span>
+              <span className="fare-amount">Request a quote</span>{" "}
               <span className="fare-sub">{VEHICLE_LABEL[vehicle]} pricing is quoted per group size</span>
             </>
           ),
@@ -444,7 +444,7 @@ function BookingCard() {
           extraPickups: 0,
         node: (
           <>
-            <span className="fare-amount">Request a quote</span>
+            <span className="fare-amount">Request a quote</span>{" "}
             <span className="fare-sub">{VEHICLE_LABEL[vehicle]} pricing is quoted per group size</span>
           </>
         ),
