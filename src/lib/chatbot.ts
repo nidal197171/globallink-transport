@@ -267,7 +267,7 @@ export class ChatEngine {
       const fare = AIRPORT_TO_AIRPORT[key1] ?? AIRPORT_TO_AIRPORT[key2];
       if (fare == null) return null;
       return this.msg(
-        `${a.label} → ${b.label} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60} (sedan + $60). 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
+        `${a.label} → ${b.label} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60}. 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
         ["Book this ride", "Get another quote"]
       );
     }
@@ -285,7 +285,7 @@ export class ChatEngine {
         );
       }
       return this.msg(
-        `${ap.label} → ${cityName(slug)} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60} (sedan + $60). 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
+        `${ap.label} → ${cityName(slug)} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60}. 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
         ["Book this ride", "Get another quote"]
       );
     }
