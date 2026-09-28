@@ -1600,8 +1600,7 @@ function Index() {
               <div className="num">02</div>
               <h3>We confirm your chauffeur</h3>
               <p>
-                A dispatcher assigns a licensed, background-checked driver and sends confirmation
-                with their name and photo.
+                A dispatcher assigns a licensed, background-checked driver.
               </p>
             </div>
           </div>
