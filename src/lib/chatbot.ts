@@ -145,6 +145,13 @@ export class ChatEngine {
       return this.msg(`No problem — cancelled. What would you like to do?`, BOOK_QUICK);
     }
 
+    // "Start over" / "main menu" — always available, resets to the main menu.
+    if (/^(start over|main menu|menu)$/.test(text)) {
+      this.mflow = null;
+      this.mlead = {};
+      return this.start();
+    }
+
     // Change/confirmation flow takes priority while active.
     if (this.mflow) return this.handleManageFlow(input, text);
 

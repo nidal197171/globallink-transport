@@ -76,6 +76,19 @@ export function ChatWidget() {
     }
   };
 
+  /** Always-available escape: wipes the conversation and restarts at the main menu. */
+  const resetChat = () => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+    setTyping(false);
+    setSubmitting(false);
+    setMessages([]);
+    setQuickReplies([]);
+    setInput("");
+    engineRef.current = new ChatEngine(ENGINE_SITE);
+    pushBot(engineRef.current.start().messages);
+  };
+
   const deliver = (engine: ChatEngine, text: string) => {
     const result = engine.handle(text);
     pushBot(result.messages, () => {
@@ -214,19 +227,38 @@ export function ChatWidget() {
                 Automated assistant · replies instantly
               </div>
             </div>
-            <button
-              onClick={() => setOpen(false)}
-              aria-label="Close chat"
-              style={{
-                background: "none",
-                border: "none",
-                color: "#fff",
-                cursor: "pointer",
-                padding: 8,
-              }}
-            >
-              <X size={20} />
-            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <button
+                onClick={resetChat}
+                aria-label="Start over"
+                title="Start over"
+                style={{
+                  background: "rgba(255,255,255,0.12)",
+                  border: "none",
+                  color: "#fff",
+                  cursor: "pointer",
+                  padding: "6px 10px",
+                  borderRadius: 8,
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
+                ↺ Start over
+              </button>
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close chat"
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#fff",
+                  cursor: "pointer",
+                  padding: 8,
+                }}
+              >
+                <X size={20} />
+              </button>
+            </div>
           </div>
 
           {/* Messages */}
