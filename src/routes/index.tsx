@@ -587,7 +587,7 @@ function BookingCard() {
       bookingSnapshot(),
       fareTextNow(),
       bookingNo,
-      paymentUrl ? "Card (Stripe)" : "Quote request"
+      paymentUrl ? "Paid" : "Not paid"
     );
     // Give the sheet request a head start before opening the email app.
     setTimeout(() => {
@@ -633,7 +633,7 @@ function BookingCard() {
   };
 
   const completePayPalReservation = (amount: number, payerName: string, bookingNo: string) => {
-    logBookingToSheet(bookingSnapshot(), fareTextNow(), bookingNo, "PayPal");
+    logBookingToSheet(bookingSnapshot(), fareTextNow(), bookingNo, "Paid");
     // Give the sheet request a head start before opening the email app.
     setTimeout(() => {
       window.location.href = buildReservationMail(bookingSnapshot(), fareTextNow(), bookingNo);
