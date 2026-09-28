@@ -24,6 +24,7 @@ import {
   sprinterBaseFare,
 } from "@/data/globallink";
 import InstallAppButton from "@/components/InstallAppButton";
+import { mintBookingNumber } from "@/lib/bookingNumber";
 
 
 export const Route = createFileRoute("/")({
@@ -287,10 +288,11 @@ function buildDescription(s: BookingState): string {
   return `${base} · incl. 20% gratuity + 5% booking fee${s.greetMeet ? ` + greet & meet ($${GREET_MEET_PRICE})` : ""}${s.extraPickups > 0 ? ` + ${s.extraPickups} extra pickup${s.extraPickups > 1 ? "s" : ""} ($${s.extraPickups * EXTRA_PICKUP_PRICE})` : ""}`;
 }
 
-function reservationDetailsText(s: BookingState, fareText: string): string {
+function reservationDetailsText(s: BookingState, fareText: string, bookingNo: string): string {
   const today = new Date().toISOString().split("T")[0];
   return (
     `${SITE.brand.legalName} — Reservation request\n\n` +
+    `Booking number: ${bookingNo}\n` +
     `Service: ${s.service === "hourly" ? `Hourly (${s.hours} hours, 4-hour minimum)` : s.service === "city" ? "City to city" : "Airport pick up & drop off"}\n` +
     `Pickup: ${placeLabel(s.pickup)}\n` +
     (s.service === "hourly" ? "" : `Drop-off: ${placeLabel(s.dropoff)}\n`) +
@@ -308,9 +310,9 @@ function reservationDetailsText(s: BookingState, fareText: string): string {
   );
 }
 
-function buildReservationMail(s: BookingState, fareText: string): string {
-  const subject = encodeURIComponent(`New Reservation & Signed Agreement — ${s.name.trim()}`);
-  const body = encodeURIComponent(reservationDetailsText(s, fareText));
+function buildReservationMail(s: BookingState, fareText: string, bookingNo: string): string {
+  const subject = encodeURIComponent(`[${bookingNo}] New Reservation & Signed Agreement — ${s.name.trim()}`);
+  const body = encodeURIComponent(reservationDetailsText(s, fareText, bookingNo));
   return `mailto:${EMAIL}?subject=${subject}&body=${body}`;
 }
 
@@ -516,7 +518,8 @@ function BookingCard() {
       setConfirm({ kind: "error", text: err });
       return;
     }
-    const mailHref = buildReservationMail(bookingSnapshot(), fareTextNow());
+    const bookingNo = await mintBookingNumber();
+    const mailHref = buildReservationMail(bookingSnapshot(), fareTextNow(), bookingNo);
 
     let paymentUrl: string | null = null;
     let paymentError: string | null = null;
@@ -534,6 +537,7 @@ function BookingCard() {
             origin: window.location.origin,
             customerName: name.trim(),
             customerEmail: email.trim(),
+            bookingNumber: bookingNo,
           },
         });
         paymentUrl = result.url;
@@ -550,7 +554,8 @@ function BookingCard() {
       kind: "ok",
       text: (
         <>
-          Thanks, {name.trim()} —{" "}
+          Thanks, {name.trim()} — your booking number is <strong>{bookingNo}</strong>. Please save
+          it; you'll need it for any changes to this reservation.{" "}
           {paymentUrl ? (
             <>
               your payment page for <strong>${fare.amount}</strong> opened in a new tab. Please complete
@@ -576,7 +581,7 @@ function BookingCard() {
             {EMAIL}
           </a>
           , or{" "}
-          <CopyDetailsButton getText={() => reservationDetailsText(bookingSnapshot(), fareTextNow())} />
+          <CopyDetailsButton getText={() => reservationDetailsText(bookingSnapshot(), fareTextNow(), bookingNo)} />
           .
         </>
       ),
@@ -584,20 +589,22 @@ function BookingCard() {
     setSubmitted(true);
   };
 
-  const completePayPalReservation = (amount: number, payerName: string) => {
-    window.location.href = buildReservationMail(bookingSnapshot(), fareTextNow());
+  const completePayPalReservation = (amount: number, payerName: string, bookingNo: string) => {
+    window.location.href = buildReservationMail(bookingSnapshot(), fareTextNow(), bookingNo);
     setConfirm({
       kind: "ok",
       text: (
         <>
           Thanks, {payerName} — your PayPal payment of <strong>${amount}</strong> is complete.
+          Your booking number is <strong>{bookingNo}</strong>. Please save it; you'll need it for
+          any changes to this reservation.{" "}
           Please send the reservation email that just opened. If your email app didn't open
           automatically, please email a copy to{" "}
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
             {EMAIL}
           </a>
           , or{" "}
-          <CopyDetailsButton getText={() => reservationDetailsText(bookingSnapshot(), fareTextNow())} />
+          <CopyDetailsButton getText={() => reservationDetailsText(bookingSnapshot(), fareTextNow(), bookingNo)} />
           .
         </>
       ),
@@ -610,6 +617,8 @@ function BookingCard() {
   liveRef.current = { snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts } };
   const completeRef = useRef(completePayPalReservation);
   completeRef.current = completePayPalReservation;
+  // Booking number minted when the PayPal order is created, shown after capture.
+  const bookingNoRef = useRef<string>("");
   const orderFnRef = useRef(createOrderFn);
   orderFnRef.current = createOrderFn;
   const captureFnRef = useRef(captureOrderFn);
@@ -656,6 +665,7 @@ function BookingCard() {
           },
           createOrder: async () => {
             const { snapshot, fare } = liveRef.current;
+            const bookingNo = await mintBookingNumber();
             const res = await orderFnRef.current({
               data: {
                 amount: fare.amount ?? 0,
@@ -665,9 +675,11 @@ function BookingCard() {
                 greetMeet: fare.greetMeet,
                 extraPickups: fare.extraPickups,
                 description: buildDescription(snapshot),
+                bookingNumber: bookingNo,
               },
             });
             if (!res.orderId) throw new Error(res.error ?? "PayPal failed");
+            bookingNoRef.current = bookingNo;
             return res.orderId;
           },
           onApprove: async (data: { orderID: string }) => {
@@ -680,7 +692,7 @@ function BookingCard() {
               return;
             }
             const { snapshot, fare } = liveRef.current;
-            completeRef.current(fare.amount ?? 0, snapshot.name.trim());
+            completeRef.current(fare.amount ?? 0, snapshot.name.trim(), bookingNoRef.current);
           },
           onError: () =>
             setConfirmRef.current({

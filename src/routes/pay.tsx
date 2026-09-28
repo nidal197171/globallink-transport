@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SITE } from "@/config/site";
 import { useState } from "react";
 import { createReservationCheckout } from "@/lib/checkout.functions";
+import { mintBookingNumber } from "@/lib/bookingNumber";
 
 type PaySearch = {
   amount?: string | undefined;
@@ -64,10 +65,11 @@ function PayPage() {
     setPaying(true);
     setError("");
     try {
+      const bookingNo = await mintBookingNumber();
       const parts = [details.trim(), address.trim(), initial.ref]
         .filter((x) => x && x.length > 0)
         .join(" — ");
-      const description = `Custom reservation payment${parts ? ` — ${parts}` : ""}`;
+      const description = `Custom reservation payment [${bookingNo}]${parts ? ` — ${parts}` : ""}`;
       const res = await createReservationCheckout({
         data: {
           base: cents,
@@ -77,6 +79,7 @@ function PayPage() {
           origin: window.location.origin,
           customerName: name.trim(),
           customerEmail: email.trim(),
+          bookingNumber: bookingNo,
         },
       });
       if (res.url) {

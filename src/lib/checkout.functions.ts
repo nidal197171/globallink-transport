@@ -12,6 +12,7 @@ const schema = z.object({
   origin: z.string().url(),
   customerName: z.string().min(1).max(200),
   customerEmail: z.string().email().max(200),
+  bookingNumber: z.string().min(1).max(20),
 });
 
 export const createReservationCheckout = createServerFn({ method: "POST" })
@@ -33,9 +34,11 @@ export const createReservationCheckout = createServerFn({ method: "POST" })
     // for future off-session charges (tolls, overtime, cleaning, damages).
     params.set("customer_email", data.customerEmail);
     params.set("metadata[customer_name]", data.customerName);
+    params.set("metadata[booking_number]", data.bookingNumber);
     params.set("metadata[reservation]", data.description);
     params.set("payment_intent_data[setup_future_usage]", "off_session");
     params.set("payment_intent_data[description]", data.description);
+    params.set("payment_intent_data[metadata][booking_number]", data.bookingNumber);
     params.set("payment_intent_data[metadata][reservation]", data.description);
     params.set("success_url", `${data.origin}/?payment=success`);
     params.set("cancel_url", `${data.origin}/?payment=cancelled#book`);

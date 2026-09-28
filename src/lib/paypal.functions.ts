@@ -34,6 +34,7 @@ const orderSchema = z.object({
   greetMeet: z.number().int().nonnegative().max(100000).optional(),
   extraPickups: z.number().int().nonnegative().max(100000).optional(),
   description: z.string().min(1).max(300),
+  bookingNumber: z.string().min(1).max(20).optional(),
 });
 
 export const createPayPalOrder = createServerFn({ method: "POST" })
@@ -55,6 +56,7 @@ export const createPayPalOrder = createServerFn({ method: "POST" })
                 amount: { currency_code: "USD", value: data.amount.toFixed(2) },
                 description: data.description,
               };
+              if (data.bookingNumber) unit.custom_id = data.bookingNumber;
               if (data.base !== undefined && data.gratuity !== undefined && data.fee !== undefined) {
                 (unit.amount as Record<string, unknown>).breakdown = {
                   item_total: { currency_code: "USD", value: data.amount.toFixed(2) },
