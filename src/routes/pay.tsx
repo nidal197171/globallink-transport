@@ -3,6 +3,7 @@ import { SITE } from "@/config/site";
 import { useState } from "react";
 import { createReservationCheckout } from "@/lib/checkout.functions";
 import { mintBookingNumber } from "@/lib/bookingNumber";
+import { postToBookingSheet } from "@/lib/bookingSheet";
 
 type PaySearch = {
   amount?: string | undefined;
@@ -65,11 +66,27 @@ function PayPage() {
     setPaying(true);
     setError("");
     try {
-      const bookingNo = await mintBookingNumber();
-      const parts = [details.trim(), address.trim(), initial.ref]
+      // Reuse the reservation's booking number when the pay link carries one
+      // (e.g. bus/coach quotes); otherwise mint a fresh number for standalone payments.
+      const refNo = /^GL\d+$/i.test(initial.ref.trim()) ? initial.ref.trim().toUpperCase() : "";
+      const bookingNo = refNo || (await mintBookingNumber());
+      // Log the attempt as Not paid before opening Stripe (it flips to Paid on return).
+      postToBookingSheet({
+        bookingNumber: bookingNo,
+        name: name.trim(),
+        email: email.trim(),
+        service: "Custom payment",
+        route: [details.trim(), address.trim()].filter((x) => x.length > 0).join(" — "),
+        dateTime: "",
+        vehicle: "",
+        fare: `$${cents}`,
+        paymentMethod: "Not paid",
+      });
+      const parts = [details.trim(), address.trim(), bookingNo]
         .filter((x) => x && x.length > 0)
         .join(" — ");
-      const description = `Custom reservation payment [${bookingNo}]${parts ? ` — ${parts}` : ""}`;
+      const refNote = initial.ref.trim() && !refNo ? ` (ref: ${initial.ref.trim()})` : "";
+      const description = `Custom reservation payment [${bookingNo}]${parts ? ` — ${parts}` : ""}${refNote}`;
       const res = await createReservationCheckout({
         data: {
           base: cents,

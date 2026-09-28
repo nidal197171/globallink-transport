@@ -40,7 +40,7 @@ export const createReservationCheckout = createServerFn({ method: "POST" })
     params.set("payment_intent_data[description]", data.description);
     params.set("payment_intent_data[metadata][booking_number]", data.bookingNumber);
     params.set("payment_intent_data[metadata][reservation]", data.description);
-    params.set("success_url", `${data.origin}/?payment=success`);
+    params.set("success_url", `${data.origin}/?payment=success&booking=${encodeURIComponent(data.bookingNumber)}`);
     params.set("cancel_url", `${data.origin}/?payment=cancelled#book`);
     let i = 0;
     for (const [name, amount] of items) {

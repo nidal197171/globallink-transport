@@ -25,6 +25,7 @@ import {
 } from "@/data/globallink";
 import InstallAppButton from "@/components/InstallAppButton";
 import { mintBookingNumber } from "@/lib/bookingNumber";
+import { postToBookingSheet, markBookingPaid } from "@/lib/bookingSheet";
 
 
 export const Route = createFileRoute("/")({
@@ -243,8 +244,6 @@ type FeeParts = { base: number; gratuity: number; fee: number; total: number };
 // Google Sheet receiver for driver applications (Apps Script web app).
 const DRIVER_SHEET_URL =
   "https://script.google.com/macros/s/AKfycbwY3WnN5Yqnc3PJ62nMW6Le_1TWZnJRev9e8rlf11oIzf-KkGKnHD6F5IsYRp-RFsjk/exec";
-// Google Sheet receiver for reservations (Apps Script web app, bound to the sheet).
-const BOOKING_SHEET_URL = "";
 // Greet & meet add-on: airport pickups only, flat $40 added to the total (no gratuity/fee on it).
 const GREET_MEET_PRICE = 40;
 // Extra pickups: $35 per additional stop, added to the total (no gratuity/fee on it).
@@ -322,32 +321,21 @@ function logBookingToSheet(
   bookingNo: string,
   paymentMethod: string
 ) {
-  if (!BOOKING_SHEET_URL) return;
   const route =
     s.service === "hourly"
       ? `${placeLabel(s.pickup)} (${s.hours} hr)`
       : `${placeLabel(s.pickup)} → ${placeLabel(s.dropoff)}`;
-  try {
-    fetch(BOOKING_SHEET_URL, {
-      method: "POST",
-      mode: "no-cors",
-      keepalive: true,
-      headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify({
-        bookingNumber: bookingNo,
-        name: s.name.trim(),
-        email: s.email.trim(),
-        service: s.service,
-        route,
-        dateTime: s.dt,
-        vehicle: VEHICLE_LABEL[s.vehicle] ?? s.vehicle,
-        fare: fareText,
-        paymentMethod,
-      }),
-    }).catch(() => {});
-  } catch {
-    /* sheet write failed — the reservation email still goes out */
-  }
+  postToBookingSheet({
+    bookingNumber: bookingNo,
+    name: s.name.trim(),
+    email: s.email.trim(),
+    service: s.service,
+    route,
+    dateTime: s.dt,
+    vehicle: VEHICLE_LABEL[s.vehicle] ?? s.vehicle,
+    fare: fareText,
+    paymentMethod,
+  });
 }
 
 function CopyDetailsButton({ getText }: { getText: () => string }) {
@@ -583,12 +571,9 @@ function BookingCard() {
     }
 
     if (paymentUrl) window.open(paymentUrl, "_blank", "noopener");
-    logBookingToSheet(
-      bookingSnapshot(),
-      fareTextNow(),
-      bookingNo,
-      paymentUrl ? "Paid" : "Not paid"
-    );
+    // Logged as Not paid at submit; flipped to Paid when the customer returns
+    // from the Stripe checkout (?payment=success&booking=...).
+    logBookingToSheet(bookingSnapshot(), fareTextNow(), bookingNo, "Not paid");
     // Give the sheet request a head start before opening the email app.
     setTimeout(() => {
       window.location.href = mailHref;
@@ -1278,6 +1263,19 @@ const NAV_LINKS: { href: string; label: string }[] = [
 
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // After a Stripe checkout, the customer returns to /?payment=success&booking=GLxxxx —
+  // flip that reservation's sheet row to Paid.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    if (q.get("payment") === "success" && q.get("booking")) {
+      markBookingPaid(q.get("booking") as string);
+      q.delete("payment");
+      q.delete("booking");
+      const clean = window.location.pathname + (q.toString() ? `?${q}` : "") + window.location.hash;
+      window.history.replaceState(null, "", clean);
+    }
+  }, []);
 
   return (
     <>
