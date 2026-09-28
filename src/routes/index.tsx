@@ -120,10 +120,6 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     a: `Yes — ${SITE.market.airports} all include flight tracking, so your chauffeur adjusts to delays or early landings at no extra charge.`,
   },
   {
-    q: "Can we set up a corporate account?",
-    a: "Yes. Corporate accounts get monthly invoicing, cost-center tagging and a dedicated account manager. Reach out through the contact section to get started.",
-  },
-  {
     q: "What happens if my flight is delayed?",
     a: "Airport pickups are tracked against your flight automatically, so your chauffeur's arrival shifts with you and you're never charged a wait fee for a late landing.",
   },
