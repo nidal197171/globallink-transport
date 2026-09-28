@@ -243,6 +243,8 @@ type FeeParts = { base: number; gratuity: number; fee: number; total: number };
 // Google Sheet receiver for driver applications (Apps Script web app).
 const DRIVER_SHEET_URL =
   "https://script.google.com/macros/s/AKfycbwY3WnN5Yqnc3PJ62nMW6Le_1TWZnJRev9e8rlf11oIzf-KkGKnHD6F5IsYRp-RFsjk/exec";
+// Google Sheet receiver for reservations (Apps Script web app, bound to the sheet).
+const BOOKING_SHEET_URL = "";
 // Greet & meet add-on: airport pickups only, flat $40 added to the total (no gratuity/fee on it).
 const GREET_MEET_PRICE = 40;
 // Extra pickups: $35 per additional stop, added to the total (no gratuity/fee on it).
@@ -310,6 +312,42 @@ function buildReservationMail(s: BookingState, fareText: string, bookingNo: stri
   const subject = encodeURIComponent(`[${bookingNo}] New Reservation & Signed Agreement — ${s.name.trim()}`);
   const body = encodeURIComponent(reservationDetailsText(s, fareText, bookingNo));
   return `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+}
+
+// Log a reservation to the Google Sheet. keepalive + a short delay before the
+// mailto navigation lets the request finish on mobile (same pattern as the driver form).
+function logBookingToSheet(
+  s: BookingState,
+  fareText: string,
+  bookingNo: string,
+  paymentMethod: string
+) {
+  if (!BOOKING_SHEET_URL) return;
+  const route =
+    s.service === "hourly"
+      ? `${placeLabel(s.pickup)} (${s.hours} hr)`
+      : `${placeLabel(s.pickup)} → ${placeLabel(s.dropoff)}`;
+  try {
+    fetch(BOOKING_SHEET_URL, {
+      method: "POST",
+      mode: "no-cors",
+      keepalive: true,
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({
+        bookingNumber: bookingNo,
+        name: s.name.trim(),
+        email: s.email.trim(),
+        service: s.service,
+        route,
+        dateTime: s.dt,
+        vehicle: VEHICLE_LABEL[s.vehicle] ?? s.vehicle,
+        fare: fareText,
+        paymentMethod,
+      }),
+    }).catch(() => {});
+  } catch {
+    /* sheet write failed — the reservation email still goes out */
+  }
 }
 
 function CopyDetailsButton({ getText }: { getText: () => string }) {
@@ -545,7 +583,16 @@ function BookingCard() {
     }
 
     if (paymentUrl) window.open(paymentUrl, "_blank", "noopener");
-    window.location.href = mailHref;
+    logBookingToSheet(
+      bookingSnapshot(),
+      fareTextNow(),
+      bookingNo,
+      paymentUrl ? "Card (Stripe)" : "Quote request"
+    );
+    // Give the sheet request a head start before opening the email app.
+    setTimeout(() => {
+      window.location.href = mailHref;
+    }, 800);
     setConfirm({
       kind: "ok",
       text: (
@@ -586,7 +633,11 @@ function BookingCard() {
   };
 
   const completePayPalReservation = (amount: number, payerName: string, bookingNo: string) => {
-    window.location.href = buildReservationMail(bookingSnapshot(), fareTextNow(), bookingNo);
+    logBookingToSheet(bookingSnapshot(), fareTextNow(), bookingNo, "PayPal");
+    // Give the sheet request a head start before opening the email app.
+    setTimeout(() => {
+      window.location.href = buildReservationMail(bookingSnapshot(), fareTextNow(), bookingNo);
+    }, 800);
     setConfirm({
       kind: "ok",
       text: (
