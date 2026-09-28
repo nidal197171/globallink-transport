@@ -2,7 +2,8 @@
 // Paste the deployed /exec URL here once it's live. Until then (or if the
 // script is unreachable), bookings fall back to a clearly-marked temporary
 // number so checkout never breaks.
-export const BOOKING_COUNTER_URL = "";
+export const BOOKING_COUNTER_URL =
+  "https://script.google.com/macros/s/AKfycbywlmg_QefnHTNlkNQ3oZ1lxgQ43NI2Tqwzbq53u1sLsK8e_zVYsG1h64qpYF0l0Mzp/exec";
 
 const fallbackNumber = () =>
   `GL-TMP-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
