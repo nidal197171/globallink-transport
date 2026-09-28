@@ -1309,7 +1309,7 @@ function Index() {
               <span className="dot" />
               Built for corporate travel and event teams
             </div>
-            <h1>The last late driver cost you a meeting. Not this time.</h1>
+            <h1>We treat your schedule like our own. Always on time.</h1>
             <p className="lead">
               One dispatch team for every ride your company books — sedan to coach.
             </p>
