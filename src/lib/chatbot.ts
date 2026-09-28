@@ -122,6 +122,13 @@ export class ChatEngine {
     const text = input.toLowerCase();
     if (!text) return { messages: [] };
 
+    // Global escape hatch — works after any bot question.
+    if (/^(cancel|never ?mind|stop|quit)$/.test(text))
+      return this.msg(
+        `No problem — cancelled. What would you like to do?`,
+        BOOK_QUICK
+      );
+
     // --- High-priority intents ---
     if (has(text, "human", "real person", "someone real", "agent", "representative"))
       return this.msg(
@@ -254,7 +261,7 @@ export class ChatEngine {
       const to = cities[1];
       if (!from || !to) return null;
       if (from === to) {
-        return this.msg(`Pickup and drop-off can't be the same place — where are you headed?`);
+        return this.msg(`Pickup and drop-off can't be the same place — where are you headed?`, ["Cancel"]);
       }
       const { base, miles } = cityToCityQuote(from, to);
       const surcharge =
@@ -272,7 +279,8 @@ export class ChatEngine {
       const ap = airports[0];
       if (!ap) return null;
       return this.msg(
-        `Sure — which city is the other end of your ${ap.label} trip? For example "${ap.label} to San Jose".`
+        `Sure — which city is the other end of your ${ap.label} trip? For example "${ap.label} to San Jose".`,
+        ["Cancel"]
       );
     }
     return null;
