@@ -258,15 +258,31 @@ export class ChatEngine {
 
   // ---------- Fare quoting ----------
 
-  /** Sprinter van route fare ($300 + $4.50/mile, nearest $5), "" if coords missing. */
-  private sprinterLine(
+  /** Sprinter van route fare ($300 + $4.50/mile, nearest $5), null if coords missing. */
+  private sprinterFare(
     a: { lat: number; lon: number } | undefined,
-    b: { lat: number; lon: number } | undefined,
-    approx: boolean
+    b: { lat: number; lon: number } | undefined
+  ): number | null {
+    if (!a || !b) return null;
+    return sprinterBaseFare(estimateRoadMiles(a, b));
+  }
+
+  /** Fare quote with one price per line. */
+  private stackedQuote(
+    header: string,
+    sedan: string,
+    suv: string,
+    sprinter: string | null,
+    note?: string
   ): string {
-    if (!a || !b) return "";
-    const fare = sprinterBaseFare(estimateRoadMiles(a, b));
-    return ` Sprinter van is ${approx ? "about " : ""}$${fare}.`;
+    const lines = [header + ":", `Sedan — ${sedan}`, `SUV or limousine — ${suv}`];
+    if (sprinter) lines.push(`Sprinter van — ${sprinter}`);
+    if (note) lines.push(note);
+    lines.push(
+      "",
+      `20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`
+    );
+    return lines.join("\n");
   }
 
   private tryFareQuote(text: string): EngineResult | null {
@@ -281,8 +297,14 @@ export class ChatEngine {
       const key2 = `${b.code}-${a.code}`;
       const fare = AIRPORT_TO_AIRPORT[key1] ?? AIRPORT_TO_AIRPORT[key2];
       if (fare == null) return null;
+      const sprinterAA = this.sprinterFare(AIRPORT_COORDS[a.code], AIRPORT_COORDS[b.code]);
       return this.msg(
-        `${a.label} → ${b.label} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60}.${this.sprinterLine(AIRPORT_COORDS[a.code], AIRPORT_COORDS[b.code], false)} 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
+        this.stackedQuote(
+          `${a.label} → ${b.label} (each way)`,
+          `$${fare}`,
+          `$${fare + 60}`,
+          sprinterAA != null ? `$${sprinterAA}` : null
+        ),
         ["Book this ride", "Get another quote"]
       );
     }
@@ -299,8 +321,14 @@ export class ChatEngine {
           ["Book a ride", "Call us"]
         );
       }
+      const sprinterAC = this.sprinterFare(AIRPORT_COORDS[ap.code], CITY_COORDS[slug]);
       return this.msg(
-        `${ap.label} → ${cityName(slug)} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60}.${this.sprinterLine(AIRPORT_COORDS[ap.code], CITY_COORDS[slug], false)} 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
+        this.stackedQuote(
+          `${ap.label} → ${cityName(slug)} (each way)`,
+          `$${fare}`,
+          `$${fare + 60}`,
+          sprinterAC != null ? `$${sprinterAC}` : null
+        ),
         ["Book this ride", "Get another quote"]
       );
     }
@@ -316,10 +344,17 @@ export class ChatEngine {
       const { base, miles } = cityToCityQuote(from, to);
       const surcharge =
         EAST_BAY_CITIES.has(from) || SOUTH_BAY_CITIES.has(from)
-          ? ` Note: a $${EAST_BAY_PICKUP_SURCHARGE} pickup surcharge applies in ${cityName(from)}.`
+          ? `Note: a $${EAST_BAY_PICKUP_SURCHARGE} pickup surcharge applies in ${cityName(from)}.`
           : "";
+      const sprinterCC = this.sprinterFare(CITY_COORDS[from], CITY_COORDS[to]);
       return this.msg(
-        `${cityName(from)} → ${cityName(to)} is about $${base} in a sedan (roughly ${Math.round(miles)} road miles). SUV or limousine is about $${base + 60}.${this.sprinterLine(CITY_COORDS[from], CITY_COORDS[to], true)}${surcharge} 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
+        this.stackedQuote(
+          `${cityName(from)} → ${cityName(to)} (about, ~${Math.round(miles)} road miles)`,
+          `about $${base}`,
+          `about $${base + 60}`,
+          sprinterCC != null ? `about $${sprinterCC}` : null,
+          surcharge || undefined
+        ),
         ["Book this ride", "Get another quote"]
       );
     }
