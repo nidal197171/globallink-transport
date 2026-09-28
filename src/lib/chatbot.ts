@@ -219,7 +219,7 @@ export class ChatEngine {
       );
     if (has(text, "vehicle", "fleet", "what cars", "what kind of car", "sedan", "suv", "limo", "sprinter", "bus", "coach", "van"))
       return this.msg(
-        `Our fleet: Sedan, SUV, Limousine, Sprinter van, and Bus & coach for big groups. Tell me your route and I'll quote the sedan fare — SUV and limousine run $60 more.`,
+        `Our fleet: Sedan, SUV, Limousine, Sprinter van, and Bus & coach for big groups. Tell me your route and I'll quote fares for each vehicle.`,
         ["Get a fare quote"]
       );
     if (has(text, "area", "where do you", "cities", "coverage", "serve", "service area", "location"))
