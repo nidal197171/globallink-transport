@@ -1,6 +1,7 @@
 // Google Sheet receiver for reservations (Apps Script web app, bound to the sheet).
 // Past the /exec URL here once the script is deployed.
-export const BOOKING_SHEET_URL = "";
+export const BOOKING_SHEET_URL =
+  "https://script.google.com/macros/s/AKfycbx58MtNg98scK2e83VtYliYrLDgw3lq59VrgU4Nn11S2bT6cU9sl2H6yZWILBL-X5jr/exec";
 
 export function postToBookingSheet(payload: Record<string, string>) {
   if (!BOOKING_SHEET_URL) return;
