@@ -10,13 +10,17 @@
  */
 
 import {
+  AIRPORT_COORDS,
   AIRPORT_RATES,
   AIRPORT_TO_AIRPORT,
   CITIES,
+  CITY_COORDS,
   cityToCityQuote,
   EAST_BAY_CITIES,
   EAST_BAY_PICKUP_SURCHARGE,
+  estimateRoadMiles,
   SOUTH_BAY_CITIES,
+  sprinterBaseFare,
 } from "@/data/globallink";
 
 export interface SiteInfo {
@@ -254,6 +258,17 @@ export class ChatEngine {
 
   // ---------- Fare quoting ----------
 
+  /** Sprinter van route fare ($300 + $4.50/mile, nearest $5), "" if coords missing. */
+  private sprinterLine(
+    a: { lat: number; lon: number } | undefined,
+    b: { lat: number; lon: number } | undefined,
+    approx: boolean
+  ): string {
+    if (!a || !b) return "";
+    const fare = sprinterBaseFare(estimateRoadMiles(a, b));
+    return ` Sprinter van is ${approx ? "about " : ""}$${fare}.`;
+  }
+
   private tryFareQuote(text: string): EngineResult | null {
     const { airports, cities } = detectRoute(text);
 
@@ -267,7 +282,7 @@ export class ChatEngine {
       const fare = AIRPORT_TO_AIRPORT[key1] ?? AIRPORT_TO_AIRPORT[key2];
       if (fare == null) return null;
       return this.msg(
-        `${a.label} → ${b.label} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60}. 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
+        `${a.label} → ${b.label} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60}.${this.sprinterLine(AIRPORT_COORDS[a.code], AIRPORT_COORDS[b.code], false)} 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
         ["Book this ride", "Get another quote"]
       );
     }
@@ -285,7 +300,7 @@ export class ChatEngine {
         );
       }
       return this.msg(
-        `${ap.label} → ${cityName(slug)} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60}. 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
+        `${ap.label} → ${cityName(slug)} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60}.${this.sprinterLine(AIRPORT_COORDS[ap.code], CITY_COORDS[slug], false)} 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
         ["Book this ride", "Get another quote"]
       );
     }
@@ -304,7 +319,7 @@ export class ChatEngine {
           ? ` Note: a $${EAST_BAY_PICKUP_SURCHARGE} pickup surcharge applies in ${cityName(from)}.`
           : "";
       return this.msg(
-        `${cityName(from)} → ${cityName(to)} is about $${base} in a sedan (roughly ${Math.round(miles)} road miles). SUV or limousine is about $${base + 60}.${surcharge} 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
+        `${cityName(from)} → ${cityName(to)} is about $${base} in a sedan (roughly ${Math.round(miles)} road miles). SUV or limousine is about $${base + 60}.${this.sprinterLine(CITY_COORDS[from], CITY_COORDS[to], true)}${surcharge} 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
         ["Book this ride", "Get another quote"]
       );
     }
