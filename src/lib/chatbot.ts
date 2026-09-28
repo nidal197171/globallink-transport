@@ -176,7 +176,7 @@ export class ChatEngine {
     // --- Info intents ---
     if (has(text, "hour", "per hour", "charter", "as directed"))
       return this.msg(
-        `Hourly service: sedan $${HOURLY_RATES["sedan"]}/hr, SUV or limousine $${HOURLY_RATES["suv"]}/hr, sprinter van $${HOURLY_RATES["sprinter"]}/hr (4-hour minimum). Bus & coach is a custom quote. 20% gratuity + 5% booking fee are added at checkout.`,
+        `Hourly service: sedan $${HOURLY_RATES["sedan"]}/hr, SUV or limousine $${HOURLY_RATES["suv"]}/hr, sprinter van $${HOURLY_RATES["sprinter"]}/hr (4-hour minimum). Bus & coach is a custom quote. 20% gratuity + 5% booking fee are added at checkout. I can book this for you right now — want me to take your booking?`,
         ["Book a ride", "Get a fare quote"]
       );
     if (has(text, "greet", "meet me", "name sign", "inside the terminal", "arrivals"))
@@ -245,7 +245,7 @@ export class ChatEngine {
       const fare = AIRPORT_TO_AIRPORT[key1] ?? AIRPORT_TO_AIRPORT[key2];
       if (fare == null) return null;
       return this.msg(
-        `${a.label} → ${b.label} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60} (sedan + $60). 20% gratuity + 5% booking fee are added at checkout.`,
+        `${a.label} → ${b.label} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60} (sedan + $60). 20% gratuity + 5% booking fee are added at checkout. I can book this fare for you right now — want me to take your booking?`,
         ["Book this ride", "Get another quote"]
       );
     }
@@ -263,7 +263,7 @@ export class ChatEngine {
         );
       }
       return this.msg(
-        `${ap.label} → ${cityName(slug)} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60} (sedan + $60). 20% gratuity + 5% booking fee are added at checkout.`,
+        `${ap.label} → ${cityName(slug)} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60} (sedan + $60). 20% gratuity + 5% booking fee are added at checkout. I can book this fare for you right now — want me to take your booking?`,
         ["Book this ride", "Get another quote"]
       );
     }
@@ -282,7 +282,7 @@ export class ChatEngine {
           ? ` Note: a $${EAST_BAY_PICKUP_SURCHARGE} pickup surcharge applies in ${cityName(from)}.`
           : "";
       return this.msg(
-        `${cityName(from)} → ${cityName(to)} is about $${base} in a sedan (roughly ${Math.round(miles)} road miles). SUV or limousine is about $${base + 60}.${surcharge} 20% gratuity + 5% booking fee are added at checkout.`,
+        `${cityName(from)} → ${cityName(to)} is about $${base} in a sedan (roughly ${Math.round(miles)} road miles). SUV or limousine is about $${base + 60}.${surcharge} 20% gratuity + 5% booking fee are added at checkout. I can book this fare for you right now — want me to take your booking?`,
         ["Book this ride", "Get another quote"]
       );
     }
