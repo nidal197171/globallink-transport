@@ -4,6 +4,8 @@
  * Keyword intent matching + REAL fare quotes computed from
  * src/data/globallink.ts. Never invents a fare: if a city or airport
  * can't be matched, it says so and points at the booking form.
+ * New bookings always go to the booking form (so customers can pay);
+ * the bot only collects info for changing or confirming an existing booking.
  * The bot always presents itself as an automated assistant.
  */
 
@@ -35,9 +37,21 @@ export interface EngineResult {
   messages: BotMessage[];
   /** When set, the widget navigates here after showing the messages. */
   navigate?: string;
+  /** When set, the widget submits this change/confirmation request. */
+  submitRequest?: ChangeRequest;
 }
 
-const BOOK_QUICK = ["Get a fare quote", "Book a ride", "Call us"];
+/** Info collected only for changing or confirming an existing booking. */
+export interface ChangeRequest {
+  name: string;
+  phone: string;
+  booking: string;
+  request: string;
+}
+
+type ManageStep = "askName" | "askPhone" | "askBooking" | "askRequest" | "confirm";
+
+const BOOK_QUICK = ["Get a fare quote", "Book a ride", "Change booking", "Call us"];
 
 const CITY_ALIASES: Record<string, string> = {
   sf: "san-francisco",
@@ -101,6 +115,8 @@ const has = (text: string, ...words: string[]) =>
 
 export class ChatEngine {
   private site: SiteInfo;
+  private mflow: ManageStep | null = null;
+  private mlead: Partial<ChangeRequest> = {};
 
   constructor(site: SiteInfo) {
     this.site = site;
@@ -110,7 +126,7 @@ export class ChatEngine {
     return {
       messages: [
         {
-          text: `Hi! I'm the ${this.site.brandName} automated assistant. I can quote fares or answer questions — what do you need?`,
+          text: `Hi! I'm the ${this.site.brandName} automated assistant. I can quote fares, answer questions, or help with an existing booking — what do you need?`,
           quickReplies: BOOK_QUICK,
         },
       ],
@@ -123,11 +139,14 @@ export class ChatEngine {
     if (!text) return { messages: [] };
 
     // Global escape hatch — works after any bot question.
-    if (/^(cancel|never ?mind|stop|quit)$/.test(text))
-      return this.msg(
-        `No problem — cancelled. What would you like to do?`,
-        BOOK_QUICK
-      );
+    if (/^(cancel|never ?mind|stop|quit)$/.test(text)) {
+      this.mflow = null;
+      this.mlead = {};
+      return this.msg(`No problem — cancelled. What would you like to do?`, BOOK_QUICK);
+    }
+
+    // Change/confirmation flow takes priority while active.
+    if (this.mflow) return this.handleManageFlow(input, text);
 
     // --- High-priority intents ---
     if (has(text, "human", "real person", "someone real", "agent", "representative"))
@@ -144,10 +163,18 @@ export class ChatEngine {
     const fare = this.tryFareQuote(text);
     if (fare) return fare;
 
+    // --- Existing booking: change or confirm (info only — new bookings go to the page) ---
+    if (
+      has(text, "change", "modify", "cancel", "postpone", "reschedule", "confirm") &&
+      has(text, "book", "reservation", "ride", "trip", "pickup")
+    )
+      return this.startManageFlow();
+
     // --- Booking intent: send them to the booking form ---
     if (
-      has(text, "book", "reserve", "schedule", "need a ride", "need a car", "get a ride", "i want a", "i'd like a", "request a") ||
-      (text.includes("quote") && !text.includes("how much"))
+      (has(text, "book", "reserve", "schedule", "need a ride", "need a car", "get a ride", "i want a", "i'd like a", "request a") ||
+        (text.includes("quote") && !text.includes("how much"))) &&
+      !has(text, "change", "modify", "cancel", "postpone", "reschedule", "confirm")
     )
       return {
         messages: [{ text: `You can book right here on the site — taking you to the booking form…` }],
@@ -156,7 +183,7 @@ export class ChatEngine {
 
     if (/^(hi|hello|hey|yo)\b/.test(text) || /\bgood (morning|afternoon|evening)\b/.test(text))
       return this.msg(
-        `Hello! How can I help — a fare quote, booking, or a question about our service?`,
+        `Hello! How can I help — a fare quote, a new booking, or an existing one?`,
         BOOK_QUICK
       );
 
@@ -192,8 +219,8 @@ export class ChatEngine {
       return this.msg(`We're available 24/7 — book any time, day or night.`, ["Book a ride"]);
     if (has(text, "how do i book", "how to book", "how can i book"))
       return this.msg(
-        `Three ways: use the booking form right here on the site, call ${this.site.phoneDisplay}, or I can take your details now — want me to start a booking?`,
-        ["Yes, start booking", "Call us"]
+        `Two ways: the booking form right here on the site — you can pay online — or call us at ${this.site.phoneDisplay}.`,
+        ["Book a ride", "Call us"]
       );
     if (has(text, "contact", "phone", "call you", "email", "reach you"))
       return this.msg(
@@ -212,7 +239,7 @@ export class ChatEngine {
 
     // --- Fallback ---
     return this.msg(
-      `I didn't quite catch that — I'm an automated assistant and I can quote exact fares, explain our services, or take your booking details. You can also call us at ${this.site.phoneDisplay}.`,
+      `I didn't quite catch that — I'm an automated assistant and I can quote exact fares, answer questions, or help with an existing booking. You can also call us at ${this.site.phoneDisplay}.`,
       BOOK_QUICK
     );
   }
@@ -286,6 +313,84 @@ export class ChatEngine {
     return null;
   }
 
+  // ---------- Existing booking: change or confirm ----------
+
+  private startManageFlow(): EngineResult {
+    this.mflow = "askName";
+    this.mlead = {};
+    return {
+      messages: [
+        {
+          text: `Sure — I can help with an existing booking. What's your name?`,
+          quickReplies: ["Cancel"],
+        },
+      ],
+    };
+  }
+
+  private handleManageFlow(input: string, text: string): EngineResult {
+    switch (this.mflow) {
+      case "askName": {
+        if (input.length < 2)
+          return this.msg(`I didn't catch your name — what should I call you?`, ["Cancel"]);
+        this.mlead.name = input;
+        this.mflow = "askPhone";
+        return this.msg(`Thanks ${input.split(" ")[0]}. What's the best phone number to reach you?`, ["Cancel"]);
+      }
+      case "askPhone": {
+        const digits = input.replace(/\D/g, "");
+        if (digits.length < 7)
+          return this.msg(`That doesn't look like a valid phone number — mind double-checking?`, ["Cancel"]);
+        this.mlead.phone = input;
+        this.mflow = "askBooking";
+        return this.msg(`What's the pickup date on the booking? A booking reference works too, if you have one.`, ["Cancel"]);
+      }
+      case "askBooking": {
+        if (input.length < 2)
+          return this.msg(`Which booking is this for — a pickup date or reference?`, ["Cancel"]);
+        this.mlead.booking = input;
+        this.mflow = "askRequest";
+        return this.msg(`And what do you need — change it, confirm it, or cancel? (Cancellations need 48 hours notice.)`, ["Cancel"]);
+      }
+      case "askRequest": {
+        if (input.length < 2)
+          return this.msg(`What should we do with this booking?`, ["Cancel"]);
+        this.mlead.request = input;
+        this.mflow = "confirm";
+        const l = this.mlead;
+        return {
+          messages: [
+            {
+              text:
+                `Here's what I'll send our team:\n` +
+                `• Name: ${l.name}\n• Phone: ${l.phone}\n• Booking: ${l.booking}\n• Request: ${l.request}\n\n` +
+                `Does that look right?`,
+              quickReplies: ["Yes, submit", "Start over", "Cancel"],
+            },
+          ],
+        };
+      }
+      case "confirm": {
+        if (has(text, "yes", "submit", "looks good", "correct")) {
+          const req = this.mlead as ChangeRequest;
+          this.mflow = null;
+          this.mlead = {};
+          return { messages: [{ text: `Sending your request…` }], submitRequest: req };
+        }
+        if (has(text, "start over", "restart", "redo")) return this.startManageFlow();
+        return this.msg(`Just say "yes" to submit, "start over" to redo it, or "cancel".`, [
+          "Yes, submit",
+          "Start over",
+          "Cancel",
+        ]);
+      }
+      default: {
+        this.mflow = null;
+        return this.msg(`Let's start fresh — how can I help?`, BOOK_QUICK);
+      }
+    }
+  }
+
   private msg(text: string, quickReplies?: string[]): EngineResult {
     return quickReplies
       ? { messages: [{ text, quickReplies }] }
@@ -293,3 +398,35 @@ export class ChatEngine {
   }
 }
 
+/** POST a booking change/confirmation request to FormSubmit (free form-to-email). Falls back to a mailto: link. */
+export async function submitChangeRequest(
+  req: ChangeRequest,
+  toEmail: string,
+  brandName: string
+): Promise<{ ok: boolean; mailto: string }> {
+  const subject = `Booking change/confirmation — ${brandName}`;
+  const body =
+    `Name: ${req.name}\n` +
+    `Phone: ${req.phone}\n` +
+    `Booking: ${req.booking}\n` +
+    `Request: ${req.request}`;
+  const mailto = `mailto:${toEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  try {
+    const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(toEmail)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        name: req.name,
+        phone: req.phone,
+        booking: req.booking,
+        request: req.request,
+        _subject: subject,
+        _template: "table",
+      }),
+    });
+    if (!res.ok) throw new Error(`formsubmit ${res.status}`);
+    return { ok: true, mailto };
+  } catch {
+    return { ok: false, mailto };
+  }
+}

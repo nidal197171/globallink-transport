@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
-import { ChatEngine, type BotMessage } from "@/lib/chatbot";
+import { ChatEngine, submitChangeRequest, type BotMessage, type ChangeRequest } from "@/lib/chatbot";
 import { SITE } from "@/config/site";
 
 interface ChatMsg {
   from: "bot" | "user";
   text: string;
+  mailto?: string;
 }
 
 const ENGINE_SITE = {
@@ -24,6 +25,7 @@ export function ChatWidget() {
   const [quickReplies, setQuickReplies] = useState<string[]>([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const engineRef = useRef<ChatEngine | null>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -77,8 +79,34 @@ export function ChatWidget() {
   const deliver = (engine: ChatEngine, text: string) => {
     const result = engine.handle(text);
     pushBot(result.messages, () => {
+      if (result.submitRequest) finishSubmit(result.submitRequest);
       if (result.navigate) goToBooking();
     });
+  };
+
+  const finishSubmit = async (req: ChangeRequest) => {
+    setSubmitting(true);
+    const res = await submitChangeRequest(req, SITE.contact.email, SITE.brand.shortName);
+    setSubmitting(false);
+    if (res.ok) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          from: "bot",
+          text: `Done — your request is on its way to our team. We'll call you at ${req.phone} shortly. For anything urgent, call ${SITE.contact.phoneDisplay}.`,
+        },
+      ]);
+    } else {
+      setMessages((prev) => [
+        ...prev,
+        {
+          from: "bot",
+          text: `I couldn't send that automatically — tap below to email us your request instead, and we'll call you back.`,
+          mailto: res.mailto,
+        },
+      ]);
+    }
+    setQuickReplies(["Get a fare quote", "Call us"]);
   };
 
   /** Booking actions take the customer to the booking form. */
@@ -93,7 +121,7 @@ export function ChatWidget() {
 
   const send = (raw: string) => {
     const text = raw.trim();
-    if (!text || typing) return;
+    if (!text || typing || submitting) return;
     const engine = engineRef.current;
     if (!engine) return;
     // "Call us" is a shortcut, not chat input.
@@ -233,6 +261,23 @@ export function ChatWidget() {
                 }}
               >
                 {m.text}
+                {m.mailto && (
+                  <a
+                    href={m.mailto}
+                    style={{
+                      display: "inline-block",
+                      marginTop: 10,
+                      background: "var(--brass)",
+                      color: "var(--ink)",
+                      fontWeight: 600,
+                      fontSize: 13,
+                      padding: "10px 16px",
+                      borderRadius: 8,
+                    }}
+                  >
+                    Email us your request
+                  </a>
+                )}
               </div>
             ))}
             {typing && (
@@ -248,6 +293,11 @@ export function ChatWidget() {
                 }}
               >
                 …
+              </div>
+            )}
+            {submitting && (
+              <div style={{ alignSelf: "flex-start", fontSize: 13, color: "var(--steel)" }}>
+                Sending your request…
               </div>
             )}
           </div>
@@ -320,7 +370,7 @@ export function ChatWidget() {
             <button
               type="submit"
               aria-label="Send message"
-              disabled={!input.trim() || typing}
+              disabled={!input.trim() || typing || submitting}
               style={{
                 background: "var(--brass)",
                 color: "var(--ink)",
@@ -331,7 +381,7 @@ export function ChatWidget() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                opacity: !input.trim() || typing ? 0.5 : 1,
+                opacity: !input.trim() || typing || submitting ? 0.5 : 1,
               }}
             >
               <Send size={18} />
