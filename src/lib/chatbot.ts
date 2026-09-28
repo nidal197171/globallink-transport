@@ -171,9 +171,10 @@ export class ChatEngine {
       return this.startManageFlow();
 
     // --- Booking intent: send them to the booking form ---
+    // NOTE: "quote" is deliberately NOT here — quote requests fall through
+    // to the fare intent below, which asks for the route.
     if (
-      (has(text, "book", "reserve", "schedule", "need a ride", "need a car", "get a ride", "i want a", "i'd like a", "request a") ||
-        (text.includes("quote") && !text.includes("how much"))) &&
+      has(text, "book", "reserve", "schedule", "need a ride", "need a car", "get a ride", "i want a", "i'd like a", "request a") &&
       !has(text, "change", "modify", "cancel", "postpone", "reschedule", "confirm")
     )
       return {
