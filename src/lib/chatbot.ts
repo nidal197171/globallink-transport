@@ -15,7 +15,6 @@ import {
   EAST_BAY_CITIES,
   EAST_BAY_PICKUP_SURCHARGE,
   SOUTH_BAY_CITIES,
-  VEHICLES,
 } from "@/data/globallink";
 
 export interface SiteInfo {
@@ -32,28 +31,11 @@ export interface BotMessage {
   quickReplies?: string[];
 }
 
-export interface Lead {
-  name: string;
-  phone: string;
-  pickup: string;
-  dropoff: string;
-  datetime: string;
-  vehicle: string;
-}
-
 export interface EngineResult {
   messages: BotMessage[];
-  submitLead?: Lead;
+  /** When set, the widget navigates here after showing the messages. */
+  navigate?: string;
 }
-
-type FlowStep =
-  | "askName"
-  | "askPhone"
-  | "askPickup"
-  | "askDropoff"
-  | "askDatetime"
-  | "askVehicle"
-  | "confirm";
 
 const BOOK_QUICK = ["Get a fare quote", "Book a ride", "Call us"];
 
@@ -119,8 +101,6 @@ const has = (text: string, ...words: string[]) =>
 
 export class ChatEngine {
   private site: SiteInfo;
-  private flow: FlowStep | null = null;
-  private lead: Partial<Lead> = {};
 
   constructor(site: SiteInfo) {
     this.site = site;
@@ -130,7 +110,7 @@ export class ChatEngine {
     return {
       messages: [
         {
-          text: `Hi! I'm the ${this.site.brandName} automated assistant. I can quote fares, answer questions, or take your booking details — what do you need?`,
+          text: `Hi! I'm the ${this.site.brandName} automated assistant. I can quote fares or answer questions — what do you need?`,
           quickReplies: BOOK_QUICK,
         },
       ],
@@ -141,9 +121,6 @@ export class ChatEngine {
     const input = rawInput.trim();
     const text = input.toLowerCase();
     if (!text) return { messages: [] };
-
-    // Lead-capture flow takes priority.
-    if (this.flow) return this.handleFlow(input, text);
 
     // --- High-priority intents ---
     if (has(text, "human", "real person", "someone real", "agent", "representative"))
@@ -160,12 +137,15 @@ export class ChatEngine {
     const fare = this.tryFareQuote(text);
     if (fare) return fare;
 
-    // --- Booking intent ---
+    // --- Booking intent: send them to the booking form ---
     if (
       has(text, "book", "reserve", "schedule", "need a ride", "need a car", "get a ride", "i want a", "i'd like a", "request a") ||
       (text.includes("quote") && !text.includes("how much"))
     )
-      return this.startFlow();
+      return {
+        messages: [{ text: `You can book right here on the site — taking you to the booking form…` }],
+        navigate: "/#book",
+      };
 
     if (/^(hi|hello|hey|yo)\b/.test(text) || /\bgood (morning|afternoon|evening)\b/.test(text))
       return this.msg(
@@ -176,7 +156,7 @@ export class ChatEngine {
     // --- Info intents ---
     if (has(text, "hour", "per hour", "charter", "as directed"))
       return this.msg(
-        `Hourly service: sedan $${HOURLY_RATES["sedan"]}/hr, SUV or limousine $${HOURLY_RATES["suv"]}/hr, sprinter van $${HOURLY_RATES["sprinter"]}/hr (4-hour minimum). Bus & coach is a custom quote. 20% gratuity + 5% booking fee are added at checkout. I can book this for you right now — want me to take your booking?`,
+        `Hourly service: sedan $${HOURLY_RATES["sedan"]}/hr, SUV or limousine $${HOURLY_RATES["suv"]}/hr, sprinter van $${HOURLY_RATES["sprinter"]}/hr (4-hour minimum). Bus & coach is a custom quote. 20% gratuity + 5% booking fee are added at checkout. Tap "Book a ride" below to book on our booking form.`,
         ["Book a ride", "Get a fare quote"]
       );
     if (has(text, "greet", "meet me", "name sign", "inside the terminal", "arrivals"))
@@ -245,7 +225,7 @@ export class ChatEngine {
       const fare = AIRPORT_TO_AIRPORT[key1] ?? AIRPORT_TO_AIRPORT[key2];
       if (fare == null) return null;
       return this.msg(
-        `${a.label} → ${b.label} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60} (sedan + $60). 20% gratuity + 5% booking fee are added at checkout. I can book this fare for you right now — want me to take your booking?`,
+        `${a.label} → ${b.label} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60} (sedan + $60). 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
         ["Book this ride", "Get another quote"]
       );
     }
@@ -263,7 +243,7 @@ export class ChatEngine {
         );
       }
       return this.msg(
-        `${ap.label} → ${cityName(slug)} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60} (sedan + $60). 20% gratuity + 5% booking fee are added at checkout. I can book this fare for you right now — want me to take your booking?`,
+        `${ap.label} → ${cityName(slug)} is $${fare} each way in a sedan. SUV or limousine is $${fare + 60} (sedan + $60). 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
         ["Book this ride", "Get another quote"]
       );
     }
@@ -282,7 +262,7 @@ export class ChatEngine {
           ? ` Note: a $${EAST_BAY_PICKUP_SURCHARGE} pickup surcharge applies in ${cityName(from)}.`
           : "";
       return this.msg(
-        `${cityName(from)} → ${cityName(to)} is about $${base} in a sedan (roughly ${Math.round(miles)} road miles). SUV or limousine is about $${base + 60}.${surcharge} 20% gratuity + 5% booking fee are added at checkout. I can book this fare for you right now — want me to take your booking?`,
+        `${cityName(from)} → ${cityName(to)} is about $${base} in a sedan (roughly ${Math.round(miles)} road miles). SUV or limousine is about $${base + 60}.${surcharge} 20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`,
         ["Book this ride", "Get another quote"]
       );
     }
@@ -298,111 +278,6 @@ export class ChatEngine {
     return null;
   }
 
-  // ---------- Lead capture flow ----------
-
-  private startFlow(): EngineResult {
-    this.flow = "askName";
-    this.lead = {};
-    return {
-      messages: [{ text: `Great — I'll take your booking details. What's your name?` }],
-    };
-  }
-
-  private handleFlow(input: string, text: string): EngineResult {
-    if (/^(cancel|stop|never ?mind|quit)/.test(text)) {
-      this.flow = null;
-      this.lead = {};
-      return this.msg(`No problem — I've cancelled that. Anything else I can help with?`, BOOK_QUICK);
-    }
-    switch (this.flow) {
-      case "askName": {
-        if (input.length < 2)
-          return this.msg(`I didn't catch your name — what should I call you?`);
-        this.lead.name = input;
-        this.flow = "askPhone";
-        return this.msg(`Thanks ${input.split(" ")[0]}. What's the best phone number to reach you?`);
-      }
-      case "askPhone": {
-        const digits = input.replace(/\D/g, "");
-        if (digits.length < 7)
-          return this.msg(`That doesn't look like a valid phone number — mind double-checking?`);
-        this.lead.phone = input;
-        this.flow = "askPickup";
-        return this.msg(`Got it. Where should we pick you up?`);
-      }
-      case "askPickup": {
-        if (input.length < 2) return this.msg(`Where's the pickup address or city?`);
-        this.lead.pickup = input;
-        this.flow = "askDropoff";
-        return this.msg(`And where are you headed?`);
-      }
-      case "askDropoff": {
-        if (input.length < 2) return this.msg(`What's the drop-off address or city?`);
-        this.lead.dropoff = input;
-        this.flow = "askDatetime";
-        return this.msg(`What date and time? (e.g. "Friday 3pm" or "Oct 5 at 9:30am")`);
-      }
-      case "askDatetime": {
-        if (input.length < 3) return this.msg(`When do you need the ride? A date and time works best.`);
-        this.lead.datetime = input;
-        this.flow = "askVehicle";
-        return {
-          messages: [
-            {
-              text: `Which vehicle?`,
-              quickReplies: VEHICLES.map((v) => v.label),
-            },
-          ],
-        };
-      }
-      case "askVehicle": {
-        const match = VEHICLES.find((v) => text.includes(v.value) || text.includes(v.label.toLowerCase()));
-        if (!match) {
-          return {
-            messages: [
-              {
-                text: `Please pick one of our vehicles:`,
-                quickReplies: VEHICLES.map((v) => v.label),
-              },
-            ],
-          };
-        }
-        this.lead.vehicle = match.label;
-        this.flow = "confirm";
-        const l = this.lead;
-        return {
-          messages: [
-            {
-              text:
-                `Here's your booking request:\n` +
-                `• Name: ${l.name}\n• Phone: ${l.phone}\n• Pickup: ${l.pickup}\n• Drop-off: ${l.dropoff}\n• When: ${l.datetime}\n• Vehicle: ${l.vehicle}\n\n` +
-                `Does that look right?`,
-              quickReplies: ["Yes, submit", "Start over", "Cancel"],
-            },
-          ],
-        };
-      }
-      case "confirm": {
-        if (has(text, "yes", "submit", "confirm", "looks good", "correct")) {
-          const lead = this.lead as Lead;
-          this.flow = null;
-          this.lead = {};
-          return { messages: [{ text: `Submitting your request…` }], submitLead: lead };
-        }
-        if (has(text, "start over", "restart", "redo")) return this.startFlow();
-        return this.msg(`Just say "yes" to submit, "start over" to redo it, or "cancel".`, [
-          "Yes, submit",
-          "Start over",
-          "Cancel",
-        ]);
-      }
-      default: {
-        this.flow = null;
-        return this.msg(`Let's start fresh — how can I help?`, BOOK_QUICK);
-      }
-    }
-  }
-
   private msg(text: string, quickReplies?: string[]): EngineResult {
     return quickReplies
       ? { messages: [{ text, quickReplies }] }
@@ -410,39 +285,3 @@ export class ChatEngine {
   }
 }
 
-/** POST the lead to FormSubmit (free form-to-email). Falls back to a mailto: link. */
-export async function submitLead(
-  lead: Lead,
-  toEmail: string,
-  brandName: string
-): Promise<{ ok: boolean; mailto: string }> {
-  const subject = `New chat lead — ${brandName}`;
-  const body =
-    `Name: ${lead.name}\n` +
-    `Phone: ${lead.phone}\n` +
-    `Pickup: ${lead.pickup}\n` +
-    `Drop-off: ${lead.dropoff}\n` +
-    `Date/time: ${lead.datetime}\n` +
-    `Vehicle: ${lead.vehicle}`;
-  const mailto = `mailto:${toEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  try {
-    const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(toEmail)}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        name: lead.name,
-        phone: lead.phone,
-        pickup: lead.pickup,
-        dropoff: lead.dropoff,
-        datetime: lead.datetime,
-        vehicle: lead.vehicle,
-        _subject: subject,
-        _template: "table",
-      }),
-    });
-    if (!res.ok) throw new Error(`formsubmit ${res.status}`);
-    return { ok: true, mailto };
-  } catch {
-    return { ok: false, mailto };
-  }
-}

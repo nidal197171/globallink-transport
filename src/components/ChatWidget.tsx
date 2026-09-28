@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
-import { ChatEngine, submitLead, type BotMessage } from "@/lib/chatbot";
+import { ChatEngine, type BotMessage } from "@/lib/chatbot";
 import { SITE } from "@/config/site";
 
 interface ChatMsg {
   from: "bot" | "user";
   text: string;
-  mailto?: string;
 }
 
 const ENGINE_SITE = {
@@ -25,7 +24,6 @@ export function ChatWidget() {
   const [quickReplies, setQuickReplies] = useState<string[]>([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const engineRef = useRef<ChatEngine | null>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -79,43 +77,36 @@ export function ChatWidget() {
   const deliver = (engine: ChatEngine, text: string) => {
     const result = engine.handle(text);
     pushBot(result.messages, () => {
-      if (result.submitLead) finishLead(result.submitLead);
+      if (result.navigate) goToBooking();
     });
   };
 
-  const finishLead = async (lead: Parameters<typeof submitLead>[0]) => {
-    setSubmitting(true);
-    const res = await submitLead(lead, SITE.contact.email, SITE.brand.shortName);
-    setSubmitting(false);
-    if (res.ok) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          from: "bot",
-          text: `Done — your request is on its way to our team. We'll call you at ${lead.phone} shortly to confirm. For anything urgent, call ${SITE.contact.phoneDisplay}.`,
-        },
-      ]);
+  /** Booking actions take the customer to the booking form. */
+  const goToBooking = () => {
+    setOpen(false);
+    if (window.location.pathname === "/") {
+      document.getElementById("book")?.scrollIntoView({ behavior: "smooth" });
     } else {
-      setMessages((prev) => [
-        ...prev,
-        {
-          from: "bot",
-          text: `I couldn't send that automatically — tap below to email us your booking details instead, and we'll call you back.`,
-          mailto: res.mailto,
-        },
-      ]);
+      window.location.href = "/#book";
     }
-    setQuickReplies(["Get a fare quote", "Call us"]);
   };
 
   const send = (raw: string) => {
     const text = raw.trim();
-    if (!text || typing || submitting) return;
+    if (!text || typing) return;
     const engine = engineRef.current;
     if (!engine) return;
     // "Call us" is a shortcut, not chat input.
     if (text.toLowerCase() === "call us") {
       window.location.href = SITE.contact.phoneHref;
+      return;
+    }
+    // Booking chips go straight to the booking form.
+    if (text.toLowerCase() === "book a ride" || text.toLowerCase() === "book this ride") {
+      setMessages((prev) => [...prev, { from: "user", text }]);
+      setQuickReplies([]);
+      setInput("");
+      goToBooking();
       return;
     }
     setMessages((prev) => [...prev, { from: "user", text }]);
@@ -242,23 +233,6 @@ export function ChatWidget() {
                 }}
               >
                 {m.text}
-                {m.mailto && (
-                  <a
-                    href={m.mailto}
-                    style={{
-                      display: "inline-block",
-                      marginTop: 10,
-                      background: "var(--brass)",
-                      color: "var(--ink)",
-                      fontWeight: 600,
-                      fontSize: 13,
-                      padding: "10px 16px",
-                      borderRadius: 8,
-                    }}
-                  >
-                    Email us your booking details
-                  </a>
-                )}
               </div>
             ))}
             {typing && (
@@ -274,11 +248,6 @@ export function ChatWidget() {
                 }}
               >
                 …
-              </div>
-            )}
-            {submitting && (
-              <div style={{ alignSelf: "flex-start", fontSize: 13, color: "var(--steel)" }}>
-                Sending your request…
               </div>
             )}
           </div>
@@ -351,7 +320,7 @@ export function ChatWidget() {
             <button
               type="submit"
               aria-label="Send message"
-              disabled={!input.trim() || typing || submitting}
+              disabled={!input.trim() || typing}
               style={{
                 background: "var(--brass)",
                 color: "var(--ink)",
@@ -362,7 +331,7 @@ export function ChatWidget() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                opacity: !input.trim() || typing || submitting ? 0.5 : 1,
+                opacity: !input.trim() || typing ? 0.5 : 1,
               }}
             >
               <Send size={18} />
