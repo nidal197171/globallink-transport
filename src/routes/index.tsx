@@ -19,6 +19,8 @@ import {
   EAST_BAY_PICKUP_SURCHARGE,
   SOUTH_BAY_CITIES,
   VEHICLES,
+  ZONE_PREMIUM,
+  ZONE_PREMIUM_CITIES,
   cityToCityQuote,
   estimateRoadMiles,
   sprinterBaseFare,
@@ -479,6 +481,16 @@ function BookingCard() {
       pricedBase = (base as number) + 60;
     } else {
       pricedBase = Math.round(((base as number) * (mult as number)) / 5) * 5;
+    }
+    // $40 zone premium for San Jose South / Oakland Hills on airport transfers.
+    // Sedan/SUV/limousine already carry it in the rate tables; Sprinter vans price
+    // from mileage, so it's added here to keep the premium identical across vehicles.
+    if (
+      vehicle === "sprinter" &&
+      ((pType === "airport" && dType === "city" && dCode && ZONE_PREMIUM_CITIES.has(dCode)) ||
+        (pType === "city" && dType === "airport" && pCode && ZONE_PREMIUM_CITIES.has(pCode)))
+    ) {
+      pricedBase += ZONE_PREMIUM;
     }
     // $50 surcharge whenever the pickup is in an East Bay or South Bay city (all vehicles).
     if (pType === "city" && pCode && (EAST_BAY_CITIES.has(pCode) || SOUTH_BAY_CITIES.has(pCode))) {

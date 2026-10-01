@@ -21,6 +21,8 @@ import {
   estimateRoadMiles,
   SOUTH_BAY_CITIES,
   sprinterBaseFare,
+  ZONE_PREMIUM,
+  ZONE_PREMIUM_CITIES,
 } from "@/data/globallink";
 
 export interface SiteInfo {
@@ -64,6 +66,16 @@ const CITY_ALIASES: Record<string, string> = {
   "saint helena": "st-helena",
   "daly city": "daly-city",
 };
+
+/** Zone pairs: a bare city name ("San Jose", "Oakland") quotes both zones. */
+const ZONE_PAIRS: [string, string][] = [
+  ["san-jose-north", "san-jose-south"],
+  ["oakland-downtown", "oakland-hills"],
+];
+const ZONE_BARE_NAMES: [string, [string, string]][] = [
+  ["san jose", ["san-jose-north", "san-jose-south"]],
+  ["oakland", ["oakland-downtown", "oakland-hills"]],
+];
 
 const AIRPORT_PATTERNS: { code: string; label: string; re: RegExp }[] = [
   { code: "sfo", label: "SFO", re: /\bsfo\b|san francisco (international )?airport/i },
@@ -109,6 +121,16 @@ function detectRoute(text: string): RouteEntities {
   for (const [alias, slug] of Object.entries(CITY_ALIASES)) {
     if (new RegExp(`\\b${esc(alias)}\\b`).test(rest.toLowerCase()) && !cities.includes(slug)) {
       cities.push(slug);
+    }
+  }
+  // A bare "San Jose" / "Oakland" (no zone named) matches both zones so the
+  // bot can quote each. Airport mentions were already stripped above.
+  for (const [bare, pair] of ZONE_BARE_NAMES) {
+    if (
+      new RegExp(`\\b${esc(bare)}\\b`).test(rest.toLowerCase()) &&
+      !pair.some((s) => cities.includes(s))
+    ) {
+      cities.push(...pair);
     }
   }
   return { airports, cities };
@@ -312,8 +334,31 @@ export class ChatEngine {
     // Airport <-> city
     if (airports.length === 1 && cities.length >= 1) {
       const ap = airports[0];
+      if (!ap) return null;
+      // Bare city name matched both zones of a pair — quote each zone.
+      const pair = ZONE_PAIRS.find(([a, b]) => cities.includes(a) && cities.includes(b));
+      if (pair) {
+        const lines: string[] = [];
+        for (const slug of pair) {
+          const fare = AIRPORT_RATES[ap.code]?.[slug];
+          if (fare == null) continue;
+          const sprinterAC = this.sprinterFare(AIRPORT_COORDS[ap.code], CITY_COORDS[slug]);
+          const sp =
+            sprinterAC == null ? null : sprinterAC + (ZONE_PREMIUM_CITIES.has(slug) ? ZONE_PREMIUM : 0);
+          lines.push(
+            `${cityName(slug)} — sedan $${fare}, SUV/limo $${fare + 60}${
+              sp != null ? `, sprinter $${sp}` : ""
+            }`
+          );
+        }
+        if (!lines.length) return null;
+        return this.msg(
+          `${ap.label} (each way):\n${lines.join("\n")}\n\n20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book on our booking form.`,
+          ["Book this ride", "Get another quote"]
+        );
+      }
       const slug = cities[0];
-      if (!ap || !slug) return null;
+      if (!slug) return null;
       const fare = AIRPORT_RATES[ap.code]?.[slug];
       if (fare == null) {
         return this.msg(
@@ -322,12 +367,14 @@ export class ChatEngine {
         );
       }
       const sprinterAC = this.sprinterFare(AIRPORT_COORDS[ap.code], CITY_COORDS[slug]);
+      const sp =
+        sprinterAC == null ? null : sprinterAC + (ZONE_PREMIUM_CITIES.has(slug) ? ZONE_PREMIUM : 0);
       return this.msg(
         this.stackedQuote(
           `${ap.label} → ${cityName(slug)} (each way)`,
           `$${fare}`,
           `$${fare + 60}`,
-          sprinterAC != null ? `$${sprinterAC}` : null
+          sp != null ? `$${sp}` : null
         ),
         ["Book this ride", "Get another quote"]
       );
@@ -340,6 +387,16 @@ export class ChatEngine {
       if (!from || !to) return null;
       if (from === to) {
         return this.msg(`Pickup and drop-off can't be the same place — where are you headed?`, ["Cancel"]);
+      }
+      // Bare city name matched both zones of a pair — ask which zone + the other end.
+      const pairHit = ZONE_PAIRS.find(
+        ([a, b]) => (from === a && to === b) || (from === b && to === a)
+      );
+      if (pairHit) {
+        return this.msg(
+          `Just to be sure — did you mean ${cityName(pairHit[0])} or ${cityName(pairHit[1])}? And where's the other end of the trip? For example "${cityName(pairHit[1])} to Palo Alto".`,
+          [cityName(pairHit[0]), cityName(pairHit[1]), "Cancel"]
+        );
       }
       const { base, miles } = cityToCityQuote(from, to);
       const surcharge =
