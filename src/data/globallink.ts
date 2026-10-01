@@ -627,9 +627,9 @@ export function cityToCityQuote(fromSlug: string, toSlug: string): { base: numbe
 }
 
 // Sprinter van base fare: Global Link's own per-mile formula —
-// $300 base + $4.50 per road mile, rounded to the nearest $5.
+// $200 base + $4.50 per road mile, rounded to the nearest $5.
 // (Benchmarked ~5% under Buster's instant-quote curve, Sep 2026.)
-export const SPRINTER_BASE_FARE = 300;
+export const SPRINTER_BASE_FARE = 200;
 export const SPRINTER_PER_MILE = 4.5;
 
 export function estimateRoadMiles(

@@ -450,7 +450,7 @@ function BookingCard() {
       };
     const [pType, pCode] = pickup.split(":");
     const [dType, dCode] = dropoff.split(":");
-    // Sprinter vans use Global Link's own per-mile formula ($300 + $4.50/mile)
+    // Sprinter vans use Global Link's own per-mile formula ($200 + $4.50/mile)
     // for every route type — airport, city-to-city, and airport-to-airport.
     let sprinterBase: number | null = null;
     let routeMiles: number | null = null;

@@ -280,7 +280,7 @@ export class ChatEngine {
 
   // ---------- Fare quoting ----------
 
-  /** Sprinter van route fare ($300 + $4.50/mile, nearest $5), null if coords missing. */
+  /** Sprinter van route fare ($200 + $4.50/mile, nearest $5), null if coords missing. */
   private sprinterFare(
     a: { lat: number; lon: number } | undefined,
     b: { lat: number; lon: number } | undefined
