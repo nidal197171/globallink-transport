@@ -611,6 +611,8 @@ export const CITY_COORDS: Record<string, { lat: number; lon: number }> = {
 // (e.g. San Francisco → San Francisco = $95, San Jose → San Jose = $280).
 const SAME_CITY_BASE = 95;
 const SAME_CITY_PER_MILE_FROM_SF = 4.25;
+// NED's exceptions: these stay at the $95 flat even though they're 15+ miles out.
+const SAME_CITY_FLAT_OVERRIDES = new Set(["san-mateo", "redwood-city"]);
 const CITY_BASE_FARE = 50;
 const CITY_PER_MILE = 4.5;
 const CITY_MIN_FARE = 85;
@@ -626,7 +628,9 @@ export function cityToCityQuote(fromSlug: string, toSlug: string): { base: numbe
     const sf = CITY_COORDS["san-francisco"];
     const milesFromSF = sf ? estimateRoadMiles(sf, a) : 0;
     const raw =
-      milesFromSF < 15 ? SAME_CITY_BASE : SAME_CITY_BASE + SAME_CITY_PER_MILE_FROM_SF * milesFromSF;
+      milesFromSF < 15 || SAME_CITY_FLAT_OVERRIDES.has(fromSlug)
+        ? SAME_CITY_BASE
+        : SAME_CITY_BASE + SAME_CITY_PER_MILE_FROM_SF * milesFromSF;
     return { base: Math.round(raw / 5) * 5, miles: 0 };
   }
   const la1 = (a.lat * Math.PI) / 180;
