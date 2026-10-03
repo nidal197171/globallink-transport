@@ -464,3 +464,12 @@
   .agree-doc{padding:0;}
 }
 .fee-link{color:var(--brass-dark);text-decoration:underline;}
+.drv-modal-backdrop{position:fixed;inset:0;background:rgba(20,24,32,0.55);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px;}
+.drv-modal{background:#fff;border-radius:10px;max-width:480px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+.drv-modal h4{font-size:17px;margin-bottom:12px;}
+.drv-terms-note{font-size:14.5px;line-height:1.65;color:var(--charcoal);background:rgba(176,141,62,0.08);border:1px solid var(--brass);border-radius:8px;padding:16px 18px;margin-bottom:18px;}
+.drv-agree{display:flex;align-items:flex-start;gap:10px;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:22px;}
+.drv-agree input{width:18px;height:18px;margin-top:1px;accent-color:var(--brass-dark);cursor:pointer;}
+.drv-modal-actions{display:flex;gap:12px;justify-content:flex-end;}
+.drv-modal-actions .btn{padding:12px 22px;}
+.drv-modal-actions .btn:disabled{opacity:0.45;cursor:not-allowed;}

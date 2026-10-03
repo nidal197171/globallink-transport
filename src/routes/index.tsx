@@ -1087,6 +1087,8 @@ function DriveForm() {
   const [hasFiles, setHasFiles] = useState(false);
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [agreed, setAgreed] = useState(false);
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -1104,6 +1106,14 @@ function DriveForm() {
       });
       return;
     }
+    // Show the commission note + agree checkbox before anything is sent.
+    setAgreed(false);
+    setShowTerms(true);
+  };
+
+  const confirmAndSend = () => {
+    if (!agreed) return;
+    setShowTerms(false);
     // Send the application to the Google Sheet. keepalive lets the request
     // finish even though we navigate to the email app right after.
     try {
@@ -1230,6 +1240,38 @@ function DriveForm() {
       <button type="button" className="btn btn-brass" id="drvSubmit" style={{ width: "100%", marginTop: 20 }} onClick={submit}>
         {submitted ? "Application sent ✓" : "Submit application"}
       </button>
+      {showTerms && (
+        <div className="drv-modal-backdrop" onClick={() => setShowTerms(false)}>
+          <div className="drv-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+            <h4>Before you apply</h4>
+            <p className="drv-terms-note">
+              Keep in mind that some of the bookings come through our reservation channels that we
+              pay 20% commission on so that 20% will be deducted of your fare.
+            </p>
+            <label className="drv-agree">
+              <input
+                type="checkbox"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+              />
+              <span>I understand and agree</span>
+            </label>
+            <div className="drv-modal-actions">
+              <button type="button" className="btn" onClick={() => setShowTerms(false)}>
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-brass"
+                disabled={!agreed}
+                onClick={confirmAndSend}
+              >
+                Confirm &amp; send
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {confirm && (
         <div
           className="sign-confirm show"
