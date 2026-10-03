@@ -1825,6 +1825,28 @@ function Index() {
         </div>
       </section>
 
+      <section id="fleetsites">
+        <div className="wrap" style={{ maxWidth: 720 }}>
+          <div className="section-head" style={{ textAlign: "center" }}>
+            <img src="/fleetsites-logo.webp" alt="FleetSites" style={{ width: 96, height: 96, objectFit: "contain", marginBottom: 12 }} />
+            <h2>Need a website for your business?</h2>
+            <p>
+              This site was built by <strong>FleetSites</strong>. We build high-converting websites for
+              transportation companies — online booking, instant quotes, payments — and websites for{" "}
+              <strong>any</strong> business.
+            </p>
+          </div>
+          <div className="drive-req">
+            <div className="drive-req-item">{CheckIcon}$2,000 one-time setup</div>
+            <div className="drive-req-item">{CheckIcon}$250/month care plan — hosting, updates, support</div>
+            <div className="drive-req-item">{CheckIcon}Booking, quotes &amp; payments built in</div>
+          </div>
+          <p style={{ textAlign: "center", marginTop: 20 }}>
+            <a href={`mailto:${EMAIL}`}>Email us</a> or call {PHONE} to get started.
+          </p>
+        </div>
+      </section>
+
       <footer>
         <div className="wrap">
           <div className="foot-grid">
