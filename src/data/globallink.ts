@@ -614,6 +614,8 @@ export function cityToCityQuote(fromSlug: string, toSlug: string): { base: numbe
   const a = CITY_COORDS[fromSlug];
   const b = CITY_COORDS[toSlug];
   if (!a || !b) return { base: CITY_SHORT_TRIP_FEE, miles: 0 };
+  // Same-city trips: flat $85 sedan fare.
+  if (fromSlug === toSlug) return { base: 85, miles: 0 };
   const la1 = (a.lat * Math.PI) / 180;
   const la2 = (b.lat * Math.PI) / 180;
   const lo1 = (a.lon * Math.PI) / 180;
