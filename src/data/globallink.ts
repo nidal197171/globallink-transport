@@ -602,11 +602,13 @@ export const CITY_COORDS: Record<string, { lat: number; lon: number }> = {
   "yountville": { lat: 38.40354, lon: -122.3619 },
 };
 
-// City-to-city sedan fare: $85 base + $2.65 per road mile (road miles
-// estimated from straight-line distance), rounded to the nearest $5.
-// Set Oct 2026 by NED: $85 base, $2.65/mi (SF → San Jose = $200).
-const CITY_BASE_FARE = 85;
-const CITY_PER_MILE = 2.65;
+// City-to-city sedan fare: $50 base + $4.50 per road mile (road miles
+// estimated from straight-line distance), $85 minimum, rounded to the
+// nearest $5. Calibrated Oct 2026 against NED's manual SFO airport fares
+// (linear fit: $49 + $4.32/mi across 108 cities).
+// Same-city trips (from == to): flat $85.
+const CITY_BASE_FARE = 50;
+const CITY_PER_MILE = 4.5;
 const CITY_MIN_FARE = 85;
 const CITY_CIRCUITY = 1.15;
 

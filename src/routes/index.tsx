@@ -179,7 +179,9 @@ function sprinterRouteMiles(pType: string | undefined, pCode: string | undefined
 
 function computeSedanBase(pickup: string, dropoff: string): number | "same" | "quote" | null {
   if (!pickup || !dropoff) return null;
-  if (pickup === dropoff) return "same";
+  // Same pickup and drop-off: blocked with a contact-for-quote message,
+  // except city → same city which is a bookable $85 flat fare.
+  if (pickup === dropoff && !pickup.startsWith("city:")) return "same";
   const [pType, pCode] = pickup.split(":");
   const [dType, dCode] = dropoff.split(":");
   if (pType === "airport" && dType === "airport") {
@@ -502,10 +504,10 @@ function BookingCard() {
     const ep = service !== "hourly" ? extraPickups * EXTRA_PICKUP_PRICE : 0;
     const parts = feeParts(pricedBase);
     const milesText =
-      routeMiles !== null
+      routeMiles !== null && routeMiles > 0
         ? ` · ${Math.round(routeMiles)} miles`
         : pType === "city" && dType === "city" && pCode && dCode
-          ? ` · ${Math.round(cityToCityQuote(pCode, dCode).miles)} miles`
+          ? (() => { const m = cityToCityQuote(pCode, dCode).miles; return m > 0 ? ` · ${Math.round(m)} miles` : ""; })()
           : "";
     return {
       cls: "has-price",
