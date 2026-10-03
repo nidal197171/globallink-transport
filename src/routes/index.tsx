@@ -495,7 +495,8 @@ function BookingCard() {
       pricedBase += ZONE_PREMIUM;
     }
     // $50 surcharge whenever the pickup is in an East Bay or South Bay city (all vehicles).
-    if (pType === "city" && pCode && (EAST_BAY_CITIES.has(pCode) || SOUTH_BAY_CITIES.has(pCode))) {
+    // Skipped for same-city trips (pickup === dropoff): those use the flat/per-mile same-city fare only.
+    if (pType === "city" && pCode && pickup !== dropoff && (EAST_BAY_CITIES.has(pCode) || SOUTH_BAY_CITIES.has(pCode))) {
       pricedBase += EAST_BAY_PICKUP_SURCHARGE;
     }
     // Greet & meet is a flat $40 add-on, only when an airport pickup is selected for an airport transfer.
