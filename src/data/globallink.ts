@@ -620,11 +620,13 @@ export function cityToCityQuote(fromSlug: string, toSlug: string): { base: numbe
   const a = CITY_COORDS[fromSlug];
   const b = CITY_COORDS[toSlug];
   if (!a || !b) return { base: CITY_MIN_FARE, miles: 0 };
-  // Same-city trips: $85 + $2.65 per road mile from San Francisco.
+  // Same-city trips: $95 + $4.25 per road mile from San Francisco;
+  // cities under 15 miles from SF stay at the $95 flat.
   if (fromSlug === toSlug) {
     const sf = CITY_COORDS["san-francisco"];
     const milesFromSF = sf ? estimateRoadMiles(sf, a) : 0;
-    const raw = SAME_CITY_BASE + SAME_CITY_PER_MILE_FROM_SF * milesFromSF;
+    const raw =
+      milesFromSF < 15 ? SAME_CITY_BASE : SAME_CITY_BASE + SAME_CITY_PER_MILE_FROM_SF * milesFromSF;
     return { base: Math.round(raw / 5) * 5, miles: 0 };
   }
   const la1 = (a.lat * Math.PI) / 180;
