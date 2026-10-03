@@ -606,12 +606,13 @@ export const CITY_COORDS: Record<string, { lat: number; lon: number }> = {
 // estimated from straight-line distance), $85 minimum, rounded to the
 // nearest $5. Calibrated Oct 2026 against NED's manual SFO airport fares
 // (linear fit: $49 + $4.32/mi across 108 cities).
-// Same-city trips (from == to): $95 + $4.25 per road mile from San
-// Francisco, rounded to the nearest $5
-// (e.g. San Francisco → San Francisco = $95, San Jose → San Jose = $280).
+// Same-city trips (from == to): $95 flat within 20 road miles of San
+// Francisco; beyond that $95 + $4.50 per mile past 20, rounded to the
+// nearest $5 (e.g. Burlingame = $95, San Jose = $200, Sacramento = $395).
 const SAME_CITY_BASE = 95;
-const SAME_CITY_PER_MILE_FROM_SF = 4.25;
-// NED's exceptions: these stay at the $95 flat even though they're 15+ miles out.
+const SAME_CITY_PER_MILE = 4.5;
+const SAME_CITY_FLAT_MILES = 20;
+// NED's exceptions: these stay at the $95 flat regardless of distance.
 const SAME_CITY_FLAT_OVERRIDES = new Set(["san-mateo", "redwood-city"]);
 const CITY_BASE_FARE = 50;
 const CITY_PER_MILE = 4.5;
@@ -622,15 +623,14 @@ export function cityToCityQuote(fromSlug: string, toSlug: string): { base: numbe
   const a = CITY_COORDS[fromSlug];
   const b = CITY_COORDS[toSlug];
   if (!a || !b) return { base: CITY_MIN_FARE, miles: 0 };
-  // Same-city trips: $95 + $4.25 per road mile from San Francisco;
-  // cities under 15 miles from SF stay at the $95 flat.
+  // Same-city trips: $95 flat within 20 miles of SF, then $95 + $4.50/mi past 20.
   if (fromSlug === toSlug) {
     const sf = CITY_COORDS["san-francisco"];
     const milesFromSF = sf ? estimateRoadMiles(sf, a) : 0;
     const raw =
-      milesFromSF < 15 || SAME_CITY_FLAT_OVERRIDES.has(fromSlug)
+      milesFromSF <= SAME_CITY_FLAT_MILES || SAME_CITY_FLAT_OVERRIDES.has(fromSlug)
         ? SAME_CITY_BASE
-        : SAME_CITY_BASE + SAME_CITY_PER_MILE_FROM_SF * milesFromSF;
+        : SAME_CITY_BASE + SAME_CITY_PER_MILE * (milesFromSF - SAME_CITY_FLAT_MILES);
     return { base: Math.round(raw / 5) * 5, miles: 0 };
   }
   const la1 = (a.lat * Math.PI) / 180;
