@@ -602,20 +602,21 @@ export const CITY_COORDS: Record<string, { lat: number; lon: number }> = {
   "yountville": { lat: 38.40354, lon: -122.3619 },
 };
 
-// City-to-city sedan fare: $5.75 per road mile (road miles estimated from
-// straight-line distance), +$45 on trips under 10 miles, rounded to the
-// nearest $5.
-const CITY_PER_MILE = 5.75;
-const CITY_SHORT_TRIP_MILES = 16;
-const CITY_SHORT_TRIP_FEE = 60;
+// City-to-city sedan fare: $50 base + $4.50 per road mile (road miles
+// estimated from straight-line distance), $85 minimum, rounded to the
+// nearest $5. Calibrated Oct 2026 against NED's manual SFO airport fares
+// (linear fit: $49 + $4.32/mi across 108 cities).
+const CITY_BASE_FARE = 50;
+const CITY_PER_MILE = 4.5;
+const CITY_MIN_FARE = 85;
 const CITY_CIRCUITY = 1.15;
 
 export function cityToCityQuote(fromSlug: string, toSlug: string): { base: number; miles: number } {
   const a = CITY_COORDS[fromSlug];
   const b = CITY_COORDS[toSlug];
-  if (!a || !b) return { base: CITY_SHORT_TRIP_FEE, miles: 0 };
+  if (!a || !b) return { base: CITY_MIN_FARE, miles: 0 };
   // Same-city trips: flat $85 sedan fare.
-  if (fromSlug === toSlug) return { base: 85, miles: 0 };
+  if (fromSlug === toSlug) return { base: CITY_MIN_FARE, miles: 0 };
   const la1 = (a.lat * Math.PI) / 180;
   const la2 = (b.lat * Math.PI) / 180;
   const lo1 = (a.lon * Math.PI) / 180;
@@ -623,7 +624,7 @@ export function cityToCityQuote(fromSlug: string, toSlug: string): { base: numbe
   const h =
     Math.sin((la2 - la1) / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin((lo2 - lo1) / 2) ** 2;
   const miles = 2 * 3959 * Math.asin(Math.sqrt(h)) * CITY_CIRCUITY;
-  const raw = CITY_PER_MILE * miles + (miles < CITY_SHORT_TRIP_MILES ? CITY_SHORT_TRIP_FEE : 0);
+  const raw = Math.max(CITY_MIN_FARE, CITY_BASE_FARE + CITY_PER_MILE * miles);
   const base = Math.round(raw / 5) * 5;
   return { base, miles };
 }
