@@ -606,7 +606,11 @@ export const CITY_COORDS: Record<string, { lat: number; lon: number }> = {
 // estimated from straight-line distance), $85 minimum, rounded to the
 // nearest $5. Calibrated Oct 2026 against NED's manual SFO airport fares
 // (linear fit: $49 + $4.32/mi across 108 cities).
-// Same-city trips (from == to): flat $85.
+// Same-city trips (from == to): $85 + $2.65 per road mile from San
+// Francisco, rounded to the nearest $5
+// (e.g. San Francisco → San Francisco = $85, San Jose → San Jose = $200).
+const SAME_CITY_BASE = 85;
+const SAME_CITY_PER_MILE_FROM_SF = 2.65;
 const CITY_BASE_FARE = 50;
 const CITY_PER_MILE = 4.5;
 const CITY_MIN_FARE = 85;
@@ -616,8 +620,13 @@ export function cityToCityQuote(fromSlug: string, toSlug: string): { base: numbe
   const a = CITY_COORDS[fromSlug];
   const b = CITY_COORDS[toSlug];
   if (!a || !b) return { base: CITY_MIN_FARE, miles: 0 };
-  // Same-city trips: flat $85 sedan fare.
-  if (fromSlug === toSlug) return { base: CITY_MIN_FARE, miles: 0 };
+  // Same-city trips: $85 + $2.65 per road mile from San Francisco.
+  if (fromSlug === toSlug) {
+    const sf = CITY_COORDS["san-francisco"];
+    const milesFromSF = sf ? estimateRoadMiles(sf, a) : 0;
+    const raw = SAME_CITY_BASE + SAME_CITY_PER_MILE_FROM_SF * milesFromSF;
+    return { base: Math.round(raw / 5) * 5, miles: 0 };
+  }
   const la1 = (a.lat * Math.PI) / 180;
   const la2 = (b.lat * Math.PI) / 180;
   const lo1 = (a.lon * Math.PI) / 180;
