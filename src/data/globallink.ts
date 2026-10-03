@@ -602,7 +602,7 @@ export const CITY_COORDS: Record<string, { lat: number; lon: number }> = {
   "yountville": { lat: 38.40354, lon: -122.3619 },
 };
 
-// City-to-city sedan fare: $50 base + $4.50 per road mile (road miles
+// City-to-city sedan fare: $50 base + $4.25 per road mile (road miles
 // estimated from straight-line distance), $85 minimum, rounded to the
 // nearest $5. Calibrated Oct 2026 against NED's manual SFO airport fares
 // (linear fit: $49 + $4.32/mi across 108 cities).
@@ -615,7 +615,7 @@ const SAME_CITY_FLAT_MILES = 20;
 // NED's exceptions: these stay at the $95 flat regardless of distance.
 const SAME_CITY_FLAT_OVERRIDES = new Set(["san-mateo", "redwood-city"]);
 const CITY_BASE_FARE = 50;
-const CITY_PER_MILE = 4.5;
+const CITY_PER_MILE = 4.25;
 const CITY_MIN_FARE = 85;
 const CITY_CIRCUITY = 1.15;
 
