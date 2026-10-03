@@ -438,7 +438,7 @@ function BookingCard() {
           greetMeet: 0, extraPickups: 0, node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
     if (base === "same")
       return { cls: "", amount: null as number | null, parts: null as FeeParts | null,
-          greetMeet: 0, extraPickups: 0, node: <span className="fare-label">Same pickup and drop-off — contact us for a quote: (415) 787-8776</span> };
+          greetMeet: 0, extraPickups: 0, node: <span className="fare-label">Same pickup and drop-off — <a href="tel:+14157878776">call (415) 787-8776</a> or <a href="mailto:info@globallinktransport.com">email us</a> for a quote</span> };
     if (base === "quote" || base === null)
       return {
         cls: "",
