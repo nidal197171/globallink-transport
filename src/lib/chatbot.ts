@@ -16,10 +16,7 @@ import {
   CITIES,
   CITY_COORDS,
   cityToCityQuote,
-  EAST_BAY_CITIES,
-  EAST_BAY_PICKUP_SURCHARGE,
   estimateRoadMiles,
-  SOUTH_BAY_CITIES,
   sprinterBaseFare,
   ZONE_PREMIUM,
   ZONE_PREMIUM_CITIES,
@@ -399,10 +396,6 @@ export class ChatEngine {
         );
       }
       const { base, miles } = cityToCityQuote(from, to);
-      const surcharge =
-        EAST_BAY_CITIES.has(from) || SOUTH_BAY_CITIES.has(from)
-          ? `Note: a $${EAST_BAY_PICKUP_SURCHARGE} pickup surcharge applies in ${cityName(from)}.`
-          : "";
       const sprinterCC = this.sprinterFare(CITY_COORDS[from], CITY_COORDS[to]);
       return this.msg(
         this.stackedQuote(
@@ -410,7 +403,7 @@ export class ChatEngine {
           `about $${base}`,
           `about $${base + 60}`,
           sprinterCC != null ? `about $${sprinterCC}` : null,
-          surcharge || undefined
+          undefined
         ),
         ["Book this ride", "Get another quote"]
       );

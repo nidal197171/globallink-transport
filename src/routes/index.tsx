@@ -15,9 +15,6 @@ import {
   AIRPORT_TO_AIRPORT,
   CITIES,
   CITY_COORDS,
-  EAST_BAY_CITIES,
-  EAST_BAY_PICKUP_SURCHARGE,
-  SOUTH_BAY_CITIES,
   VEHICLES,
   ZONE_PREMIUM,
   ZONE_PREMIUM_CITIES,
@@ -494,11 +491,7 @@ function BookingCard() {
     ) {
       pricedBase += ZONE_PREMIUM;
     }
-    // $50 surcharge whenever the pickup is in an East Bay or South Bay city (all vehicles).
-    // Skipped for same-city trips (pickup === dropoff): those use the flat/per-mile same-city fare only.
-    if (pType === "city" && pCode && pickup !== dropoff && (EAST_BAY_CITIES.has(pCode) || SOUTH_BAY_CITIES.has(pCode))) {
-      pricedBase += EAST_BAY_PICKUP_SURCHARGE;
-    }
+    // (East/South Bay $50 pickup surcharge removed Oct 2026 per NED.)
     // Greet & meet is a flat $40 add-on, only when an airport pickup is selected for an airport transfer.
     const gm = service === "transfer" && greetMeet && pickup.startsWith("airport:") ? GREET_MEET_PRICE : 0;
     // Extra pickups: $35 per additional stop, flat add-on (no gratuity/fee on it).
