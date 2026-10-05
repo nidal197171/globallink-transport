@@ -479,9 +479,8 @@ function BookingCard() {
     } else if (vehicle === "sprinter") {
       pricedBase = sprinterBase as number;
     } else if (vehicle === "suv" || vehicle === "limousine") {
-      // SUV and Limousine are $40 over the sedan base fare on airport transfers,
-      // $60 over on other route types.
-      pricedBase = (base as number) + (isAirportTransfer ? 40 : 60);
+      // SUV and Limousine are $40 over the sedan base fare on every route type.
+      pricedBase = (base as number) + 40;
     } else {
       pricedBase = Math.round(((base as number) * (mult as number)) / 5) * 5;
     }

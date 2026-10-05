@@ -395,7 +395,7 @@ export class ChatEngine {
         this.stackedQuote(
           `${cityName(from)} → ${cityName(to)} (about, ~${Math.round(miles)} road miles)`,
           `about $${base}`,
-          `about $${base + 60}`,
+          `about $${base + 40}`,
           sprinterCC != null ? `about $${sprinterCC}` : null,
           undefined
         ),
