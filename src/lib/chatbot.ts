@@ -321,7 +321,7 @@ export class ChatEngine {
         this.stackedQuote(
           `${a.label} → ${b.label} (each way)`,
           `$${fare}`,
-          `$${fare + 60}`,
+          `$${fare + 40}`,
           sprinterAA != null ? `$${sprinterAA}` : null
         ),
         ["Book this ride", "Get another quote"]
@@ -343,7 +343,7 @@ export class ChatEngine {
           const sp =
             sprinterAC == null ? null : sprinterAC + (ZONE_PREMIUM_CITIES.has(slug) ? ZONE_PREMIUM : 0);
           lines.push(
-            `${cityName(slug)} — sedan $${fare}, SUV/limo $${fare + 60}${
+            `${cityName(slug)} — sedan $${fare}, SUV/limo $${fare + 40}${
               sp != null ? `, sprinter $${sp}` : ""
             }`
           );
@@ -370,7 +370,7 @@ export class ChatEngine {
         this.stackedQuote(
           `${ap.label} → ${cityName(slug)} (each way)`,
           `$${fare}`,
-          `$${fare + 60}`,
+          `$${fare + 40}`,
           sp != null ? `$${sp}` : null
         ),
         ["Book this ride", "Get another quote"]
