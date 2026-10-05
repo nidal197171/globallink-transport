@@ -18,8 +18,6 @@ import {
   cityToCityQuote,
   estimateRoadMiles,
   sprinterBaseFare,
-  ZONE_PREMIUM,
-  ZONE_PREMIUM_CITIES,
 } from "@/data/globallink";
 
 export interface SiteInfo {
@@ -316,7 +314,7 @@ export class ChatEngine {
       const key2 = `${b.code}-${a.code}`;
       const fare = AIRPORT_TO_AIRPORT[key1] ?? AIRPORT_TO_AIRPORT[key2];
       if (fare == null) return null;
-      const sprinterAA = this.sprinterFare(AIRPORT_COORDS[a.code], AIRPORT_COORDS[b.code]);
+      const sprinterAA = fare + 200; // Sprinter is $200 over sedan on airport transfers
       return this.msg(
         this.stackedQuote(
           `${a.label} → ${b.label} (each way)`,
@@ -339,9 +337,7 @@ export class ChatEngine {
         for (const slug of pair) {
           const fare = AIRPORT_RATES[ap.code]?.[slug];
           if (fare == null) continue;
-          const sprinterAC = this.sprinterFare(AIRPORT_COORDS[ap.code], CITY_COORDS[slug]);
-          const sp =
-            sprinterAC == null ? null : sprinterAC + (ZONE_PREMIUM_CITIES.has(slug) ? ZONE_PREMIUM : 0);
+          const sp = fare + 200; // Sprinter is $200 over sedan on airport transfers
           lines.push(
             `${cityName(slug)} — sedan $${fare}, SUV/limo $${fare + 40}${
               sp != null ? `, sprinter $${sp}` : ""
@@ -363,9 +359,7 @@ export class ChatEngine {
           ["Book a ride", "Call us"]
         );
       }
-      const sprinterAC = this.sprinterFare(AIRPORT_COORDS[ap.code], CITY_COORDS[slug]);
-      const sp =
-        sprinterAC == null ? null : sprinterAC + (ZONE_PREMIUM_CITIES.has(slug) ? ZONE_PREMIUM : 0);
+      const sp = fare + 200; // Sprinter is $200 over sedan on airport transfers
       return this.msg(
         this.stackedQuote(
           `${ap.label} → ${cityName(slug)} (each way)`,

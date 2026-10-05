@@ -16,8 +16,6 @@ import {
   CITIES,
   CITY_COORDS,
   VEHICLES,
-  ZONE_PREMIUM,
-  ZONE_PREMIUM_CITIES,
   cityToCityQuote,
   estimateRoadMiles,
   sprinterBaseFare,
@@ -472,26 +470,20 @@ function BookingCard() {
           </>
         ),
       };
+    // Airport transfers price every vehicle off the sedan base fare.
+    const isAirportTransfer = pType === "airport" || dType === "airport";
     let pricedBase: number;
-    if (vehicle === "sprinter") {
+    if (vehicle === "sprinter" && isAirportTransfer) {
+      // Sprinter is $200 over the sedan base fare on airport transfers.
+      pricedBase = (base as number) + 200;
+    } else if (vehicle === "sprinter") {
       pricedBase = sprinterBase as number;
     } else if (vehicle === "suv" || vehicle === "limousine") {
       // SUV and Limousine are $40 over the sedan base fare on airport transfers,
       // $60 over on other route types.
-      const isAirport = pType === "airport" || dType === "airport";
-      pricedBase = (base as number) + (isAirport ? 40 : 60);
+      pricedBase = (base as number) + (isAirportTransfer ? 40 : 60);
     } else {
       pricedBase = Math.round(((base as number) * (mult as number)) / 5) * 5;
-    }
-    // $40 zone premium for San Jose South / Oakland Hills on airport transfers.
-    // Sedan/SUV/limousine already carry it in the rate tables; Sprinter vans price
-    // from mileage, so it's added here to keep the premium identical across vehicles.
-    if (
-      vehicle === "sprinter" &&
-      ((pType === "airport" && dType === "city" && dCode && ZONE_PREMIUM_CITIES.has(dCode)) ||
-        (pType === "city" && dType === "airport" && pCode && ZONE_PREMIUM_CITIES.has(pCode)))
-    ) {
-      pricedBase += ZONE_PREMIUM;
     }
     // (East/South Bay $50 pickup surcharge removed Oct 2026 per NED.)
     // Greet & meet is a flat $40 add-on, only when an airport pickup is selected for an airport transfer.
