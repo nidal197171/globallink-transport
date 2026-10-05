@@ -16,8 +16,6 @@ import {
   CITIES,
   CITY_COORDS,
   cityToCityQuote,
-  estimateRoadMiles,
-  sprinterBaseFare,
 } from "@/data/globallink";
 
 export interface SiteInfo {
@@ -275,15 +273,6 @@ export class ChatEngine {
 
   // ---------- Fare quoting ----------
 
-  /** Sprinter van route fare ($200 + $4.50/mile, nearest $5), null if coords missing. */
-  private sprinterFare(
-    a: { lat: number; lon: number } | undefined,
-    b: { lat: number; lon: number } | undefined
-  ): number | null {
-    if (!a || !b) return null;
-    return sprinterBaseFare(estimateRoadMiles(a, b));
-  }
-
   /** Fare quote with one price per line. */
   private stackedQuote(
     header: string,
@@ -390,13 +379,12 @@ export class ChatEngine {
         );
       }
       const { base, miles } = cityToCityQuote(from, to);
-      const sprinterCC = this.sprinterFare(CITY_COORDS[from], CITY_COORDS[to]);
       return this.msg(
         this.stackedQuote(
           `${cityName(from)} → ${cityName(to)} (about, ~${Math.round(miles)} road miles)`,
           `about $${base}`,
           `about $${base + 40}`,
-          sprinterCC != null ? `about $${sprinterCC}` : null,
+          `about $${base + 200}`,
           undefined
         ),
         ["Book this ride", "Get another quote"]

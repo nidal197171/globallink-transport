@@ -18,7 +18,6 @@ import {
   VEHICLES,
   cityToCityQuote,
   estimateRoadMiles,
-  sprinterBaseFare,
 } from "@/data/globallink";
 import InstallAppButton from "@/components/InstallAppButton";
 import { mintBookingNumber } from "@/lib/bookingNumber";
@@ -447,16 +446,13 @@ function BookingCard() {
       };
     const [pType, pCode] = pickup.split(":");
     const [dType, dCode] = dropoff.split(":");
-    // Sprinter vans use Global Link's own per-mile formula ($200 + $4.50/mile)
-    // for every route type — airport, city-to-city, and airport-to-airport.
-    let sprinterBase: number | null = null;
+    // Route miles are shown in the fare display ("· X miles").
     let routeMiles: number | null = null;
     if (vehicle === "sprinter") {
       routeMiles = sprinterRouteMiles(pType, pCode, dType, dCode);
-      if (routeMiles !== null) sprinterBase = sprinterBaseFare(routeMiles);
     }
     const mult = VEHICLE_MULTIPLIER[vehicle];
-    if ((vehicle === "sprinter" && sprinterBase === null) || (vehicle !== "sprinter" && (mult === null || mult === undefined)))
+    if (vehicle !== "sprinter" && (mult === null || mult === undefined))
       return {
         cls: "has-price",
         amount: null as number | null,
@@ -470,14 +466,10 @@ function BookingCard() {
           </>
         ),
       };
-    // Airport transfers price every vehicle off the sedan base fare.
-    const isAirportTransfer = pType === "airport" || dType === "airport";
     let pricedBase: number;
-    if (vehicle === "sprinter" && isAirportTransfer) {
-      // Sprinter is $200 over the sedan base fare on airport transfers.
+    if (vehicle === "sprinter") {
+      // Sprinter is $200 over the sedan base fare on every route type.
       pricedBase = (base as number) + 200;
-    } else if (vehicle === "sprinter") {
-      pricedBase = sprinterBase as number;
     } else if (vehicle === "suv" || vehicle === "limousine") {
       // SUV and Limousine are $40 over the sedan base fare on every route type.
       pricedBase = (base as number) + 40;
