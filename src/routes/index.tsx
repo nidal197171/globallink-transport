@@ -1494,7 +1494,7 @@ function Index() {
             <div className="hero-actions">
               <div className="hero-cta-stack">
                 <a href="#book" className="btn btn-brass">
-                  Check availability
+                  Reserve & Pay
                 </a>
                 <Link to="/pay" search={{}} className="btn btn-brass" preload="intent">
                   Custom reservations pay
