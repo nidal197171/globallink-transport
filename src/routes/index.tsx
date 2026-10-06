@@ -260,17 +260,27 @@ type BookingState = {
   name: string;
   signature: string;
   email: string;
+  isConcierge: boolean;
+  bookingFor: string;
+  hotelName: string;
+  conciergeName: string;
+  conciergePhone: string;
 };
 
 function validateBooking(s: BookingState): string | null {
   const missingRoute = s.service === "hourly" ? !s.pickup : !s.pickup || !s.dropoff;
-  if (missingRoute || !s.dt || !s.name.trim() || !s.signature.trim()) {
-    return s.service === "hourly"
+  if (missingRoute || !s.dt || !s.name.trim() || !s.signature.trim()) {    return s.service === "hourly"
       ? "Please choose pickup, date & time, and sign your name before submitting."
       : "Please choose pickup, drop-off, date & time, and sign your name before submitting.";
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) {
     return "Please enter a valid email address for your receipt.";
+  }
+  if (!s.bookingFor) {
+    return "Please tell us whether this booking is for you or for someone else.";
+  }
+  if (s.isConcierge && (!s.conciergeName.trim() || !s.conciergePhone.trim())) {
+    return "Please enter your name and phone number.";
   }
   return null;
 }
@@ -296,6 +306,13 @@ function reservationDetailsText(s: BookingState, fareText: string, bookingNo: st
     (s.greetMeet ? `Greet & meet: Yes ($${GREET_MEET_PRICE})\n` : "") +
     (s.extraPickups > 0 ? `Extra pickups: ${s.extraPickups} ($${s.extraPickups * EXTRA_PICKUP_PRICE})\n` : "") +
     `Fare: ${fareText}\n\n` +
+    (s.isConcierge
+      ? `Booking for someone else\n` +
+        `Booked by: ${s.conciergeName.trim()}\n` +
+        `Booker phone: ${s.conciergePhone.trim()}\n` +
+        (s.hotelName.trim() ? `Hotel: ${s.hotelName.trim()}\n` : "") +
+        `\n`
+      : "") +
     "Rental agreement acknowledgement\n" +
     `Name: ${s.name.trim()}\n` +
     `Email: ${s.email.trim()}\n` +
@@ -333,6 +350,10 @@ function logBookingToSheet(
     vehicle: VEHICLE_LABEL[s.vehicle] ?? s.vehicle,
     fare: fareText,
     paymentMethod,
+    isConcierge: s.isConcierge ? "Yes" : "",
+    hotelName: s.hotelName.trim(),
+    conciergeName: s.conciergeName.trim(),
+    conciergePhone: s.conciergePhone.trim(),
   });
 }
 
@@ -376,6 +397,10 @@ function BookingCard() {
   const [name, setName] = useState("");
   const [signature, setSignature] = useState("");
   const [email, setEmail] = useState("");
+  const [bookingFor, setBookingFor] = useState("");
+  const [hotelName, setHotelName] = useState("");
+  const [conciergeName, setConciergeName] = useState("");
+  const [conciergePhone, setConciergePhone] = useState("");
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [paying, setPaying] = useState(false);
@@ -517,6 +542,11 @@ function BookingCard() {
     name,
     signature,
     email,
+    isConcierge: bookingFor === "someone",
+    bookingFor,
+    hotelName,
+    conciergeName,
+    conciergePhone,
   });
 
   const fareTextNow = () =>
@@ -948,6 +978,70 @@ function BookingCard() {
             <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 15, borderTop: "1px solid var(--brass)", marginTop: 6, paddingTop: 8 }}>
               <span>Total due</span>
               <span>${fare.parts.total}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="field" style={{ marginTop: 14 }}>
+        <label>Is this booking for you or for someone else?</label>
+        <div style={{ display: "flex", gap: 20, marginTop: 8 }}>
+          <label style={{ display: "flex", gap: 8, alignItems: "center", fontWeight: 400, cursor: "pointer" }}>
+            <input
+              type="radio"
+              name="bookingFor"
+              checked={bookingFor === "me"}
+              onChange={() => setBookingFor("me")}
+            />
+            For me
+          </label>
+          <label style={{ display: "flex", gap: 8, alignItems: "center", fontWeight: 400, cursor: "pointer" }}>
+            <input
+              type="radio"
+              name="bookingFor"
+              checked={bookingFor === "someone"}
+              onChange={() => setBookingFor("someone")}
+            />
+            For someone else
+          </label>
+        </div>
+      </div>
+
+      {bookingFor === "someone" && (
+        <div style={{ border: "1px solid var(--brass)", borderRadius: 12, padding: "12px 14px", marginTop: 12, background: "rgba(176,141,62,0.06)" }}>
+          <div className="field" style={{ marginBottom: 10 }}>
+            <label htmlFor="hotelName">Hotel name <span style={{ fontWeight: 400 }}>(if you&apos;re a hotel concierge)</span></label>
+            <input
+              id="hotelName"
+              type="text"
+              autoComplete="organization"
+              placeholder="e.g. Fairmont San Francisco"
+              value={hotelName}
+              onChange={(e) => setHotelName(e.target.value)}
+            />
+          </div>
+          <div className="field-row">
+            <div className="field">
+              <label htmlFor="conciergeName">Your name</label>
+              <input
+                id="conciergeName"
+                type="text"
+                autoComplete="name"
+                placeholder="Your name"
+                value={conciergeName}
+                onChange={(e) => setConciergeName(e.target.value)}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="conciergePhone">Your phone number</label>
+              <input
+                id="conciergePhone"
+                type="tel"
+                autoComplete="tel"
+                placeholder="(415) 555-0100"
+                value={conciergePhone}
+                onChange={(e) => setConciergePhone(e.target.value)}
+              />
             </div>
           </div>
         </div>
