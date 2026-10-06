@@ -310,7 +310,7 @@ function reservationDetailsText(s: BookingState, fareText: string, bookingNo: st
       ? `Booking for someone else\n` +
         `Booked by: ${s.conciergeName.trim()}\n` +
         `Booker phone: ${s.conciergePhone.trim()}\n` +
-        (s.hotelName.trim() ? `Hotel: ${s.hotelName.trim()}\n` : "") +
+        (s.hotelName.trim() ? `Company / hotel: ${s.hotelName.trim()}\n` : "") +
         `\n`
       : "") +
     "Rental agreement acknowledgement\n" +
@@ -1010,12 +1010,12 @@ function BookingCard() {
       {bookingFor === "someone" && (
         <div style={{ border: "1px solid var(--brass)", borderRadius: 12, padding: "12px 14px", marginTop: 12, background: "rgba(176,141,62,0.06)" }}>
           <div className="field" style={{ marginBottom: 10 }}>
-            <label htmlFor="hotelName">Hotel name <span style={{ fontWeight: 400 }}>(if you&apos;re a hotel concierge)</span></label>
+            <label htmlFor="hotelName">Company / hotel name <span style={{ fontWeight: 400 }}>(if booking for work)</span></label>
             <input
               id="hotelName"
               type="text"
               autoComplete="organization"
-              placeholder="e.g. Fairmont San Francisco"
+              placeholder="e.g. Acme Inc. or Fairmont San Francisco"
               value={hotelName}
               onChange={(e) => setHotelName(e.target.value)}
             />
