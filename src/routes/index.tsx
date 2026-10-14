@@ -1407,12 +1407,32 @@ const CheckIcon = (
   </svg>
 );
 
-const SERVICES: { title: string; img: string }[] = [
-  { title: "Corporate Transportation Service", img: "/images/services/corporate.jpg" },
-  { title: "Airport Limo Service", img: "/images/services/airport.jpg" },
-  { title: "Business Transportation", img: "/images/services/business.jpg" },
-  { title: "Prom & Wine Tours", img: "/images/services/prom-wine.jpg" },
-  { title: "Special Events & Occasions", img: "/images/services/events.jpg" },
+const SERVICES: { title: string; img: string; desc: string }[] = [
+  {
+    title: "Corporate Transportation Service",
+    img: "/images/services/corporate.jpg",
+    desc: "Our corporate car service in San Francisco and across the Bay Area supports business travel, executive transfers, and team logistics. One dedicated dispatch team coordinates every ride, from a single sedan to a full fleet for conferences. Enjoy a single monthly invoice and volume rates for corporate accounts.",
+  },
+  {
+    title: "Airport Limo Service",
+    img: "/images/services/airport.jpg",
+    desc: "Our San Francisco airport limo service provides reliable airport transfers with live flight tracking at San Francisco International Airport (SFO), Oakland International Airport (OAK), and San Jose Mineta International Airport (SJC). Your chauffeur offers meet-and-greet service and adjusts for flight delays or early arrivals. Enjoy fixed fares with no surge pricing — book your airport limo online in minutes.",
+  },
+  {
+    title: "Business Transportation",
+    img: "/images/services/business.jpg",
+    desc: "Business transportation across the San Francisco Bay Area for airport runs, client meetings, and executive travel. Our licensed, background-checked chauffeurs deliver on-time, professional service for busy schedules. Fixed pricing means no surge and no surprises.",
+  },
+  {
+    title: "Prom & Wine Tours",
+    img: "/images/services/prom-wine.jpg",
+    desc: "Enjoy Napa Valley wine tours and prom limo service with professional chauffeurs. Choose stretch limousines and Sprinter vans for Napa, Sonoma, and Livermore wineries, proms, and special nights out. Book by the hour and travel together in comfort and style.",
+  },
+  {
+    title: "Special Events & Occasions",
+    img: "/images/services/events.jpg",
+    desc: "Special event transportation in San Francisco for weddings, galas, concerts, and sporting events. Choose from stretch limousines, SUVs, Sprinter vans, and coaches for groups of any size. One dispatch team coordinates every vehicle so your event runs on time.",
+  },
 ];
 
 const NAV_LINKS: { href: string; label: string }[] = [
@@ -1613,6 +1633,7 @@ function Index() {
             {SERVICES.map((svc) => (
               <div className="service-card" key={svc.title}>
                 <h3>{svc.title}</h3>
+                <p className="desc">{svc.desc}</p>
                 <img src={svc.img} alt={svc.title} loading="lazy" />
               </div>
             ))}
@@ -2018,7 +2039,42 @@ function Index() {
           </div>
           <p style={{ textAlign: "center", marginTop: 20 }}>
             <a href={`mailto:${EMAIL}`}>Email us</a> or call {PHONE} to get started.
-          </p>
+        </p>
+        </div>
+      </section>
+
+      <section id="areas" className="areas">
+        <div className="wrap">
+          <div className="section-head">
+            <h2>Serving the San Francisco Bay Area</h2>
+            <p>
+              Global Link Transportation provides chauffeured sedan, SUV, limousine, Sprinter van, and coach service
+              across the San Francisco Bay Area — from SFO airport transfers to Napa wine tours. Our licensed,
+              background-checked chauffeurs cover more than 60 Bay Area cities, three major airports, and wine country,
+              with fixed fares and one dispatch team behind every reservation.
+            </p>
+          </div>
+          <div className="areas-grid">
+            <div className="areas-group">
+              <h3>Cities served</h3>
+              <p>
+                San Francisco, San Mateo, San Jose, Oakland, Berkeley, Palo Alto, Mountain View, Daly City, South San
+                Francisco, Redwood City, Fremont, Santa Clara, Sunnyvale, Walnut Creek, and more than 60 Bay Area
+                cities.
+              </p>
+            </div>
+            <div className="areas-group">
+              <h3>Airports served</h3>
+              <p>
+                San Francisco International Airport (SFO), Oakland International Airport (OAK), and San Jose Mineta
+                International Airport (SJC).
+              </p>
+            </div>
+            <div className="areas-group">
+              <h3>Wine country</h3>
+              <p>Napa, Sonoma, Livermore, and Monterey.</p>
+            </div>
+          </div>
         </div>
       </section>
 
