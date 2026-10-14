@@ -1443,27 +1443,27 @@ const SERVICES: { title: string; img: string; desc: string }[] = [
   {
     title: "Corporate Transportation Service",
     img: "/images/services/corporate.jpg",
-    desc: "Our corporate car service in San Francisco and across the Bay Area supports business travel, executive transfers, and team logistics. One dedicated dispatch team coordinates every ride, from a single sedan to a full fleet for conferences. Enjoy a single monthly invoice and volume rates for corporate accounts.",
+    desc: "Our corporate car service in San Francisco and across the Bay Area supports business travel, executive transfers, and team logistics. Book a town car, black car, or executive car service with a professional chauffeur for airport runs, client meetings, and roadshows, or arrange group transportation for a visiting team. One dedicated dispatch team coordinates every ride, from a single sedan to a full fleet for conferences. Enjoy a single monthly invoice and volume rates for corporate accounts.",
   },
   {
     title: "Airport Limo Service",
     img: "/images/services/airport.jpg",
-    desc: "Our San Francisco airport limo service provides reliable airport transfers with live flight tracking at San Francisco International Airport (SFO), Oakland International Airport (OAK), and San Jose Mineta International Airport (SJC). Your chauffeur offers meet-and-greet service and adjusts for flight delays or early arrivals. Enjoy fixed fares with no surge pricing — book your airport limo online in minutes.",
+    desc: "Our San Francisco airport limo service provides reliable airport transfers with live flight tracking at San Francisco International Airport (SFO), Oakland International Airport (OAK), and San Jose Mineta International Airport (SJC). A comfortable airport taxi alternative, our black car and luxury car service puts a licensed chauffeur behind the wheel of a sedan, SUV, or limousine for door-to-door ground transportation. Your chauffeur offers meet-and-greet service and adjusts for flight delays or early arrivals. Enjoy fixed fares with no surge pricing — book your airport limo online in minutes.",
   },
   {
     title: "Business Transportation",
     img: "/images/services/business.jpg",
-    desc: "Business transportation across the San Francisco Bay Area for airport runs, client meetings, and executive travel. Our licensed, background-checked chauffeurs deliver on-time, professional service for busy schedules. Fixed pricing means no surge and no surprises.",
+    desc: "Business transportation across the San Francisco Bay Area for airport runs, client meetings, and executive travel. Our licensed, background-checked chauffeurs deliver on-time, professional service in a town car, black car, or executive car service. Fixed pricing means no surge and no surprises. From a single car to group transportation for a visiting team, we handle the ground transportation so your day runs on schedule.",
   },
   {
     title: "Prom & Wine Tours",
     img: "/images/services/prom-wine.jpg",
-    desc: "Enjoy Napa Valley wine tours and prom limo service with professional chauffeurs. Choose stretch limousines and Sprinter vans for Napa, Sonoma, and Livermore wineries, proms, and special nights out. Book by the hour and travel together in comfort and style.",
+    desc: "Enjoy Napa Valley wine tours and prom limo service with professional chauffeurs. Choose stretch limousines, Sprinter vans, or a party bus for Napa, Sonoma, and Livermore wineries, proms, and special nights out. Book by the hour and travel together in comfort and style — group transportation that keeps everyone in the same car, with no one left to arrange a ride home.",
   },
   {
     title: "Special Events & Occasions",
     img: "/images/services/events.jpg",
-    desc: "Special event transportation in San Francisco for weddings, galas, concerts, and sporting events. Choose from stretch limousines, SUVs, Sprinter vans, and coaches for groups of any size. One dispatch team coordinates every vehicle so your event runs on time.",
+    desc: "Special event transportation in San Francisco for weddings, galas, concerts, and sporting events. Our wedding limo service, event transportation, and concert transportation keep your guests arriving together, on time, and in style. We also provide sports game transportation — football game transportation, baseball game limo service, basketball game transportation, and hockey game transportation — with limos, buses, and charter buses available for every game day. Choose from stretch limousines, SUVs, Sprinter vans, party bus, and charter bus rentals for groups of any size, plus prom limo service for a memorable night out. One dispatch team coordinates every vehicle so your event runs on time.",
   },
 ];
 
@@ -1723,7 +1723,7 @@ function Index() {
             <h2>Choose your ride</h2>
             <p>
               Five vehicle classes, each with its own vetted chauffeur pool — from a single airport transfer to a
-              fifty-person conference shuttle.
+              fifty-person conference charter bus.
             </p>
           </div>
 
