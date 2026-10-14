@@ -133,6 +133,38 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
       </>
     ),
   },
+  {
+    q: "What areas does Global Link Transportation serve?",
+    a: "Global Link Transportation serves the San Francisco Bay Area with chauffeured car service, limousine, limo, Sprinter van, and charter bus coverage across San Francisco, San Mateo, San Jose, Oakland, Berkeley, Palo Alto, Mountain View, Daly City, South San Francisco, Redwood City, Fremont, Santa Clara, Sunnyvale, Walnut Creek, and more than 60 Bay Area cities. We also run SFO airport transfers plus pickups at OAK and SJC, and serve wine country and the coast, including Napa, Sonoma, Livermore, and Monterey.",
+  },
+  {
+    q: "How much does an SFO airport transfer cost?",
+    a: "SFO airport transfers use fixed fares with no surge pricing — a private black car, SUV, or limousine with a chauffeur, not an airport taxi. Our airport car service covers San Francisco, Oakland, and San Jose, and every SFO airport transfer is priced before you book. Use the fare calculator on this page to see your exact fixed fare for your pickup, destination, and vehicle. A 20% gratuity and a 5% booking fee apply.",
+  },
+  {
+    q: "Do you offer wedding limo service in San Francisco?",
+    a: "Yes — we offer wedding limo service in San Francisco and across the Bay Area with stretch limousines, SUVs, and Sprinter vans, plus charter bus and party bus options for larger wedding parties. Add red carpet service and champagne for your celebration, or book SFO airport transfers for guests flying in. Our on-time guarantee helps your wedding day run on schedule.",
+  },
+  {
+    q: "Can I book a Napa wine tour with a chauffeur?",
+    a: "Yes — book a Napa Valley wine tour with a professional chauffeur, or choose a Sonoma wine tour, Livermore wine tours, and other wine country tours across Napa, Sonoma, and Livermore wineries. Our wine tasting tours link a Napa Valley wine tasting with Sonoma wine tasting tours so the day flows easily, and a limo, SUV, Sprinter van, or party bus makes it a comfortable wine tasting experience with group transportation between wineries. Wine tours leave from San Francisco and most Bay Area cities, are booked by the hour with a 4-hour minimum, and can include an SFO airport transfer, so you can visit multiple wineries at your own pace.",
+  },
+  {
+    q: "Do you provide corporate transportation for large events?",
+    a: "Yes — we provide corporate transportation for conferences, roadshows, and large events across San Francisco and the Bay Area. Choose Sprinter vans, charter bus, bus rental, and coach service for up to 56 passengers, coordinated by one dispatch team as complete group transportation, with airport car service for SFO, OAK, and SJC arrivals and a single monthly invoice for your company.",
+  },
+  {
+    q: "What vehicles are available?",
+    a: "Choose from five vehicle classes: Sedan for up to 3 passengers, SUV for up to 5 passengers, Limousine for up to 6 passengers, Sprinter van for up to 14 passengers, and Bus & coach for up to 56 passengers. Each vehicle comes with a licensed, background-checked chauffeur, and every class can be booked for SFO airport transfers, wedding limo service, prom limo nights, concert transportation, sports game transportation, and wine country tours across San Francisco and the Bay Area.",
+  },
+  {
+    q: "How far in advance should I book?",
+    a: "We recommend booking 24-48 hours in advance for most San Francisco and Bay Area rides. Same-day bookings are available when vehicles and chauffeurs are available, including SFO airport transfers. For weddings, proms, concerts, sports games, and events that need charter buses, we recommend booking 2-4 weeks in advance.",
+  },
+  {
+    q: "Do you offer hourly service?",
+    a: "Yes — hourly limo and car service is available with a 4-hour minimum, then billed in 30-minute increments after that, which suits wine country tours, wedding limo service, and special nights out across San Francisco and the Bay Area. Hourly rates are Sedan $85/hr, SUV $120/hr, Limo $120/hr, Sprinter $175/hr, and Bus available with a custom quote.",
+  },
 ];
 
 const DRIVE_REQS = [
@@ -1407,12 +1439,32 @@ const CheckIcon = (
   </svg>
 );
 
-const SERVICES: { title: string; img: string }[] = [
-  { title: "Corporate Transportation Service", img: "/images/services/corporate.jpg" },
-  { title: "Airport Limo Service", img: "/images/services/airport.jpg" },
-  { title: "Business Transportation", img: "/images/services/business.jpg" },
-  { title: "Prom & Wine Tours", img: "/images/services/prom-wine.jpg" },
-  { title: "Special Events & Occasions", img: "/images/services/events.jpg" },
+const SERVICES: { title: string; img: string; desc: string }[] = [
+  {
+    title: "Corporate Transportation Service",
+    img: "/images/services/corporate.jpg",
+    desc: "Our corporate car service in San Francisco and across the Bay Area supports business travel, executive transfers, and team logistics. Book a town car, black car, or executive car service with a professional chauffeur for SFO airport transfers, client meetings, and roadshows, or arrange group transportation and corporate airport car service for a visiting team. One dedicated dispatch team coordinates every ride across San Francisco, San Mateo, and San Jose — from a single sedan to a full Bay Area fleet for conferences. Enjoy a single monthly invoice and volume rates for corporate accounts.",
+  },
+  {
+    title: "Airport Limo Service",
+    img: "/images/services/airport.jpg",
+    desc: "Our San Francisco airport limo service provides reliable airport transfers with live flight tracking at San Francisco International Airport (SFO), Oakland International Airport (OAK), and San Jose Mineta International Airport (SJC). A comfortable airport taxi alternative, our black car and luxury car service puts a licensed chauffeur behind the wheel of a sedan, SUV, or limousine for door-to-door ground transportation across San Francisco and the Bay Area. Your chauffeur offers meet-and-greet service and adjusts for flight delays or early arrivals. Enjoy fixed fares with no surge pricing — book your SFO airport limo, airport car service, or limo rental online in minutes.",
+  },
+  {
+    title: "Business Transportation",
+    img: "/images/services/business.jpg",
+    desc: "Business transportation across the San Francisco Bay Area for SFO airport transfers, client meetings, and executive travel. Our licensed, background-checked chauffeurs deliver on-time, professional service in a town car, black car, or executive car service, and our San Francisco airport car service keeps every flight on schedule. Fixed pricing means no surge and no surprises. From a single limo service booking to group transportation for a visiting team, we handle the ground transportation across the Bay Area so your day runs on schedule.",
+  },
+  {
+    title: "Prom & Wine Tours",
+    img: "/images/services/prom-wine.jpg",
+    desc: "Enjoy a Napa Valley wine tour, a Sonoma wine tour, or Livermore wine tours with professional chauffeurs, plus prom limo service for a memorable night out in San Francisco. Our wine tasting tours cover Napa Valley wine tasting rooms, Sonoma wine tasting tours, and Livermore wineries as a relaxed wine tasting experience — no one has to drive. Choose stretch limousines, Sprinter vans, or a party bus for wine country tours across the Bay Area, or add an SFO airport transfer at the start or end of your trip. Book a limo rental by the hour and travel together in comfort and style — group transportation that keeps everyone in the same car.",
+  },
+  {
+    title: "Special Events & Occasions",
+    img: "/images/services/events.jpg",
+    desc: "Special event transportation in San Francisco for weddings, galas, concerts, and sporting events. Our wedding limo service, event transportation, and concert transportation keep your guests arriving together, on time, and in style, with SFO airport transfers for out-of-town guests. We also provide sports game transportation across the Bay Area — football game transportation, baseball game limo service, basketball game transportation, and hockey game transportation — with limos, buses, and charter buses available for every game day. Choose from stretch limousines, SUVs, Sprinter vans, party bus, and charter bus rentals for groups of any size, plus prom limo service for a memorable night out. One dispatch team coordinates every vehicle in San Francisco and the wider Bay Area so your event runs on time.",
+  },
 ];
 
 const NAV_LINKS: { href: string; label: string }[] = [
@@ -1613,6 +1665,7 @@ function Index() {
             {SERVICES.map((svc) => (
               <div className="service-card" key={svc.title}>
                 <h3>{svc.title}</h3>
+                <p className="desc">{svc.desc}</p>
                 <img src={svc.img} alt={svc.title} loading="lazy" />
               </div>
             ))}
@@ -1670,7 +1723,7 @@ function Index() {
             <h2>Choose your ride</h2>
             <p>
               Five vehicle classes, each with its own vetted chauffeur pool — from a single airport transfer to a
-              fifty-person conference shuttle.
+              fifty-person conference charter bus.
             </p>
           </div>
 
@@ -2018,7 +2071,48 @@ function Index() {
           </div>
           <p style={{ textAlign: "center", marginTop: 20 }}>
             <a href={`mailto:${EMAIL}`}>Email us</a> or call {PHONE} to get started.
-          </p>
+        </p>
+        </div>
+      </section>
+
+      <section id="areas" className="areas">
+        <div className="wrap">
+          <div className="section-head">
+            <h2>Serving the San Francisco Bay Area</h2>
+            <p>
+              Global Link Transportation provides chauffeured car service, limo service, and airport transfers across
+              the San Francisco Bay Area — sedan, SUV, limousine, limo, Sprinter van, charter bus, and coach ground
+              transportation, from SFO airport runs to wine country tours: a Napa Valley wine tour, a Sonoma wine
+              tour, Livermore wine tours, and runs to Monterey. Our licensed, background-checked chauffeurs cover
+              more than 60 Bay Area cities.
+            </p>
+          </div>
+          <div className="areas-grid">
+            <div className="areas-group">
+              <h3>Cities served</h3>
+              <p>
+                San Francisco, San Mateo, San Jose, Oakland, Berkeley, Palo Alto, Mountain View, Daly City, South San
+                Francisco, Redwood City, Fremont, Santa Clara, Sunnyvale, Walnut Creek, and more than 60 Bay Area
+                cities — with car service, limo rental, and charter bus options throughout.
+              </p>
+            </div>
+            <div className="areas-group">
+              <h3>Airports served</h3>
+              <p>
+                San Francisco International Airport (SFO), Oakland International Airport (OAK), and San Jose Mineta
+                International Airport (SJC) — airport limo service, airport car service, and private transfers at
+                every terminal.
+              </p>
+            </div>
+            <div className="areas-group">
+              <h3>Wine country</h3>
+              <p>
+                Napa, Sonoma, Livermore, and Monterey — wine country tours with a professional chauffeur, including a
+                Napa Valley wine tour, a Sonoma wine tour, and Livermore wine tours, with pickup across San Francisco
+                and the Bay Area.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
