@@ -1133,6 +1133,7 @@ function BookingCard() {
               <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
                 {paying ? "Opening secure payment…" : submitted ? "Reserved & signed ✓" : "Reserve, sign & pay"}
               </button>
+              {checkoutData && <ReservationCheckout {...checkoutData} />}
             </>
           )}
         </>
@@ -1417,6 +1418,7 @@ function Index() {
 
   return (
     <>
+      <PaymentTestModeBanner />
       <div className="disclaimer-bar">
         We are a global ground transportation arranger
         <br />
