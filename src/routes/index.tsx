@@ -514,7 +514,7 @@ function BookingCard() {
     // Greet & meet is a flat $40 add-on, only when an airport pickup is selected for an airport transfer.
     const gm = service === "transfer" && greetMeet && pickup.startsWith("airport:") ? GREET_MEET_PRICE : 0;
     // Extra pickups: $35 per additional stop, flat add-on (no gratuity/fee on it).
-    const ep = service !== "hourly" ? extraPickups * EXTRA_PICKUP_PRICE : 0;
+    const ep = extraPickups * EXTRA_PICKUP_PRICE;
     const parts = feeParts(pricedBase);
     const milesText =
       routeMiles !== null && routeMiles > 0
@@ -676,8 +676,8 @@ function BookingCard() {
   };
 
   // Latest values for the PayPal button callbacks (avoids stale closures).
-  const liveRef = useRef({ snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts } });
-  liveRef.current = { snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts } };
+  const liveRef = useRef({ snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts, greetMeet: "greetMeet" in fare ? (fare.greetMeet as number) : 0, extraPickups: "extraPickups" in fare ? (fare.extraPickups as number) : 0 } });
+  liveRef.current = { snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts, greetMeet: "greetMeet" in fare ? (fare.greetMeet as number) : 0, extraPickups: "extraPickups" in fare ? (fare.extraPickups as number) : 0 } };
   const completeRef = useRef(completePayPalReservation);
   completeRef.current = completePayPalReservation;
   // Booking number minted when the PayPal order is created, shown after capture.
@@ -702,9 +702,9 @@ function BookingCard() {
 
   // Render PayPal buttons when PayPal is the chosen method.
   useEffect(() => {
-    if (payMethod !== "paypal" || !ppClientId) return;
+    if (payMethod !== "paypal" || !ppClientId) return undefined;
     const container = document.getElementById("paypal-buttons");
-    if (!container) return;
+    if (!container) return undefined;
     container.innerHTML = "";
 
     const renderButtons = () => {
