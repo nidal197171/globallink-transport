@@ -27,17 +27,24 @@ import { postToBookingSheet, markBookingPaid } from "@/lib/bookingSheet";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: `${SITE.brand.shortName} — ${SITE.brand.tagline}` },
+      {
+        title:
+          "San Francisco Limo & Black Car Service | SFO Airport Transfers | Global Link",
+      },
       {
         name: "description",
         content:
-          "Chauffeured sedans, SUVs, limousines, vans and coaches across the " + SITE.market.metro + " and " + SITE.market.airports + ". Fixed fares, vetted chauffeurs, one monthly invoice.",
+          "Luxury black car & limo service in San Francisco & the Bay Area. SFO, OAK & SJC airport transfers with flight tracking. Fixed fares, vetted chauffeurs. Book online in 2 minutes.",
       },
-      { property: "og:title", content: `${SITE.brand.shortName} — ${SITE.brand.tagline}` },
+      {
+        property: "og:title",
+        content:
+          "San Francisco Limo & Black Car Service | SFO Airport Transfers | Global Link",
+      },
       {
         property: "og:description",
         content:
-          "Chauffeured sedans, SUVs, limousines, vans and coaches across the " + SITE.market.metro + " and " + SITE.market.airports + ". Fixed fares, vetted chauffeurs, one monthly invoice.",
+          "Luxury black car & limo service in San Francisco & the Bay Area. SFO, OAK & SJC airport transfers with flight tracking. Fixed fares, vetted chauffeurs. Book online in 2 minutes.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -1488,7 +1495,7 @@ function Index() {
               <span className="dot" />
               Built for corporate travel and event teams
             </div>
-            <h1>We treat your schedule like our own. Always on time.</h1>
+            <h1>San Francisco Limo Service &amp; Bay Area Black Car Transfers</h1>
             <p className="lead">
               One dispatch team for every ride your company books — sedan to coach.
             </p>
