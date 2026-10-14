@@ -14,3 +14,4 @@
 - Stale "opened in a new tab" confirmation text after the user's manual same-tab payment redirect.
 - Wine country pass: "Napa Valley wine tour", "Sonoma wine tour", "Livermore wine tours", "wine country tours" in the Prom & Wine description, the Napa FAQ answer, and the coverage section. Never "winery to winery".
 - Wine tasting pass: add "wine tasting", "wine tasting tours", "Napa Valley wine tasting", "Sonoma wine tasting tours", "wine tasting experience" to the Prom & Wine description and the Napa FAQ answer.
+- Emphasis pass: repeat "SFO airport", "airport transfer", "airport limo", "airport car service", "limo service", "limo rental", "wedding limo", "San Francisco", "Bay Area", "SFO" across service descriptions, FAQ answers, and the coverage section — naturally, no stuffing.
