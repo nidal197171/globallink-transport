@@ -133,6 +133,38 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
       </>
     ),
   },
+  {
+    q: "What areas does Global Link Transportation serve?",
+    a: "Global Link Transportation serves the San Francisco Bay Area, including San Francisco, San Mateo, San Jose, Oakland, Berkeley, Palo Alto, Mountain View, Daly City, South San Francisco, Redwood City, Fremont, Santa Clara, Sunnyvale, Walnut Creek, and more than 60 Bay Area cities. We also serve wine country and the coast, including Napa, Sonoma, Livermore, and Monterey, plus SFO, OAK, and SJC airports.",
+  },
+  {
+    q: "How much does an SFO airport transfer cost?",
+    a: "SFO airport transfers use fixed fares with no surge pricing. Use the fare calculator on this page to see your exact fixed fare for your pickup, destination, and vehicle. A 20% gratuity and a 5% booking fee apply.",
+  },
+  {
+    q: "Do you offer wedding limo service in San Francisco?",
+    a: "Yes — we offer wedding limo service in San Francisco and across the Bay Area with stretch limousines, SUVs, and Sprinter vans. Add red carpet service and champagne for your celebration. Our on-time guarantee helps your wedding day run on schedule.",
+  },
+  {
+    q: "Can I book a Napa wine tour with a chauffeur?",
+    a: "Yes — book a Napa wine tour with a professional chauffeur for Napa, Sonoma, and Livermore wineries. Wine tours are booked by the hour with a 4-hour minimum, so you can visit multiple wineries at your own pace.",
+  },
+  {
+    q: "Do you provide corporate transportation for large events?",
+    a: "Yes — we provide corporate transportation for conferences, roadshows, and large events across the Bay Area. Choose Sprinter vans and coaches for up to 56 passengers, coordinated by one dispatch team, with a single monthly invoice for your company.",
+  },
+  {
+    q: "What vehicles are available?",
+    a: "Choose from five vehicle classes: Sedan for up to 3 passengers, SUV for up to 5 passengers, Limousine for up to 6 passengers, Sprinter van for up to 14 passengers, and Bus & coach for up to 56 passengers. Each vehicle comes with a licensed, background-checked chauffeur.",
+  },
+  {
+    q: "How far in advance should I book?",
+    a: "We recommend booking 24-48 hours in advance. Same-day bookings are available when vehicles and chauffeurs are available. For weddings and large events, we recommend booking 2-4 weeks in advance.",
+  },
+  {
+    q: "Do you offer hourly service?",
+    a: "Yes — hourly service is available with a 4-hour minimum, then billed in 30-minute increments after that. Hourly rates are Sedan $85/hr, SUV $120/hr, Limo $120/hr, Sprinter $175/hr, and Bus available with a custom quote.",
+  },
 ];
 
 const DRIVE_REQS = [
