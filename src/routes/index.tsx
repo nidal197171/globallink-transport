@@ -611,14 +611,10 @@ function BookingCard() {
         <>
           Thanks, {name.trim()} — your booking number is <strong>{bookingNo}</strong>. Please save it; you'll need it
           for any changes to this reservation.{" "}
-          {paymentUrl ? (
+          {wantsCardPayment ? (
             <>
-              your payment page for <strong>${fare.amount}</strong> opened in a new tab. Please complete payment, then
-              send the reservation email that just opened.{" "}
-              <a href={paymentUrl} target="_blank" rel="noopener" style={{ color: "var(--brass-dark)" }}>
-                Reopen the payment page
-              </a>{" "}
-              if needed.{" "}
+              please complete the secure card payment for <strong>${fare.amount}</strong> below, then send the
+              reservation email that just opened.{" "}
             </>
           ) : isQuoteOnly ? (
             <>
