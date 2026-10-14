@@ -786,6 +786,7 @@ function BookingCard() {
     } else {
       renderButtons();
     }
+    return undefined;
   }, [payMethod, ppClientId]);
 
   return (
