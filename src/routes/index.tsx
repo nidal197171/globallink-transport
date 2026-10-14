@@ -147,7 +147,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Can I book a Napa wine tour with a chauffeur?",
-    a: "Yes — book a Napa Valley wine tour with a professional chauffeur, or choose a Sonoma wine tour, Livermore wine tours, and other wine country tours across Napa, Sonoma, and Livermore wineries. Travel in a limo, SUV, Sprinter van, or party bus as comfortable group transportation between wineries. Wine tours are booked by the hour with a 4-hour minimum, so you can visit multiple wineries at your own pace.",
+    a: "Yes — book a Napa Valley wine tour with a professional chauffeur, or choose a Sonoma wine tour, Livermore wine tours, and other wine country tours across Napa, Sonoma, and Livermore wineries. Our wine tasting tours link a Napa Valley wine tasting with Sonoma wine tasting tours so the day flows easily, and a limo, SUV, Sprinter van, or party bus makes it a comfortable wine tasting experience with group transportation between wineries. Wine tours are booked by the hour with a 4-hour minimum, so you can visit multiple wineries at your own pace.",
   },
   {
     q: "Do you provide corporate transportation for large events?",
@@ -1458,7 +1458,7 @@ const SERVICES: { title: string; img: string; desc: string }[] = [
   {
     title: "Prom & Wine Tours",
     img: "/images/services/prom-wine.jpg",
-    desc: "Enjoy a Napa Valley wine tour, a Sonoma wine tour, or Livermore wine tours with professional chauffeurs, plus prom limo service for a memorable night out. Choose stretch limousines, Sprinter vans, or a party bus for Napa, Sonoma, and Livermore wineries and wine country tours across the Bay Area. Book by the hour and travel together in comfort and style — group transportation that keeps everyone in the same car.",
+    desc: "Enjoy a Napa Valley wine tour, a Sonoma wine tour, or Livermore wine tours with professional chauffeurs, plus prom limo service for a memorable night out. Our wine tasting tours cover Napa Valley wine tasting rooms, Sonoma wine tasting tours, and Livermore wineries as a relaxed wine tasting experience — no one has to drive. Choose stretch limousines, Sprinter vans, or a party bus for wine country tours across the Bay Area. Book by the hour and travel together in comfort and style — group transportation that keeps everyone in the same car.",
   },
   {
     title: "Special Events & Occasions",
