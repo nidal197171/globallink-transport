@@ -2,8 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SITE } from "@/config/site";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { createReservationCheckout } from "@/lib/checkout.functions";
 import { capturePayPalOrder, createPayPalOrder, getPayPalClientId } from "@/lib/paypal.functions";
+import { ReservationCheckout, type ReservationCheckoutProps } from "@/components/ReservationCheckout";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import {
   AIRPORTS,
   AIRPORT_COORDS,
@@ -395,7 +396,7 @@ function BookingCard() {
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [paying, setPaying] = useState(false);
-  const createCheckout = useServerFn(createReservationCheckout);
+  const [checkoutData, setCheckoutData] = useState<ReservationCheckoutProps | null>(null);
   const createOrderFn = useServerFn(createPayPalOrder);
   const captureOrderFn = useServerFn(capturePayPalOrder);
   const getClientIdFn = useServerFn(getPayPalClientId);
@@ -578,34 +579,25 @@ function BookingCard() {
     const bookingNo = await mintBookingNumber();
     const mailHref = buildReservationMail(bookingSnapshot(), fareTextNow(), bookingNo);
 
-    let paymentUrl: string | null = null;
-    let paymentError: string | null = null;
-    if (fare.amount && fare.amount > 0 && fare.parts) {
+    const wantsCardPayment = fare.amount && fare.amount > 0 && fare.parts;
+    if (wantsCardPayment && fare.parts) {
       setPaying(true);
-      try {
-        const result = await createCheckout({
-          data: {
-            base: fare.parts.base,
-            gratuity: fare.parts.gratuity,
-            fee: fare.parts.fee,
-            greetMeet: fare.greetMeet,
-            extraPickups: fare.extraPickups,
-            description: buildDescription(bookingSnapshot()),
-            origin: window.location.origin,
-            customerName: name.trim(),
-            customerEmail: email.trim(),
-            bookingNumber: bookingNo,
-          },
-        });
-        paymentUrl = result.url;
-        paymentError = result.error;
-      } catch {
-        paymentError = "We couldn't open the payment page.";
-      }
+      // Mount the embedded secure payment form below the button — it charges
+      // the exact calculated total (base + gratuity + fee + add-ons).
+      setCheckoutData({
+        base: fare.parts.base,
+        gratuity: fare.parts.gratuity,
+        fee: fare.parts.fee,
+        greetMeet: fare.greetMeet,
+        extraPickups: fare.extraPickups,
+        description: buildDescription(bookingSnapshot()),
+        customerName: name.trim(),
+        customerEmail: email.trim(),
+        bookingNumber: bookingNo,
+      });
       setPaying(false);
     }
 
-    if (paymentUrl) window.open(paymentUrl, "_blank", "noopener");
     // Logged as Not paid at submit; flipped to Paid when the customer returns
     // from the Stripe checkout (?payment=success&booking=...).
     logBookingToSheet(bookingSnapshot(), fareTextNow(), bookingNo, "Not paid");
@@ -619,14 +611,10 @@ function BookingCard() {
         <>
           Thanks, {name.trim()} — your booking number is <strong>{bookingNo}</strong>. Please save it; you'll need it
           for any changes to this reservation.{" "}
-          {paymentUrl ? (
+          {wantsCardPayment ? (
             <>
-              your payment page for <strong>${fare.amount}</strong> opened in a new tab. Please complete payment, then
-              send the reservation email that just opened.{" "}
-              <a href={paymentUrl} target="_blank" rel="noopener" style={{ color: "var(--brass-dark)" }}>
-                Reopen the payment page
-              </a>{" "}
-              if needed.{" "}
+              please complete the secure card payment for <strong>${fare.amount}</strong> below, then send the
+              reservation email that just opened.{" "}
             </>
           ) : isQuoteOnly ? (
             <>
@@ -634,10 +622,7 @@ function BookingCard() {
               shortly.{" "}
             </>
           ) : (
-            <>
-              your reservation and signed agreement are ready to send.{" "}
-              {paymentError ? `${paymentError} We'll send you a secure payment link by email. ` : ""}
-            </>
+            <>your reservation and signed agreement are ready to send. </>
           )}
           If your email app didn't open automatically, please email a copy to{" "}
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
@@ -1148,6 +1133,7 @@ function BookingCard() {
               <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
                 {paying ? "Opening secure payment…" : submitted ? "Reserved & signed ✓" : "Reserve, sign & pay"}
               </button>
+              {checkoutData && <ReservationCheckout {...checkoutData} />}
             </>
           )}
         </>
@@ -1432,6 +1418,7 @@ function Index() {
 
   return (
     <>
+      <PaymentTestModeBanner />
       <div className="disclaimer-bar">
         We are a global ground transportation arranger
         <br />
