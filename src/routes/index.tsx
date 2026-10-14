@@ -2,8 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SITE } from "@/config/site";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { createReservationCheckout } from "@/lib/checkout.functions";
 import { capturePayPalOrder, createPayPalOrder, getPayPalClientId } from "@/lib/paypal.functions";
+import { ReservationCheckout, type ReservationCheckoutProps } from "@/components/ReservationCheckout";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import {
   AIRPORTS,
   AIRPORT_COORDS,
@@ -395,7 +396,7 @@ function BookingCard() {
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [paying, setPaying] = useState(false);
-  const createCheckout = useServerFn(createReservationCheckout);
+  const [checkoutData, setCheckoutData] = useState<ReservationCheckoutProps | null>(null);
   const createOrderFn = useServerFn(createPayPalOrder);
   const captureOrderFn = useServerFn(capturePayPalOrder);
   const getClientIdFn = useServerFn(getPayPalClientId);
