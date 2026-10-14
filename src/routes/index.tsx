@@ -614,10 +614,12 @@ function BookingCard() {
     // Logged as Not paid at submit; flipped to Paid when the customer returns
     // from the Stripe checkout (?payment=success&booking=...).
     logBookingToSheet(bookingSnapshot(), fareTextNow(), bookingNo, "Not paid");
-    // Give the sheet request a head start before opening the email app.
-    setTimeout(() => {
-      window.location.href = mailHref;
-    }, 800);
+    // Only open email for quotes (bus/coach) — card payments email after Stripe confirms
+    if (isQuoteOnly) {
+      setTimeout(() => {
+        window.location.href = mailHref;
+      }, 800);
+    }
     setConfirm({
       kind: "ok",
       text: (
