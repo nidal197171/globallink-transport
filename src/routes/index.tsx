@@ -622,10 +622,7 @@ function BookingCard() {
               shortly.{" "}
             </>
           ) : (
-            <>
-              your reservation and signed agreement are ready to send.{" "}
-              {paymentError ? `${paymentError} We'll send you a secure payment link by email. ` : ""}
-            </>
+            <>your reservation and signed agreement are ready to send. </>
           )}
           If your email app didn't open automatically, please email a copy to{" "}
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
