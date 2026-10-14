@@ -135,35 +135,35 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "What areas does Global Link Transportation serve?",
-    a: "Global Link Transportation serves the San Francisco Bay Area, including San Francisco, San Mateo, San Jose, Oakland, Berkeley, Palo Alto, Mountain View, Daly City, South San Francisco, Redwood City, Fremont, Santa Clara, Sunnyvale, Walnut Creek, and more than 60 Bay Area cities. We also serve wine country and the coast, including Napa, Sonoma, Livermore, and Monterey, plus SFO, OAK, and SJC airports.",
+    a: "Global Link Transportation serves the San Francisco Bay Area with chauffeured car service, limousine, limo, Sprinter van, and charter bus coverage across San Francisco, San Mateo, San Jose, Oakland, Berkeley, Palo Alto, Mountain View, Daly City, South San Francisco, Redwood City, Fremont, Santa Clara, Sunnyvale, Walnut Creek, and more than 60 Bay Area cities. We also serve wine country and the coast, including Napa, Sonoma, Livermore, and Monterey, plus SFO, OAK, and SJC airports.",
   },
   {
     q: "How much does an SFO airport transfer cost?",
-    a: "SFO airport transfers use fixed fares with no surge pricing. Use the fare calculator on this page to see your exact fixed fare for your pickup, destination, and vehicle. A 20% gratuity and a 5% booking fee apply.",
+    a: "SFO airport transfers use fixed fares with no surge pricing — a private black car, SUV, or limousine with a chauffeur, not an airport taxi. Use the fare calculator on this page to see your exact fixed fare for your pickup, destination, and vehicle. A 20% gratuity and a 5% booking fee apply.",
   },
   {
     q: "Do you offer wedding limo service in San Francisco?",
-    a: "Yes — we offer wedding limo service in San Francisco and across the Bay Area with stretch limousines, SUVs, and Sprinter vans. Add red carpet service and champagne for your celebration. Our on-time guarantee helps your wedding day run on schedule.",
+    a: "Yes — we offer wedding limo service in San Francisco and across the Bay Area with stretch limousines, SUVs, and Sprinter vans, plus charter bus and party bus options for larger wedding parties. Add red carpet service and champagne for your celebration. Our on-time guarantee helps your wedding day run on schedule.",
   },
   {
     q: "Can I book a Napa wine tour with a chauffeur?",
-    a: "Yes — book a Napa wine tour with a professional chauffeur for Napa, Sonoma, and Livermore wineries. Wine tours are booked by the hour with a 4-hour minimum, so you can visit multiple wineries at your own pace.",
+    a: "Yes — book a Napa Valley wine tour with a professional chauffeur, or choose a Sonoma wine tour, Livermore wine tours, and other wine country tours across Napa, Sonoma, and Livermore wineries. Travel in a limo, SUV, Sprinter van, or party bus as comfortable group transportation between wineries. Wine tours are booked by the hour with a 4-hour minimum, so you can visit multiple wineries at your own pace.",
   },
   {
     q: "Do you provide corporate transportation for large events?",
-    a: "Yes — we provide corporate transportation for conferences, roadshows, and large events across the Bay Area. Choose Sprinter vans and coaches for up to 56 passengers, coordinated by one dispatch team, with a single monthly invoice for your company.",
+    a: "Yes — we provide corporate transportation for conferences, roadshows, and large events across the Bay Area. Choose Sprinter vans, charter bus, bus rental, and coach service for up to 56 passengers, coordinated by one dispatch team as complete group transportation, with a single monthly invoice for your company.",
   },
   {
     q: "What vehicles are available?",
-    a: "Choose from five vehicle classes: Sedan for up to 3 passengers, SUV for up to 5 passengers, Limousine for up to 6 passengers, Sprinter van for up to 14 passengers, and Bus & coach for up to 56 passengers. Each vehicle comes with a licensed, background-checked chauffeur.",
+    a: "Choose from five vehicle classes: Sedan for up to 3 passengers, SUV for up to 5 passengers, Limousine for up to 6 passengers, Sprinter van for up to 14 passengers, and Bus & coach for up to 56 passengers. Each vehicle comes with a licensed, background-checked chauffeur, and every class can be booked for airport transfers, wedding limo service, prom limo nights, concert transportation, sports game transportation, and wine country tours.",
   },
   {
     q: "How far in advance should I book?",
-    a: "We recommend booking 24-48 hours in advance. Same-day bookings are available when vehicles and chauffeurs are available. For weddings and large events, we recommend booking 2-4 weeks in advance.",
+    a: "We recommend booking 24-48 hours in advance. Same-day bookings are available when vehicles and chauffeurs are available. For weddings, proms, concerts, sports games, and events that need charter buses, we recommend booking 2-4 weeks in advance.",
   },
   {
     q: "Do you offer hourly service?",
-    a: "Yes — hourly service is available with a 4-hour minimum, then billed in 30-minute increments after that. Hourly rates are Sedan $85/hr, SUV $120/hr, Limo $120/hr, Sprinter $175/hr, and Bus available with a custom quote.",
+    a: "Yes — hourly limo and car service is available with a 4-hour minimum, then billed in 30-minute increments after that, which suits wine country tours and special nights out. Hourly rates are Sedan $85/hr, SUV $120/hr, Limo $120/hr, Sprinter $175/hr, and Bus available with a custom quote.",
   },
 ];
 
@@ -1458,7 +1458,7 @@ const SERVICES: { title: string; img: string; desc: string }[] = [
   {
     title: "Prom & Wine Tours",
     img: "/images/services/prom-wine.jpg",
-    desc: "Enjoy Napa Valley wine tours and prom limo service with professional chauffeurs. Choose stretch limousines, Sprinter vans, or a party bus for Napa, Sonoma, and Livermore wineries, proms, and special nights out. Book by the hour and travel together in comfort and style — group transportation that keeps everyone in the same car, with no one left to arrange a ride home.",
+    desc: "Enjoy a Napa Valley wine tour, a Sonoma wine tour, or Livermore wine tours with professional chauffeurs, plus prom limo service for a memorable night out. Choose stretch limousines, Sprinter vans, or a party bus for Napa, Sonoma, and Livermore wineries and wine country tours across the Bay Area. Book by the hour and travel together in comfort and style — group transportation that keeps everyone in the same car.",
   },
   {
     title: "Special Events & Occasions",
@@ -2080,10 +2080,10 @@ function Index() {
           <div className="section-head">
             <h2>Serving the San Francisco Bay Area</h2>
             <p>
-              Global Link Transportation provides chauffeured sedan, SUV, limousine, Sprinter van, and coach service
-              across the San Francisco Bay Area — from SFO airport transfers to Napa wine tours. Our licensed,
-              background-checked chauffeurs cover more than 60 Bay Area cities, three major airports, and wine country,
-              with fixed fares and one dispatch team behind every reservation.
+              Global Link Transportation provides chauffeured car service across the San Francisco Bay Area — sedan,
+              SUV, limousine, limo, Sprinter van, charter bus, and coach ground transportation, from SFO airport
+              transfers to wine country tours: a Napa Valley wine tour, a Sonoma wine tour, Livermore wine tours, and
+              runs to Monterey. Our licensed, background-checked chauffeurs cover more than 60 Bay Area cities.
             </p>
           </div>
           <div className="areas-grid">
@@ -2104,7 +2104,10 @@ function Index() {
             </div>
             <div className="areas-group">
               <h3>Wine country</h3>
-              <p>Napa, Sonoma, Livermore, and Monterey.</p>
+              <p>
+                Napa, Sonoma, Livermore, and Monterey — wine country tours with a professional chauffeur, including a
+                Napa Valley wine tour, a Sonoma wine tour, and Livermore wine tours.
+              </p>
             </div>
           </div>
         </div>

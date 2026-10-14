@@ -12,3 +12,4 @@
 - Stripe secrets were disconnected by the user — dynamic checkout will fail until restored.
 - 30% markup (20% gratuity + 10% booking fee) still not applied to displayed fare / Stripe charge.
 - Stale "opened in a new tab" confirmation text after the user's manual same-tab payment redirect.
+- Wine country pass: "Napa Valley wine tour", "Sonoma wine tour", "Livermore wine tours", "wine country tours" in the Prom & Wine description, the Napa FAQ answer, and the coverage section. Never "winery to winery".
