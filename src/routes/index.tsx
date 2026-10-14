@@ -505,7 +505,7 @@ function BookingCard() {
     // Greet & meet is a flat $40 add-on, only when an airport pickup is selected for an airport transfer.
     const gm = service === "transfer" && greetMeet && pickup.startsWith("airport:") ? GREET_MEET_PRICE : 0;
     // Extra pickups: $35 per additional stop, flat add-on (no gratuity/fee on it).
-    const ep = service !== "hourly" ? extraPickups * EXTRA_PICKUP_PRICE : 0;
+    const ep = (service as string) !== "hourly" ? extraPickups * EXTRA_PICKUP_PRICE : 0;
     const parts = feeParts(pricedBase);
     const milesText =
       routeMiles !== null && routeMiles > 0
@@ -668,8 +668,8 @@ function BookingCard() {
   };
 
   // Latest values for the PayPal button callbacks (avoids stale closures).
-  const liveRef = useRef({ snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts } });
-  liveRef.current = { snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts } };
+  const liveRef = useRef({ snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts, greetMeet: fare.greetMeet, extraPickups: fare.extraPickups } });
+  liveRef.current = { snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts, greetMeet: fare.greetMeet, extraPickups: fare.extraPickups } };
   const completeRef = useRef(completePayPalReservation);
   completeRef.current = completePayPalReservation;
   // Booking number minted when the PayPal order is created, shown after capture.
@@ -778,6 +778,7 @@ function BookingCard() {
     } else {
       renderButtons();
     }
+    return undefined;
   }, [payMethod, ppClientId]);
 
 
