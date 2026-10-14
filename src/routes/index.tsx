@@ -579,34 +579,25 @@ function BookingCard() {
     const bookingNo = await mintBookingNumber();
     const mailHref = buildReservationMail(bookingSnapshot(), fareTextNow(), bookingNo);
 
-    let paymentUrl: string | null = null;
-    let paymentError: string | null = null;
-    if (fare.amount && fare.amount > 0 && fare.parts) {
+    const wantsCardPayment = fare.amount && fare.amount > 0 && fare.parts;
+    if (wantsCardPayment && fare.parts) {
       setPaying(true);
-      try {
-        const result = await createCheckout({
-          data: {
-            base: fare.parts.base,
-            gratuity: fare.parts.gratuity,
-            fee: fare.parts.fee,
-            greetMeet: fare.greetMeet,
-            extraPickups: fare.extraPickups,
-            description: buildDescription(bookingSnapshot()),
-            origin: window.location.origin,
-            customerName: name.trim(),
-            customerEmail: email.trim(),
-            bookingNumber: bookingNo,
-          },
-        });
-        paymentUrl = result.url;
-        paymentError = result.error;
-      } catch {
-        paymentError = "We couldn't open the payment page.";
-      }
+      // Mount the embedded secure payment form below the button — it charges
+      // the exact calculated total (base + gratuity + fee + add-ons).
+      setCheckoutData({
+        base: fare.parts.base,
+        gratuity: fare.parts.gratuity,
+        fee: fare.parts.fee,
+        greetMeet: fare.greetMeet,
+        extraPickups: fare.extraPickups,
+        description: buildDescription(bookingSnapshot()),
+        customerName: name.trim(),
+        customerEmail: email.trim(),
+        bookingNumber: bookingNo,
+      });
       setPaying(false);
     }
 
-    if (paymentUrl) window.open(paymentUrl, "_blank", "noopener");
     // Logged as Not paid at submit; flipped to Paid when the customer returns
     // from the Stripe checkout (?payment=success&booking=...).
     logBookingToSheet(bookingSnapshot(), fareTextNow(), bookingNo, "Not paid");
