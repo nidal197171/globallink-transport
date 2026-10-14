@@ -2,9 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SITE } from "@/config/site";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { capturePayPalOrder, createPayPalOrder, getPayPalClientId } from "@/lib/paypal.functions";
-import { ReservationCheckout, type ReservationCheckoutProps } from "@/components/ReservationCheckout";
-import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { createReservationCheckout } from "@/lib/checkout.functions";
+import {
+  capturePayPalOrder,
+  createPayPalOrder,
+  getPayPalClientId,
+} from "@/lib/paypal.functions";
 import {
   AIRPORTS,
   AIRPORT_COORDS,
@@ -20,20 +23,21 @@ import InstallAppButton from "@/components/InstallAppButton";
 import { mintBookingNumber } from "@/lib/bookingNumber";
 import { postToBookingSheet, markBookingPaid } from "@/lib/bookingSheet";
 
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "San Francisco Limo & Black Car Service | SFO Airport Transfers | Global Link" },
+      { title: `${SITE.brand.shortName} — ${SITE.brand.tagline}` },
       {
         name: "description",
         content:
-          "Luxury black car & limo service in San Francisco & the Bay Area. SFO, OAK & SJC airport transfers with flight tracking. Fixed fares, vetted chauffeurs. Book online in 2 minutes.",
+          "Chauffeured sedans, SUVs, limousines, vans and coaches across the " + SITE.market.metro + " and " + SITE.market.airports + ". Fixed fares, vetted chauffeurs, one monthly invoice.",
       },
-      { property: "og:title", content: "San Francisco Limo & Black Car Service | SFO Airport Transfers | Global Link" },
+      { property: "og:title", content: `${SITE.brand.shortName} — ${SITE.brand.tagline}` },
       {
         property: "og:description",
         content:
-          "Luxury black car & limo service in San Francisco & the Bay Area. SFO, OAK & SJC airport transfers with flight tracking. Fixed fares, vetted chauffeurs. Book online in 2 minutes.",
+          "Chauffeured sedans, SUVs, limousines, vans and coaches across the " + SITE.market.metro + " and " + SITE.market.airports + ". Fixed fares, vetted chauffeurs, one monthly invoice.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -46,9 +50,11 @@ const EMAIL = SITE.contact.email;
 const PHONE = SITE.contact.phoneDisplay;
 const PHONE_HREF = SITE.contact.phoneHref;
 
-const VEHICLE_LABEL: Record<string, string> = Object.fromEntries(VEHICLES.map((v) => [v.value, v.label]));
+const VEHICLE_LABEL: Record<string, string> = Object.fromEntries(
+  VEHICLES.map((v) => [v.value, v.label])
+);
 const VEHICLE_MULTIPLIER: Record<string, number | null> = Object.fromEntries(
-  VEHICLES.map((v) => [v.value, v.multiplier]),
+  VEHICLES.map((v) => [v.value, v.multiplier])
 );
 const HOURLY_RATES: Record<string, number | null> = {
   sedan: 85,
@@ -59,6 +65,8 @@ const HOURLY_RATES: Record<string, number | null> = {
 };
 
 const HOUR_OPTIONS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+
 
 const AGREEMENT_TERMS: { title: string; body: string }[] = [
   {
@@ -120,8 +128,9 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "What's your cancellation policy?",
     a: (
       <>
-        Cancellations must be made at least 48 hours before your scheduled pickup. Cancellations inside the 48-hour
-        window, or no-shows, will be charged the full reservation amount — see the{" "}
+        Cancellations must be made at least 48 hours before your scheduled pickup. Cancellations
+        inside the 48-hour window, or no-shows, will be charged the full reservation amount — see
+        the{" "}
         <a href="#book" style={{ color: "var(--brass-dark)" }}>
           rental agreement
         </a>{" "}
@@ -148,17 +157,12 @@ function placeLabel(value: string) {
   const [type, code] = value.split(":");
   if (type === "airport") {
     const a = AIRPORTS.find((x) => x.code === code);
-    return a ? `${a.label} (${a.short})` : (code ?? "");
+    return a ? `${a.label} (${a.short})` : code ?? "";
   }
   return CITIES.find((c) => c.slug === code)?.name ?? code ?? "";
 }
 
-function sprinterRouteMiles(
-  pType: string | undefined,
-  pCode: string | undefined,
-  dType: string | undefined,
-  dCode: string | undefined,
-): number | null {
+function sprinterRouteMiles(pType: string | undefined, pCode: string | undefined, dType: string | undefined, dCode: string | undefined): number | null {
   const point = (t: string | undefined, c: string | undefined) =>
     !t || !c ? undefined : t === "airport" ? AIRPORT_COORDS[c] : t === "city" ? CITY_COORDS[c] : undefined;
   const a = point(pType, pCode);
@@ -265,8 +269,7 @@ type BookingState = {
 
 function validateBooking(s: BookingState): string | null {
   const missingRoute = s.service === "hourly" ? !s.pickup : !s.pickup || !s.dropoff;
-  if (missingRoute || !s.dt || !s.name.trim() || !s.signature.trim()) {
-    return s.service === "hourly"
+  if (missingRoute || !s.dt || !s.name.trim() || !s.signature.trim()) {    return s.service === "hourly"
       ? "Please choose pickup, date & time, and sign your name before submitting."
       : "Please choose pickup, drop-off, date & time, and sign your name before submitting.";
   }
@@ -327,7 +330,12 @@ function buildReservationMail(s: BookingState, fareText: string, bookingNo: stri
 
 // Log a reservation to the Google Sheet. keepalive + a short delay before the
 // mailto navigation lets the request finish on mobile (same pattern as the driver form).
-function logBookingToSheet(s: BookingState, fareText: string, bookingNo: string, paymentMethod: string) {
+function logBookingToSheet(
+  s: BookingState,
+  fareText: string,
+  bookingNo: string,
+  paymentMethod: string
+) {
   const route =
     s.service === "hourly"
       ? `${placeLabel(s.pickup)} (${s.hours} hr)`
@@ -396,7 +404,7 @@ function BookingCard() {
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [paying, setPaying] = useState(false);
-  const [checkoutData, setCheckoutData] = useState<ReservationCheckoutProps | null>(null);
+  const createCheckout = useServerFn(createReservationCheckout);
   const createOrderFn = useServerFn(createPayPalOrder);
   const captureOrderFn = useServerFn(capturePayPalOrder);
   const getClientIdFn = useServerFn(getPayPalClientId);
@@ -439,8 +447,7 @@ function BookingCard() {
           <>
             <span className="fare-amount">${parts.base}</span>
             <span className="fare-sub">
-              {hours} hours × ${rate}/hr · {VEHICLE_LABEL[vehicle]} (4-hour minimum) + 20% gratuity + 5% booking fee at
-              checkout
+              {hours} hours × ${rate}/hr · {VEHICLE_LABEL[vehicle]} (4-hour minimum) + 20% gratuity + 5% booking fee at checkout
             </span>
           </>
         ),
@@ -448,35 +455,18 @@ function BookingCard() {
     }
     const base = computeSedanBase(pickup, dropoff);
     if (!pickup || !dropoff)
-      return {
-        cls: "",
-        amount: null as number | null,
-        parts: null as FeeParts | null,
-        greetMeet: 0,
-        extraPickups: 0,
-        node: <span className="fare-label">Choose pickup and drop-off to see your fare</span>,
-      };
+      return { cls: "", amount: null as number | null, parts: null as FeeParts | null,
+          greetMeet: 0, extraPickups: 0, node: <span className="fare-label">Choose pickup and drop-off to see your fare</span> };
     if (base === "same")
-      return {
-        cls: "",
-        amount: null as number | null,
-        parts: null as FeeParts | null,
-        greetMeet: 0,
-        extraPickups: 0,
-        node: (
-          <span className="fare-label">
-            Same pickup and drop-off — <a href="tel:+14157878776">call (415) 787-8776</a> or{" "}
-            <a href="mailto:info@globallinktransport.com">email us</a> for a quote
-          </span>
-        ),
-      };
+      return { cls: "", amount: null as number | null, parts: null as FeeParts | null,
+          greetMeet: 0, extraPickups: 0, node: <span className="fare-label">Same pickup and drop-off — <a href="tel:+14157878776">call (415) 787-8776</a> or <a href="mailto:info@globallinktransport.com">email us</a> for a quote</span> };
     if (base === "quote" || base === null)
       return {
         cls: "",
         amount: null as number | null,
         parts: null as FeeParts | null,
-        greetMeet: 0,
-        extraPickups: 0,
+          greetMeet: 0,
+          extraPickups: 0,
         node: <span className="fare-label">Custom route — dispatch confirms your exact fare in minutes</span>,
       };
     const [pType, pCode] = pickup.split(":");
@@ -492,8 +482,8 @@ function BookingCard() {
         cls: "has-price",
         amount: null as number | null,
         parts: null as FeeParts | null,
-        greetMeet: 0,
-        extraPickups: 0,
+          greetMeet: 0,
+          extraPickups: 0,
         node: (
           <>
             <span className="fare-amount">Request a quote</span>{" "}
@@ -515,16 +505,13 @@ function BookingCard() {
     // Greet & meet is a flat $40 add-on, only when an airport pickup is selected for an airport transfer.
     const gm = service === "transfer" && greetMeet && pickup.startsWith("airport:") ? GREET_MEET_PRICE : 0;
     // Extra pickups: $35 per additional stop, flat add-on (no gratuity/fee on it).
-    const ep = extraPickups * EXTRA_PICKUP_PRICE;
+    const ep = service !== "hourly" ? extraPickups * EXTRA_PICKUP_PRICE : 0;
     const parts = feeParts(pricedBase);
     const milesText =
       routeMiles !== null && routeMiles > 0
         ? ` · ${Math.round(routeMiles)} miles`
         : pType === "city" && dType === "city" && pCode && dCode
-          ? (() => {
-              const m = cityToCityQuote(pCode, dCode).miles;
-              return m > 0 ? ` · ${Math.round(m)} miles` : "";
-            })()
+          ? (() => { const m = cityToCityQuote(pCode, dCode).miles; return m > 0 ? ` · ${Math.round(m)} miles` : ""; })()
           : "";
     return {
       cls: "has-price",
@@ -535,15 +522,13 @@ function BookingCard() {
       node: (
         <>
           <span className="fare-amount">${parts.base + gm + ep}</span>
-          <span className="fare-sub">
-            Estimated one-way fare{milesText} · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 5% booking fee at checkout
-            {gm > 0 ? ` · incl. greet & meet ($${GREET_MEET_PRICE})` : ""}
-            {ep > 0 ? ` · incl. ${extraPickups} extra pickup${extraPickups > 1 ? "s" : ""} ($${ep})` : ""}
-          </span>
+          <span className="fare-sub">Estimated one-way fare{milesText} · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 5% booking fee at checkout{gm > 0 ? ` · incl. greet & meet ($${GREET_MEET_PRICE})` : ""}{ep > 0 ? ` · incl. ${extraPickups} extra pickup${extraPickups > 1 ? "s" : ""} ($${ep})` : ""}</span>
         </>
       ),
     };
   }, [pickup, dropoff, vehicle, service, hours, greetMeet, extraPickups]);
+
+
 
   const bookingSnapshot = (): BookingState => ({
     service,
@@ -565,7 +550,9 @@ function BookingCard() {
   });
 
   const fareTextNow = () =>
-    (typeof document !== "undefined" && document.getElementById("farePreview")?.textContent?.trim()) || "";
+    (typeof document !== "undefined" &&
+      document.getElementById("farePreview")?.textContent?.trim()) ||
+    "";
 
   // Bus & coach have no instant price — the request goes straight to email for a manual quote.
   const isQuoteOnly = !(fare.amount && fare.amount > 0);
@@ -579,25 +566,34 @@ function BookingCard() {
     const bookingNo = await mintBookingNumber();
     const mailHref = buildReservationMail(bookingSnapshot(), fareTextNow(), bookingNo);
 
-    const wantsCardPayment = fare.amount && fare.amount > 0 && fare.parts;
-    if (wantsCardPayment && fare.parts) {
+    let paymentUrl: string | null = null;
+    let paymentError: string | null = null;
+    if (fare.amount && fare.amount > 0 && fare.parts) {
       setPaying(true);
-      // Mount the embedded secure payment form below the button — it charges
-      // the exact calculated total (base + gratuity + fee + add-ons).
-      setCheckoutData({
-        base: fare.parts.base,
-        gratuity: fare.parts.gratuity,
-        fee: fare.parts.fee,
-        greetMeet: fare.greetMeet,
-        extraPickups: fare.extraPickups,
-        description: buildDescription(bookingSnapshot()),
-        customerName: name.trim(),
-        customerEmail: email.trim(),
-        bookingNumber: bookingNo,
-      });
+      try {
+        const result = await createCheckout({
+          data: {
+            base: fare.parts.base,
+            gratuity: fare.parts.gratuity,
+            fee: fare.parts.fee,
+            greetMeet: fare.greetMeet,
+            extraPickups: fare.extraPickups,
+            description: buildDescription(bookingSnapshot()),
+            origin: window.location.origin,
+            customerName: name.trim(),
+            customerEmail: email.trim(),
+            bookingNumber: bookingNo,
+          },
+        });
+        paymentUrl = result.url;
+        paymentError = result.error;
+      } catch {
+        paymentError = "We couldn't open the payment page.";
+      }
       setPaying(false);
     }
 
+    if (paymentUrl) window.open(paymentUrl, "_blank", "noopener");
     // Logged as Not paid at submit; flipped to Paid when the customer returns
     // from the Stripe checkout (?payment=success&booking=...).
     logBookingToSheet(bookingSnapshot(), fareTextNow(), bookingNo, "Not paid");
@@ -609,26 +605,34 @@ function BookingCard() {
       kind: "ok",
       text: (
         <>
-          Thanks, {name.trim()} — your booking number is <strong>{bookingNo}</strong>. Please save it; you'll need it
-          for any changes to this reservation.{" "}
-          {wantsCardPayment ? (
+          Thanks, {name.trim()} — your booking number is <strong>{bookingNo}</strong>. Please save
+          it; you'll need it for any changes to this reservation.{" "}
+          {paymentUrl ? (
             <>
-              please complete the secure card payment for <strong>${fare.amount}</strong> below, then send the
-              reservation email that just opened.{" "}
+              your payment page for <strong>${fare.amount}</strong> opened in a new tab. Please complete
+              payment, then send the reservation email that just opened.{" "}
+              <a href={paymentUrl} target="_blank" rel="noopener" style={{ color: "var(--brass-dark)" }}>
+                Reopen the payment page
+              </a>{" "}
+              if needed.{" "}
             </>
           ) : isQuoteOnly ? (
             <>
-              your quote request and signed agreement are ready to send. Our dispatch team will reply with your price
-              shortly.{" "}
+              your quote request and signed agreement are ready to send. Our dispatch team will
+              reply with your price shortly.{" "}
             </>
           ) : (
-            <>your reservation and signed agreement are ready to send. </>
+            <>
+              your reservation and signed agreement are ready to send.{" "}
+              {paymentError ? `${paymentError} We'll send you a secure payment link by email. ` : ""}
+            </>
           )}
           If your email app didn't open automatically, please email a copy to{" "}
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
             {EMAIL}
           </a>
-          , or <CopyDetailsButton getText={() => reservationDetailsText(bookingSnapshot(), fareTextNow(), bookingNo)} />
+          , or{" "}
+          <CopyDetailsButton getText={() => reservationDetailsText(bookingSnapshot(), fareTextNow(), bookingNo)} />
           .
         </>
       ),
@@ -646,13 +650,16 @@ function BookingCard() {
       kind: "ok",
       text: (
         <>
-          Thanks, {payerName} — your PayPal payment of <strong>${amount}</strong> is complete. Your booking number is{" "}
-          <strong>{bookingNo}</strong>. Please save it; you'll need it for any changes to this reservation. Please send
-          the reservation email that just opened. If your email app didn't open automatically, please email a copy to{" "}
+          Thanks, {payerName} — your PayPal payment of <strong>${amount}</strong> is complete.
+          Your booking number is <strong>{bookingNo}</strong>. Please save it; you'll need it for
+          any changes to this reservation.{" "}
+          Please send the reservation email that just opened. If your email app didn't open
+          automatically, please email a copy to{" "}
           <a href={`mailto:${EMAIL}`} style={{ color: "var(--brass-dark)" }}>
             {EMAIL}
           </a>
-          , or <CopyDetailsButton getText={() => reservationDetailsText(bookingSnapshot(), fareTextNow(), bookingNo)} />
+          , or{" "}
+          <CopyDetailsButton getText={() => reservationDetailsText(bookingSnapshot(), fareTextNow(), bookingNo)} />
           .
         </>
       ),
@@ -661,8 +668,8 @@ function BookingCard() {
   };
 
   // Latest values for the PayPal button callbacks (avoids stale closures).
-  const liveRef = useRef({ snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts, greetMeet: "greetMeet" in fare ? (fare.greetMeet as number) : 0, extraPickups: "extraPickups" in fare ? (fare.extraPickups as number) : 0 } });
-  liveRef.current = { snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts, greetMeet: "greetMeet" in fare ? (fare.greetMeet as number) : 0, extraPickups: "extraPickups" in fare ? (fare.extraPickups as number) : 0 } };
+  const liveRef = useRef({ snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts } });
+  liveRef.current = { snapshot: bookingSnapshot(), fare: { amount: fare.amount, parts: fare.parts } };
   const completeRef = useRef(completePayPalReservation);
   completeRef.current = completePayPalReservation;
   // Booking number minted when the PayPal order is created, shown after capture.
@@ -687,9 +694,9 @@ function BookingCard() {
 
   // Render PayPal buttons when PayPal is the chosen method.
   useEffect(() => {
-    if (payMethod !== "paypal" || !ppClientId) return undefined;
+    if (payMethod !== "paypal" || !ppClientId) return;
     const container = document.getElementById("paypal-buttons");
-    if (!container) return undefined;
+    if (!container) return;
     container.innerHTML = "";
 
     const renderButtons = () => {
@@ -771,8 +778,8 @@ function BookingCard() {
     } else {
       renderButtons();
     }
-    return undefined;
   }, [payMethod, ppClientId]);
+
 
   return (
     <div className="booking-card" id="book">
@@ -810,26 +817,9 @@ function BookingCard() {
         )}
       </div>
       <div className="field-row">
-        <LocationSelect
-          id="pu"
-          label="Pickup"
-          value={pickup}
-          onChange={(v) => {
-            setPickup(v);
-            if (!v.startsWith("airport:")) setGreetMeet(false);
-          }}
-          placeholder="Choose pickup"
-          citiesOnly={service === "city"}
-        />
+        <LocationSelect id="pu" label="Pickup" value={pickup} onChange={(v) => { setPickup(v); if (!v.startsWith("airport:")) setGreetMeet(false); }} placeholder="Choose pickup" citiesOnly={service === "city"} />
         {service !== "hourly" && (
-          <LocationSelect
-            id="do"
-            label="Drop-off"
-            value={dropoff}
-            onChange={setDropoff}
-            placeholder="Choose destination"
-            citiesOnly={service === "city"}
-          />
+          <LocationSelect id="do" label="Drop-off" value={dropoff} onChange={setDropoff} placeholder="Choose destination" citiesOnly={service === "city"} />
         )}
       </div>
       <div className="field-row">
@@ -849,10 +839,15 @@ function BookingCard() {
         </div>
       </div>
 
+
       {service === "transfer" && pickup.startsWith("airport:") && (
         <div className="field-row">
           <label className="check-field">
-            <input type="checkbox" checked={greetMeet} onChange={(e) => setGreetMeet(e.target.checked)} />
+            <input
+              type="checkbox"
+              checked={greetMeet}
+              onChange={(e) => setGreetMeet(e.target.checked)}
+            />
             <span>
               Add greet &amp; meet — your driver meets you inside the terminal with a name sign{" "}
               <strong>+${GREET_MEET_PRICE}</strong>
@@ -865,7 +860,11 @@ function BookingCard() {
         <div className="field-row">
           <div className="field">
             <label htmlFor="extraPickups">Extra pickups — $35 per stop</label>
-            <select id="extraPickups" value={extraPickups} onChange={(e) => setExtraPickups(Number(e.target.value))}>
+            <select
+              id="extraPickups"
+              value={extraPickups}
+              onChange={(e) => setExtraPickups(Number(e.target.value))}
+            >
               {EXTRA_PICKUP_OPTIONS.map((n) => (
                 <option key={n} value={n}>
                   {n === 0 ? "No extra pickups" : `${n} extra pickup${n > 1 ? "s" : ""} (+$${n * EXTRA_PICKUP_PRICE})`}
@@ -923,8 +922,8 @@ function BookingCard() {
         <summary>Read the rental agreement</summary>
         <div className="agreement-details-body">
           <p style={{ fontSize: 13, color: "var(--steel)", paddingTop: 14 }}>
-            This agreement applies to every ride booked with {SITE.brand.legalName}. By signing below, you agree to the
-            terms here.
+            This agreement applies to every ride booked with {SITE.brand.legalName}. By signing
+            below, you agree to the terms here.
           </p>
           {AGREEMENT_TERMS.map((t, i) => (
             <div className="agreement-item" key={t.title}>
@@ -936,15 +935,15 @@ function BookingCard() {
           <div className="agreement-box">
             <h4>Additional charges</h4>
             <p>
-              A <strong>20% gratuity</strong> and <strong>5% booking fee</strong> are added to all reservations.
-              Overtime is billed at the hourly rate of the reserved vehicle.
+              A <strong>20% gratuity</strong> and <strong>5% booking fee</strong> are added to all
+              reservations. Overtime is billed at the hourly rate of the reserved vehicle.
             </p>
           </div>
           <div className="agreement-box">
             <h4>Cleaning fees</h4>
             <p>
-              A <strong>$600 cleaning fee</strong> applies if the vehicle must be cleaned due to someone getting sick in
-              the vehicle.
+              A <strong>$600 cleaning fee</strong> applies if the vehicle must be cleaned due to
+              someone getting sick in the vehicle.
             </p>
           </div>
           <div className="agreement-box">
@@ -957,20 +956,13 @@ function BookingCard() {
       </details>
 
       <p style={{ fontSize: 12, color: "var(--steel)", marginTop: 12, lineHeight: 1.5 }}>
-        By typing your name as a signature above, you agree to the rental agreement and authorize the charges described
-        in it.
+        By typing your name as a signature above, you agree to the rental agreement and authorize
+        the charges described in it.
       </p>
 
       {fare.parts && (
         <div className="field" style={{ marginTop: 14 }}>
-          <div
-            style={{
-              border: "1px solid var(--brass)",
-              borderRadius: 12,
-              padding: "12px 14px",
-              background: "rgba(176,141,62,0.06)",
-            }}
-          >
+          <div style={{ border: "1px solid var(--brass)", borderRadius: 12, padding: "12px 14px", background: "rgba(176,141,62,0.06)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, padding: "2px 0" }}>
               <span>Base fare</span>
               <span>${fare.parts.base}</span>
@@ -983,17 +975,7 @@ function BookingCard() {
               <span>Booking fee (5%)</span>
               <span>${fare.parts.fee}</span>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                fontWeight: 700,
-                fontSize: 15,
-                borderTop: "1px solid var(--brass)",
-                marginTop: 6,
-                paddingTop: 8,
-              }}
-            >
+            <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 15, borderTop: "1px solid var(--brass)", marginTop: 6, paddingTop: 8 }}>
               <span>Total due</span>
               <span>${fare.parts.total}</span>
             </div>
@@ -1005,7 +987,12 @@ function BookingCard() {
         <label>Is this booking for you or for someone else?</label>
         <div style={{ display: "flex", gap: 20, marginTop: 8 }}>
           <label style={{ display: "flex", gap: 8, alignItems: "center", fontWeight: 400, cursor: "pointer" }}>
-            <input type="radio" name="bookingFor" checked={bookingFor === "me"} onChange={() => setBookingFor("me")} />
+            <input
+              type="radio"
+              name="bookingFor"
+              checked={bookingFor === "me"}
+              onChange={() => setBookingFor("me")}
+            />
             For me
           </label>
           <label style={{ display: "flex", gap: 8, alignItems: "center", fontWeight: 400, cursor: "pointer" }}>
@@ -1021,19 +1008,9 @@ function BookingCard() {
       </div>
 
       {bookingFor === "someone" && (
-        <div
-          style={{
-            border: "1px solid var(--brass)",
-            borderRadius: 12,
-            padding: "12px 14px",
-            marginTop: 12,
-            background: "rgba(176,141,62,0.06)",
-          }}
-        >
+        <div style={{ border: "1px solid var(--brass)", borderRadius: 12, padding: "12px 14px", marginTop: 12, background: "rgba(176,141,62,0.06)" }}>
           <div className="field" style={{ marginBottom: 10 }}>
-            <label htmlFor="hotelName">
-              Company / hotel name <span style={{ fontWeight: 400 }}>(if booking for work)</span>
-            </label>
+            <label htmlFor="hotelName">Company / hotel name <span style={{ fontWeight: 400 }}>(if booking for work)</span></label>
             <input
               id="hotelName"
               type="text"
@@ -1073,8 +1050,8 @@ function BookingCard() {
       {isQuoteOnly ? (
         <>
           <p style={{ fontSize: 12.5, color: "var(--steel)", marginTop: 14, lineHeight: 1.55 }}>
-            {VEHICLE_LABEL[vehicle]} trips are quoted per group — no payment is due now. Send your request and our
-            dispatch team will reply with your price.
+            {VEHICLE_LABEL[vehicle]} trips are quoted per group — no payment is due now. Send your
+            request and our dispatch team will reply with your price.
           </p>
           <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
             {submitted ? "Request sent ✓" : "Send reservation request"}
@@ -1082,66 +1059,73 @@ function BookingCard() {
         </>
       ) : (
         <>
-          <div className="field" style={{ marginTop: 14 }}>
-            <label>Payment method</label>
-            <div style={{ display: "flex", gap: 20, marginTop: 8 }}>
-              <label style={{ display: "flex", gap: 8, alignItems: "center", fontWeight: 400, cursor: "pointer" }}>
-                <input
-                  type="radio"
-                  name="payMethod"
-                  checked={payMethod === "card"}
-                  onChange={() => setPayMethod("card")}
-                />
-                Card
-              </label>
-              <label
-                style={{
-                  display: "flex",
-                  gap: 8,
-                  alignItems: "center",
-                  fontWeight: 400,
-                  cursor: ppChecked && !ppClientId ? "not-allowed" : "pointer",
-                  opacity: ppChecked && !ppClientId ? 0.55 : 1,
-                }}
-              >
-                <input
-                  type="radio"
-                  name="payMethod"
-                  checked={payMethod === "paypal"}
-                  disabled={ppChecked && !ppClientId}
-                  onChange={() => setPayMethod("paypal")}
-                />
-                PayPal{ppChecked && !ppClientId ? " (coming soon)" : ""}
-              </label>
-            </div>
-          </div>
+      <div className="field" style={{ marginTop: 14 }}>
+        <label>Payment method</label>
+        <div style={{ display: "flex", gap: 20, marginTop: 8 }}>
+          <label style={{ display: "flex", gap: 8, alignItems: "center", fontWeight: 400, cursor: "pointer" }}>
+            <input
+              type="radio"
+              name="payMethod"
+              checked={payMethod === "card"}
+              onChange={() => setPayMethod("card")}
+            />
+            Card
+          </label>
+          <label
+            style={{
+              display: "flex",
+              gap: 8,
+              alignItems: "center",
+              fontWeight: 400,
+              cursor: ppChecked && !ppClientId ? "not-allowed" : "pointer",
+              opacity: ppChecked && !ppClientId ? 0.55 : 1,
+            }}
+          >
+            <input
+              type="radio"
+              name="payMethod"
+              checked={payMethod === "paypal"}
+              disabled={ppChecked && !ppClientId}
+              onChange={() => setPayMethod("paypal")}
+            />
+            PayPal{ppChecked && !ppClientId ? " (coming soon)" : ""}
+          </label>
+        </div>
+      </div>
 
-          {payMethod === "paypal" ? (
-            fare.amount && fare.amount > 0 ? (
-              <div id="paypal-buttons" style={{ marginTop: 12, minHeight: 100 }} />
-            ) : (
-              <p style={{ fontSize: 13, color: "var(--steel)", marginTop: 12 }}>
-                Choose your route to see the PayPal payment button.
-              </p>
-            )
-          ) : (
-            <>
-              <p style={{ fontSize: 12.5, color: "var(--steel)", marginTop: 14, lineHeight: 1.55 }}>
-                Your card will be kept on file and may be charged for tolls, overtime, waiting time, cleaning and damage
-                fees as described in the rental agreement.
-              </p>
-              <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
-                {paying ? "Opening secure payment…" : submitted ? "Reserved & signed ✓" : "Reserve, sign & pay"}
-              </button>
-              {checkoutData && <ReservationCheckout {...checkoutData} />}
-            </>
-          )}
+      {payMethod === "paypal" ? (
+        fare.amount && fare.amount > 0 ? (
+          <div id="paypal-buttons" style={{ marginTop: 12, minHeight: 100 }} />
+        ) : (
+          <p style={{ fontSize: 13, color: "var(--steel)", marginTop: 12 }}>
+            Choose your route to see the PayPal payment button.
+          </p>
+        )
+      ) : (
+        <>
+          <p style={{ fontSize: 12.5, color: "var(--steel)", marginTop: 14, lineHeight: 1.55 }}>
+            Your card will be kept on file and may be charged for tolls, overtime, waiting time,
+            cleaning and damage fees as described in the rental agreement.
+          </p>
+          <button className="btn btn-brass" id="reserveSubmit" onClick={submitCard} disabled={paying}>
+          {paying
+            ? "Opening secure payment…"
+            : submitted
+              ? "Reserved & signed ✓"
+              : "Reserve, sign & pay"}
+          </button>
+        </>
+      )}
         </>
       )}
       {confirm && (
         <div
           className="sign-confirm show"
-          style={confirm.kind === "error" ? { background: "rgba(200,60,60,0.08)", borderColor: "#c83c3c" } : undefined}
+          style={
+            confirm.kind === "error"
+              ? { background: "rgba(200,60,60,0.08)", borderColor: "#c83c3c" }
+              : undefined
+          }
         >
           {confirm.text}
         </div>
@@ -1181,9 +1165,8 @@ function DriveForm() {
   const [showTerms, setShowTerms] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
-  const set =
-    (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-      setForm((f) => ({ ...f, [k]: e.target.value }));
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const onFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -1237,7 +1220,7 @@ function DriveForm() {
         `Vehicle: ${VEHICLE_LABEL[form.vehicle]}\n` +
         `Years driving professionally: ${form.experience || "Not specified"}\n` +
         `Notes: ${form.notes.trim() || "None"}\n\n` +
-        "Documents: please attach driver's license, proof of insurance and PUC documents to this email before sending.",
+        "Documents: please attach driver's license, proof of insurance and PUC documents to this email before sending."
     );
     // Give the sheet request a head start before opening the email app.
     setTimeout(() => {
@@ -1310,8 +1293,8 @@ function DriveForm() {
       <div className="drive-upload">
         <h4>Upload documents</h4>
         <p className="upload-note">
-          Attach a photo or PDF of each. These stay on your device until you send the email — they don't upload
-          automatically, so please attach them again in the email that opens if needed.
+          Attach a photo or PDF of each. These stay on your device until you send the email — they
+          don't upload automatically, so please attach them again in the email that opens if needed.
         </p>
         <div className="field-row">
           <div className="field">
@@ -1329,13 +1312,7 @@ function DriveForm() {
         </div>
       </div>
 
-      <button
-        type="button"
-        className="btn btn-brass"
-        id="drvSubmit"
-        style={{ width: "100%", marginTop: 20 }}
-        onClick={submit}
-      >
+      <button type="button" className="btn btn-brass" id="drvSubmit" style={{ width: "100%", marginTop: 20 }} onClick={submit}>
         {submitted ? "Application sent ✓" : "Submit application"}
       </button>
       {showTerms && (
@@ -1343,18 +1320,27 @@ function DriveForm() {
           <div className="drv-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
             <h4>Before you apply</h4>
             <p className="drv-terms-note">
-              Keep in mind that some of the bookings come through our reservation channels that we pay 20% commission on
-              so that 20% will be deducted of your fare.
+              Keep in mind that some of the bookings come through our reservation channels that we
+              pay 20% commission on so that 20% will be deducted of your fare.
             </p>
             <label className="drv-agree">
-              <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+              />
               <span>I understand and agree</span>
             </label>
             <div className="drv-modal-actions">
               <button type="button" className="btn" onClick={() => setShowTerms(false)}>
                 Cancel
               </button>
-              <button type="button" className="btn btn-brass" disabled={!agreed} onClick={confirmAndSend}>
+              <button
+                type="button"
+                className="btn btn-brass"
+                disabled={!agreed}
+                onClick={confirmAndSend}
+              >
                 Confirm &amp; send
               </button>
             </div>
@@ -1364,7 +1350,11 @@ function DriveForm() {
       {confirm && (
         <div
           className="sign-confirm show"
-          style={confirm.kind === "error" ? { background: "rgba(200,60,60,0.08)", borderColor: "#c83c3c" } : undefined}
+          style={
+            confirm.kind === "error"
+              ? { background: "rgba(200,60,60,0.08)", borderColor: "#c83c3c" }
+              : undefined
+          }
         >
           {confirm.text}
         </div>
@@ -1418,7 +1408,6 @@ function Index() {
 
   return (
     <>
-      <PaymentTestModeBanner />
       <div className="disclaimer-bar">
         We are a global ground transportation arranger
         <br />
@@ -1498,8 +1487,10 @@ function Index() {
               <span className="dot" />
               Built for corporate travel and event teams
             </div>
-            <h1>San Francisco Limo Service & Bay Area Black Car Transfers</h1>
-            <p className="lead">One dispatch team for every ride your company books — sedan to coach.</p>
+            <h1>We treat your schedule like our own. Always on time.</h1>
+            <p className="lead">
+              One dispatch team for every ride your company books — sedan to coach.
+            </p>
             <div className="hero-actions">
               <div className="hero-cta-stack">
                 <a href="#book" className="btn btn-brass">
@@ -1510,7 +1501,10 @@ function Index() {
                 </Link>
                 <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.45)", marginTop: 8 }}>
                   Payment confirms your reservation {"\u00A0·\u00A0"} or{" "}
-                  <a href={`mailto:${EMAIL}`} style={{ color: "rgba(255,255,255,0.65)", textDecoration: "underline" }}>
+                  <a
+                    href={`mailto:${EMAIL}`}
+                    style={{ color: "rgba(255,255,255,0.65)", textDecoration: "underline" }}
+                  >
                     email us
                   </a>
                 </p>
@@ -1525,6 +1519,7 @@ function Index() {
                 Email us: {EMAIL}
               </a>
               <InstallAppButton className="btn btn-outline-dark" />
+
             </div>
             <div className="hero-stats">
               <div>
@@ -1551,8 +1546,8 @@ function Index() {
           <div className="section-head">
             <h2>{SITE.brand.shortName} in motion</h2>
             <p>
-              A glimpse of what a {SITE.brand.shortName} ride feels like — from airport pickup to the final drop-off,
-              every trip handled by a vetted chauffeur.
+              A glimpse of what a {SITE.brand.shortName} ride feels like — from airport pickup to the final
+              drop-off, every trip handled by a vetted chauffeur.
             </p>
           </div>
           <video
@@ -1599,21 +1594,27 @@ function Index() {
           <div className="section-head">
             <h2>Booking rides for a team isn't a car problem. It's a trust problem.</h2>
             <p>
-              Every time you book a driver for a colleague or a guest, you're betting on something you don't control:
-              will they show up on time, in a clean car, and will you get one clear bill at month's end — or twenty
-              scattered receipts?
+              Every time you book a driver for a colleague or a guest, you're betting on something
+              you don't control: will they show up on time, in a clean car, and will you get one
+              clear bill at month's end — or twenty scattered receipts?
             </p>
           </div>
           <div className="problem-grid">
             <div className="problem-item">
               <div className="tag">Time</div>
               <h3>Every ride, coordinated by hand</h3>
-              <p>Switching between apps and unknown drivers for each trip eats the hours it was supposed to save.</p>
+              <p>
+                Switching between apps and unknown drivers for each trip eats the hours it was
+                supposed to save.
+              </p>
             </div>
             <div className="problem-item">
               <div className="tag">Budget control</div>
               <h3>Receipts, not reporting</h3>
-              <p>Dozens of scattered charges with no cost center make travel spend nearly impossible to reconcile.</p>
+              <p>
+                Dozens of scattered charges with no cost center make travel spend nearly impossible
+                to reconcile.
+              </p>
             </div>
           </div>
         </div>
@@ -1624,15 +1625,15 @@ function Index() {
           <div className="about-inner">
             <h2>Transportation you stop having to think about</h2>
             <p>
-              {SITE.brand.shortName} isn't another ride-booking app. We're a full transportation coordination team — one
-              unified fleet, individually vetted licensed chauffeurs, and support that answers as a person, not a
-              routing bot.
+              {SITE.brand.shortName} isn't another ride-booking app. We're a full transportation coordination
+              team — one unified fleet, individually vetted licensed chauffeurs, and support that
+              answers as a person, not a routing bot.
             </p>
             <p>
-              We started because travel managers and event planners were coordinating every ride by hand: one driver
-              here, one invoice there, no guarantee on either. Today, we're the one team your company needs for every
-              kind of trip across the {SITE.market.metro} — {SITE.market.airports} — on a single invoice that ties it
-              all together.
+              We started because travel managers and event planners were coordinating every ride by
+              hand: one driver here, one invoice there, no guarantee on either. Today, we're the one
+              team your company needs for every kind of trip across the {SITE.market.metro} — {SITE.market.airports} — on a single invoice that
+              ties it all together.
             </p>
           </div>
         </div>
@@ -1643,8 +1644,8 @@ function Index() {
           <div className="section-head">
             <h2>Choose your ride</h2>
             <p>
-              Five vehicle classes, each with its own vetted chauffeur pool — from a single airport transfer to a
-              fifty-person conference shuttle.
+              Five vehicle classes, each with its own vetted chauffeur pool — from a single airport
+              transfer to a fifty-person conference shuttle.
             </p>
           </div>
 
@@ -1652,12 +1653,7 @@ function Index() {
             <div className="fleet-card">
               <div className="icon-box">
                 <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
-                  <path
-                    d="M4 22 L7 12 Q10 8 16 8 H30 Q36 8 39 12 L44 22"
-                    stroke="#0F1B2D"
-                    strokeWidth="1.6"
-                    fill="none"
-                  />
+                  <path d="M4 22 L7 12 Q10 8 16 8 H30 Q36 8 39 12 L44 22" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
                   <rect x="2" y="20" width="44" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
                   <circle cx="13" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
                   <circle cx="35" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
@@ -1671,12 +1667,7 @@ function Index() {
             <div className="fleet-card">
               <div className="icon-box">
                 <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
-                  <path
-                    d="M4 22 L6 10 Q8 7 14 7 H32 Q38 7 41 12 L44 22"
-                    stroke="#0F1B2D"
-                    strokeWidth="1.6"
-                    fill="none"
-                  />
+                  <path d="M4 22 L6 10 Q8 7 14 7 H32 Q38 7 41 12 L44 22" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
                   <rect x="2" y="20" width="44" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
                   <circle cx="13" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
                   <circle cx="35" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
@@ -1690,12 +1681,7 @@ function Index() {
             <div className="fleet-card">
               <div className="icon-box">
                 <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
-                  <path
-                    d="M2 22 L4 13 Q6 9 12 9 H20 L23 8 H30 Q33 8 34 11 L36 13 Q40 13 42 17 L46 22"
-                    stroke="#0F1B2D"
-                    strokeWidth="1.6"
-                    fill="none"
-                  />
+                  <path d="M2 22 L4 13 Q6 9 12 9 H20 L23 8 H30 Q33 8 34 11 L36 13 Q40 13 42 17 L46 22" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
                   <rect x="1" y="20" width="46" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
                   <circle cx="11" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
                   <circle cx="37" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
@@ -1746,44 +1732,24 @@ function Index() {
           <div className="pricing-copy">
             <h2>Need the car to wait? Book by the hour.</h2>
             <p>
-              For roadshows, city tours, or a day where your schedule keeps shifting, your chauffeur and vehicle stay
-              with you — no re-booking between stops, no separate fare for each leg.
+              For roadshows, city tours, or a day where your schedule keeps shifting, your chauffeur
+              and vehicle stay with you — no re-booking between stops, no separate fare for each
+              leg.
             </p>
             <p>
-              Hourly bookings have a <strong style={{ color: "var(--charcoal)" }}>4-hour minimum</strong>. After that,
+              Hourly bookings have a{" "}
+              <strong style={{ color: "var(--charcoal)" }}>4-hour minimum</strong>. After that,
               you're billed in 30-minute increments at the same rate.
             </p>
             <p className="note">Get your hourly rate now — no commitment.</p>
           </div>
           <div className="price-card">
-            <div className="price-row">
-              <span className="name">Sedan</span>
-              <span className="leader" />
-              <span className="amount">$85/hr</span>
-            </div>
-            <div className="price-row">
-              <span className="name">SUV</span>
-              <span className="leader" />
-              <span className="amount">$120/hr</span>
-            </div>
-            <div className="price-row">
-              <span className="name">Limousine</span>
-              <span className="leader" />
-              <span className="amount">$120/hr</span>
-            </div>
-            <div className="price-row">
-              <span className="name">Sprinter van</span>
-              <span className="leader" />
-              <span className="amount">$175/hr</span>
-            </div>
-            <div className="price-row">
-              <span className="name">Bus &amp; coach</span>
-              <span className="leader" />
-              <span className="amount">Custom quote</span>
-            </div>
-            <a href="#book" className="btn btn-brass">
-              Book by the hour
-            </a>
+            <div className="price-row"><span className="name">Sedan</span><span className="leader" /><span className="amount">$85/hr</span></div>
+            <div className="price-row"><span className="name">SUV</span><span className="leader" /><span className="amount">$120/hr</span></div>
+            <div className="price-row"><span className="name">Limousine</span><span className="leader" /><span className="amount">$120/hr</span></div>
+            <div className="price-row"><span className="name">Sprinter van</span><span className="leader" /><span className="amount">$175/hr</span></div>
+            <div className="price-row"><span className="name">Bus &amp; coach</span><span className="leader" /><span className="amount">Custom quote</span></div>
+            <a href="#book" className="btn btn-brass">Book by the hour</a>
             <p className="disclaimer">4-hour minimum {"\u00A0·\u00A0"} Same chauffeur, all day</p>
           </div>
         </div>
@@ -1800,14 +1766,16 @@ function Index() {
               <div className="num">01</div>
               <h3>Tell us where and when</h3>
               <p>
-                Enter your pickup, destination and vehicle class. Group or recurring trips can be arranged directly with
-                dispatch.
+                Enter your pickup, destination and vehicle class. Group or recurring trips can be
+                arranged directly with dispatch.
               </p>
             </div>
             <div className="step">
               <div className="num">02</div>
               <h3>We confirm your chauffeur</h3>
-              <p>A dispatcher assigns a licensed, background-checked driver.</p>
+              <p>
+                A dispatcher assigns a licensed, background-checked driver.
+              </p>
             </div>
           </div>
         </div>
@@ -1818,8 +1786,9 @@ function Index() {
           <div className="section-head">
             <h2>One dispatch team, for every ride your company books</h2>
             <p>
-              Instead of switching between apps and unfamiliar drivers, your team gets a single fleet — sedan to coach —
-              with licensed, background-checked chauffeurs. Booking takes a minute; the worrying stops.
+              Instead of switching between apps and unfamiliar drivers, your team gets a single
+              fleet — sedan to coach — with licensed, background-checked chauffeurs. Booking takes a
+              minute; the worrying stops.
             </p>
           </div>
           <div className="usp-grid">
@@ -1827,9 +1796,7 @@ function Index() {
               <div className="icon-box">
                 <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
                   <circle cx="17" cy="17" r="14" stroke="#B08D3E" strokeWidth="1.6" />
-                  <text x="17" y="22" textAnchor="middle" fontFamily="Fraunces, serif" fontSize="14" fill="#B08D3E">
-                    $
-                  </text>
+                  <text x="17" y="22" textAnchor="middle" fontFamily="Fraunces, serif" fontSize="14" fill="#B08D3E">$</text>
                 </svg>
               </div>
               <h3>Fixed pricing</h3>
@@ -1838,12 +1805,7 @@ function Index() {
             <div className="usp">
               <div className="icon-box">
                 <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-                  <path
-                    d="M17 4 L28 9 V17 C28 24 23 28 17 30 C11 28 6 24 6 17 V9 Z"
-                    stroke="#B08D3E"
-                    strokeWidth="1.6"
-                    fill="none"
-                  />
+                  <path d="M17 4 L28 9 V17 C28 24 23 28 17 30 C11 28 6 24 6 17 V9 Z" stroke="#B08D3E" strokeWidth="1.6" fill="none" />
                 </svg>
               </div>
               <h3>Licensed &amp; vetted</h3>
@@ -1860,30 +1822,16 @@ function Index() {
           </div>
           <div className="test-grid">
             <div className="test-card">
-              <p className="quote">
-                "Every chauffeur showed up early for our three-day roadshow across four cities. Not one delay."
-              </p>
-              <div className="who">
-                <strong>Priya N.</strong>Event planner, London
-              </div>
+              <p className="quote">"Every chauffeur showed up early for our three-day roadshow across four cities. Not one delay."</p>
+              <div className="who"><strong>Priya N.</strong>Event planner, London</div>
             </div>
             <div className="test-card">
-              <p className="quote">
-                "We moved our whole travel program to {SITE.brand.shortName} for the invoicing alone. The service held
-                up just as well."
-              </p>
-              <div className="who">
-                <strong>Daniel R.</strong>COO, fintech startup
-              </div>
+              <p className="quote">"We moved our whole travel program to {SITE.brand.shortName} for the invoicing alone. The service held up just as well."</p>
+              <div className="who"><strong>Daniel R.</strong>COO, fintech startup</div>
             </div>
             <div className="test-card">
-              <p className="quote">
-                "The limousine arrived exactly on time and the driver knew the venue better than our own coordinator
-                did."
-              </p>
-              <div className="who">
-                <strong>Marisol T.</strong>Wedding client
-              </div>
+              <p className="quote">"The limousine arrived exactly on time and the driver knew the venue better than our own coordinator did."</p>
+              <div className="who"><strong>Marisol T.</strong>Wedding client</div>
             </div>
           </div>
         </div>
@@ -1893,24 +1841,15 @@ function Index() {
         <div className="corporate" id="corporate">
           <div>
             <h2>Managing travel for a team or event?</h2>
-            <p>
-              Get a dedicated account manager, volume rates, and a single invoice for every ride across the{" "}
-              {SITE.market.metro}.
-            </p>
+            <p>Get a dedicated account manager, volume rates, and a single invoice for every ride across the {SITE.market.metro}.</p>
           </div>
           <div>
-            <a href="#book" className="btn btn-brass">
-              Talk to our team
-            </a>
+            <a href="#book" className="btn btn-brass">Talk to our team</a>
             <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)", marginTop: 10, textAlign: "center" }}>
               or{" "}
-              <a href={PHONE_HREF} style={{ color: "rgba(255,255,255,0.75)", textDecoration: "underline" }}>
-                call us
-              </a>
+              <a href={PHONE_HREF} style={{ color: "rgba(255,255,255,0.75)", textDecoration: "underline" }}>call us</a>
               {" \u00A0·\u00A0 "}
-              <a href={`mailto:${EMAIL}`} style={{ color: "rgba(255,255,255,0.75)", textDecoration: "underline" }}>
-                email us
-              </a>
+              <a href={`mailto:${EMAIL}`} style={{ color: "rgba(255,255,255,0.75)", textDecoration: "underline" }}>email us</a>
             </p>
           </div>
         </div>
@@ -1932,18 +1871,12 @@ function Index() {
       <section className="final-cta">
         <div className="wrap">
           <h2>Wherever you're headed next, a car is ready.</h2>
-          <a href="#book" className="btn btn-outline-light">
-            Book now
-          </a>
+          <a href="#book" className="btn btn-outline-light">Book now</a>
           <p style={{ fontSize: 13, color: "rgba(15,27,45,0.65)", marginTop: 16 }}>
             Support available 24/7 {"\u00A0·\u00A0"} or{" "}
-            <a href={PHONE_HREF} style={{ color: "var(--ink)", textDecoration: "underline" }}>
-              call us
-            </a>
+            <a href={PHONE_HREF} style={{ color: "var(--ink)", textDecoration: "underline" }}>call us</a>
             {" \u00A0·\u00A0 "}
-            <a href={`mailto:${EMAIL}`} style={{ color: "var(--ink)", textDecoration: "underline" }}>
-              email us
-            </a>
+            <a href={`mailto:${EMAIL}`} style={{ color: "var(--ink)", textDecoration: "underline" }}>email us</a>
           </p>
         </div>
       </section>
@@ -1953,8 +1886,8 @@ function Index() {
           <div className="section-head">
             <h2>Drive with {SITE.brand.shortName}</h2>
             <p>
-              We're always looking for professional chauffeurs across the {SITE.market.metro}. Here's what it takes to
-              join the fleet.
+              We're always looking for professional chauffeurs across the {SITE.market.metro}. Here's what it
+              takes to join the fleet.
             </p>
           </div>
 
@@ -1974,15 +1907,12 @@ function Index() {
       <section id="fleetsites">
         <div className="wrap" style={{ maxWidth: 720 }}>
           <div className="section-head" style={{ textAlign: "center" }}>
-            <img
-              src="/fleetsites-logo.webp"
-              alt="FleetSites"
-              style={{ width: 96, height: 96, objectFit: "contain", marginBottom: 12 }}
-            />
+            <img src="/fleetsites-logo.webp" alt="FleetSites" style={{ width: 96, height: 96, objectFit: "contain", marginBottom: 12 }} />
             <h2>Need a website for your business?</h2>
             <p>
-              This site was built by <strong>FleetSites</strong>. We build high-converting websites for transportation
-              companies — online booking, instant quotes, payments — and websites for <strong>any</strong> business.
+              This site was built by <strong>FleetSites</strong>. We build high-converting websites for
+              transportation companies — online booking, instant quotes, payments — and websites for{" "}
+              <strong>any</strong> business.
             </p>
           </div>
           <div className="drive-req">
@@ -2009,26 +1939,12 @@ function Index() {
             <div>
               <h4>Company</h4>
               <ul>
-                <li>
-                  <a href="#fleet">Fleet</a>
-                </li>
-                <li>
-                  <a href="#how">How it works</a>
-                </li>
-                <li>
-                  <a href="#corporate">Corporate</a>
-                </li>
-                <li>
-                  <a href="#faq">FAQ</a>
-                </li>
-                <li>
-                  <a href="#book">Rental agreement</a>
-                </li>
-                <li>
-                  <Link to="/pay" search={{}} preload="intent">
-                    Custom reservations pay
-                  </Link>
-                </li>
+                <li><a href="#fleet">Fleet</a></li>
+                <li><a href="#how">How it works</a></li>
+                <li><a href="#corporate">Corporate</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#book">Rental agreement</a></li>
+                <li><Link to="/pay" search={{}} preload="intent">Custom reservations pay</Link></li>
               </ul>
             </div>
             <div>
@@ -2042,16 +1958,8 @@ function Index() {
             <div>
               <h4>Follow</h4>
               <ul>
-                <li>
-                  <a href={SITE.social.instagram} target="_blank" rel="noopener">
-                    Instagram
-                  </a>
-                </li>
-                <li>
-                  <a href={SITE.social.linkedin} target="_blank" rel="noopener">
-                    LinkedIn
-                  </a>
-                </li>
+                <li><a href={SITE.social.instagram} target="_blank" rel="noopener">Instagram</a></li>
+                <li><a href={SITE.social.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
               </ul>
             </div>
           </div>

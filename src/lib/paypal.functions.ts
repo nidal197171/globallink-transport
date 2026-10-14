@@ -56,12 +56,12 @@ export const createPayPalOrder = createServerFn({ method: "POST" })
                 amount: { currency_code: "USD", value: data.amount.toFixed(2) },
                 description: data.description,
               };
-              if (data.bookingNumber) unit["custom_id"] = data.bookingNumber;
+              if (data.bookingNumber) unit.custom_id = data.bookingNumber;
               if (data.base !== undefined && data.gratuity !== undefined && data.fee !== undefined) {
-                (unit["amount"] as Record<string, unknown>)["breakdown"] = {
+                (unit.amount as Record<string, unknown>).breakdown = {
                   item_total: { currency_code: "USD", value: data.amount.toFixed(2) },
                 };
-                unit["items"] = [
+                unit.items = [
                   {
                     name: "Base fare",
                     unit_amount: { currency_code: "USD", value: data.base.toFixed(2) },

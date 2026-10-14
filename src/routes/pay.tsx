@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SITE } from "@/config/site";
 import { useState } from "react";
-import { ReservationCheckout, type ReservationCheckoutProps } from "@/components/ReservationCheckout";
-import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { createReservationCheckout } from "@/lib/checkout.functions";
 import { mintBookingNumber } from "@/lib/bookingNumber";
 import { postToBookingSheet } from "@/lib/bookingSheet";
 
@@ -53,7 +52,6 @@ function PayPage() {
   const [details, setDetails] = useState("");
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState("");
-  const [checkoutData, setCheckoutData] = useState<ReservationCheckoutProps | null>(null);
 
   const cents = Math.round(Number(amount));
   const valid =
@@ -72,7 +70,7 @@ function PayPage() {
       // (e.g. bus/coach quotes); otherwise mint a fresh number for standalone payments.
       const refNo = /^GL\d+$/i.test(initial.ref.trim()) ? initial.ref.trim().toUpperCase() : "";
       const bookingNo = refNo || (await mintBookingNumber());
-      // Log the attempt as Not paid before opening checkout (it flips to Paid on return).
+      // Log the attempt as Not paid before opening Stripe (it flips to Paid on return).
       postToBookingSheet({
         bookingNumber: bookingNo,
         name: name.trim(),
@@ -89,17 +87,23 @@ function PayPage() {
         .join(" — ");
       const refNote = initial.ref.trim() && !refNo ? ` (ref: ${initial.ref.trim()})` : "";
       const description = `Custom reservation payment [${bookingNo}]${parts ? ` — ${parts}` : ""}${refNote}`;
-      setCheckoutData({
-        base: cents,
-        gratuity: 0,
-        fee: 0,
-        greetMeet: 0,
-        extraPickups: 0,
-        description,
-        customerName: name.trim(),
-        customerEmail: email.trim(),
-        bookingNumber: bookingNo,
+      const res = await createReservationCheckout({
+        data: {
+          base: cents,
+          gratuity: 0,
+          fee: 0,
+          description,
+          origin: window.location.origin,
+          customerName: name.trim(),
+          customerEmail: email.trim(),
+          bookingNumber: bookingNo,
+        },
       });
+      if (res.url) {
+        window.location.href = res.url;
+        return;
+      }
+      setError(res.error || "We couldn't open the payment page. Please try again.");
     } catch {
       setError("Something went wrong. Please try again.");
     }
@@ -108,7 +112,6 @@ function PayPage() {
 
   return (
     <section>
-      <PaymentTestModeBanner />
       <div className="wrap" style={{ maxWidth: 560 }}>
         <div className="section-head">
           <h2>Complete your payment</h2>
@@ -197,13 +200,9 @@ function PayPage() {
                 ? `Pay $${cents}`
                 : "Enter an amount to pay"}
           </button>
-          {checkoutData ? (
-            <ReservationCheckout {...checkoutData} />
-          ) : (
-            <p className="sub" style={{ marginTop: 12 }}>
-              A secure payment form will appear here to enter your card details.
-            </p>
-          )}
+          <p className="sub" style={{ marginTop: 12 }}>
+            You'll be taken to our secure checkout to enter your card details.
+          </p>
         </div>
       </div>
     </section>
