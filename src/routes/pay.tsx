@@ -22,6 +22,10 @@ export const Route = createFileRoute("/pay")({
   head: () => ({
     meta: [
       { title: `Pay your reservation — ${SITE.brand.legalName}` },
+      { property: "og:title", content: `Pay your reservation — ${SITE.brand.legalName}` },
+      { property: "og:description", content: `Complete your ${SITE.brand.legalName} reservation payment securely by card.` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         name: "description",
         content:

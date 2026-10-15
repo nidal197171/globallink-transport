@@ -11,6 +11,8 @@ export const Route = createFileRoute("/agreement")({
           `${SITE.brand.legalName} rental agreement: passenger responsibilities, cleaning and damage fees, cancellation policy, and payment authorization.`,
       },
       { property: "og:title", content: `Rental Agreement — ${SITE.brand.legalName}` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: `Terms and conditions for rides booked with ${SITE.brand.legalName}.`,
