@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/services/SiteChrome";
+import { SERVICE_PAGES, type ServicePath } from "@/data/service-pages";
 import { SITE } from "@/config/site";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -1620,6 +1621,11 @@ function Index() {
               </div>
             ))}
           </div>
+          <nav className="service-related-links" aria-label="Explore our transportation services">
+            {(Object.keys(SERVICE_PAGES) as ServicePath[]).map((path) => (
+              <Link key={path} to={path}>{SERVICE_PAGES[path].h1}<span aria-hidden="true">↗</span></Link>
+            ))}
+          </nav>
         </div>
       </section>
 
@@ -1629,8 +1635,8 @@ function Index() {
             <h2>Booking rides for a team isn't a car problem. It's a trust problem.</h2>
             <p>
               Every time you book a driver for a colleague or a guest, you're betting on something you don't control:
-              will they show up on time, in a clean car, and will you get one clear bill at month's end — or twenty
-              scattered receipts?
+              will they show up on time, in a clean car, and will your reservation paperwork be easy to find?
+              An invoice is sent automatically with your confirmation email for every reservation.
             </p>
           </div>
           <div className="problem-grid">
@@ -1660,8 +1666,8 @@ function Index() {
             <p>
               We started because travel managers and event planners were coordinating every ride by hand: one driver
               here, one invoice there, no guarantee on either. Today, we're the one team your company needs for every
-              kind of trip across the {SITE.market.metro} — {SITE.market.airports} — on a single invoice that ties it
-              all together.
+              kind of trip across the {SITE.market.metro} — {SITE.market.airports}.
+              An invoice is sent automatically with your confirmation email for every reservation.
             </p>
           </div>
         </div>
@@ -1923,8 +1929,8 @@ function Index() {
           <div>
             <h2>Managing travel for a team or event?</h2>
             <p>
-              Get a dedicated account manager, volume rates, and a single invoice for every ride across the{" "}
-              {SITE.market.metro}.
+              Get a dedicated account manager and volume rates for every ride across the{" "}
+              {SITE.market.metro}. An invoice is sent automatically with your confirmation email for every reservation.
             </p>
           </div>
           <div>
