@@ -2022,7 +2022,7 @@ function Index() {
           </div>
           <div className="drive-req">
             <div className="drive-req-item">{CheckIcon}$1,500 one-time setup</div>
-            <div className="drive-req-item">{CheckIcon}$250/month care plan — hosting, updates, support</div>
+            <div className="drive-req-item">{CheckIcon}$200/month care plan — hosting, updates, support</div>
             <div className="drive-req-item">{CheckIcon}Booking, quotes &amp; payments built in</div>
           </div>
           <p style={{ textAlign: "center", marginTop: 20 }}>
