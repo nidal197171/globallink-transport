@@ -82,6 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { property: "og:site_name", content: SITE.brand.legalName },
       { property: "og:type", content: "website" },
+      { name: "google-site-verification", content: "FmUjN14VG-FCeibn0f8m9RWKnfMg5JlwVLFuv2e36P0" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#0F1B2D" },
       { name: "mobile-web-app-capable", content: "yes" },
