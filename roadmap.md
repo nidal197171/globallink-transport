@@ -1,5 +1,10 @@
 # Roadmap
 
+## Current request
+- Create five dedicated service pages with exact metadata, four descriptive paragraphs, shared homepage header/footer, booking CTA, and cross-links.
+- Replace prohibited recurring-invoice wording across the site with the exact per-reservation invoice statement.
+- Verify all five pages and checks; do not publish.
+
 ## Done
 - SEO keyword-rich service descriptions, 8 new FAQ items, "Serving the San Francisco Bay Area" section.
 - Keyword variety pass: limo/limousine, car service, airport taxi alternative, ground transportation, black car, luxury car service, chauffeur, town car, executive car service, group transportation, buses, bus rental, charter bus, party bus.
