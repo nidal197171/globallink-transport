@@ -503,5 +503,12 @@
 .service-related-links a:hover{color:var(--brass-dark);}
 .service-related-links span{flex-shrink:0;color:var(--brass-dark);}
 .service-page-link{display:inline-block;color:var(--brass-dark);font-size:13px;font-weight:600;margin-bottom:18px;text-decoration:underline;}
+.service-site-header .nav-inner{gap:20px;}
+.service-site-header .logo{flex-shrink:0;}
+.service-site-header .nav-links{gap:14px;}
+.service-site-header .nav-links a{font-size:12px;white-space:nowrap;}
+.service-site-header .nav-cta{gap:10px;}
+.service-site-header .nav-cta .btn{padding:12px 16px;font-size:13px;}
+@media(min-width:901px) and (max-width:1150px){.service-site-header .nav-links,.service-site-header .nav-cta{display:none;}.service-site-header .menu-toggle{display:flex;}.service-site-header .mobile-panel{display:block;}}
 @media(max-width:900px){.service-cover{min-height:380px;padding:48px 0;}.service-cover h1{font-size:34px;}.service-copy{padding:42px 0;}.service-copy p{font-size:16px;}.service-related-links{grid-template-columns:1fr;}}
 @media(prefers-reduced-motion:reduce){.service-page a{transition:none;}}

@@ -1,11 +1,9 @@
 # Roadmap
 
-## Current request
-- Bold all requested keyword occurrences in the five new pages' body text with strong tags.
-- Include the follow-up's broad core and service-specific keyword coverage naturally across all five pages.
-- Create five dedicated service pages with exact metadata, four descriptive paragraphs, shared homepage header/footer, booking CTA, and cross-links.
-- Replace prohibited recurring-invoice wording across the site with the exact per-reservation invoice statement.
-- Verify all five pages and checks; do not publish.
+## Current request — complete
+- Created five dedicated service pages with exact metadata, four keyword-rich paragraphs, bold keyword occurrences, shared homepage header/footer, booking CTA, and cross-links; linked all five from the homepage services section.
+- Replaced incorrect recurring and consolidated invoice claims with the exact per-reservation invoice statement.
+- Verified every service URL, metadata, photos, strong tags, cross-links, homepage booking links, mobile menu, and absence of browser errors. No publishing performed.
 
 ## Done
 - SEO keyword-rich service descriptions, 8 new FAQ items, "Serving the San Francisco Bay Area" section.
