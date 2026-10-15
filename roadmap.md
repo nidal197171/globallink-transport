@@ -14,5 +14,5 @@
 ## Open
 - Do NOT publish until the user says so. Head/SEO changes + all new copy are not yet live on globallinktransport.com.
 - Stripe secrets were disconnected by the user — dynamic checkout will fail until restored.
-- 30% markup (20% gratuity + 10% booking fee) still not applied to displayed fare / Stripe charge.
+- Fees ARE applied at checkout (base × 1.25 = 20% gratuity + 5% booking fee). Unresolved: the user earlier asked for 30% (20% + 10%) and the agreement/booking form say 10% — needs the user's call on 5% vs 10%.
 - Stale "opened in a new tab" confirmation text after the user's manual same-tab payment redirect.
