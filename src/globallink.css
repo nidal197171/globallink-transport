@@ -512,3 +512,14 @@
 @media(min-width:901px) and (max-width:1150px){.service-site-header .nav-links,.service-site-header .nav-cta{display:none;}.service-site-header .menu-toggle{display:flex;}.service-site-header .mobile-panel{display:block;}}
 @media(max-width:900px){.service-cover{min-height:380px;padding:48px 0;}.service-cover h1{font-size:34px;}.service-copy{padding:42px 0;}.service-copy p{font-size:16px;}.service-related-links{grid-template-columns:1fr;}}
 @media(prefers-reduced-motion:reduce){.service-page a{transition:none;}}
+
+/* Clickable service cards + services dropdown */
+a.service-card{text-decoration:none; color:inherit; transition:transform .2s ease, box-shadow .2s ease;}
+a.service-card:hover{transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0,0,.18);}
+.nav-dropdown{position:relative; display:inline-flex; align-items:center;}
+.nav-dropdown-toggle{background:none; border:0; font:inherit; color:inherit; cursor:pointer; padding:0;}
+.nav-dropdown-menu{display:none; position:absolute; top:100%; left:0; padding-top:10px; min-width:240px; z-index:60;}
+.nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown:focus-within .nav-dropdown-menu{display:flex; flex-direction:column;}
+.nav-dropdown-menu a{display:block; background:var(--paper, #fff); color:#1B1B18; padding:10px 16px; white-space:nowrap; border-bottom:1px solid rgba(0,0,0,.06);}
+.nav-dropdown-menu a:hover{background:#F3EEE2;}
+.mp-group-label{font-size:11px; letter-spacing:.12em; text-transform:uppercase; opacity:.6; margin:4px 0 2px;}

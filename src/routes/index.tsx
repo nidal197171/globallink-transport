@@ -1460,6 +1460,14 @@ const CheckIcon = (
   </svg>
 );
 
+const SERVICE_CARD_LINKS: Record<string, ServicePath> = {
+  "Corporate Transportation Service": "/corporate-transportation",
+  "Airport Limo Service": "/sfo-airport-limo",
+  "Business Transportation": "/san-francisco-limo-service",
+  "Prom & Wine Tours": "/wine-country-tours",
+  "Special Events & Occasions": "/wedding-limo",
+};
+
 const SERVICES: { title: string; img: string; desc: string }[] = [
   {
     title: "Corporate Transportation Service",
@@ -1614,11 +1622,11 @@ function Index() {
           </div>
           <div className="services-grid">
             {SERVICES.map((svc) => (
-              <div className="service-card" key={svc.title}>
+              <Link className="service-card" key={svc.title} to={SERVICE_CARD_LINKS[svc.title] ?? "/"}>
                 <h3>{svc.title}</h3>
                 <p className="desc">{svc.desc}</p>
                 <img src={svc.img} alt={svc.title} loading="lazy" />
-              </div>
+              </Link>
             ))}
           </div>
           <nav className="service-related-links" aria-label="Explore our transportation services">

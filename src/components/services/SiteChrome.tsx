@@ -3,6 +3,14 @@ import { useState } from "react";
 import { SITE } from "@/config/site";
 import InstallAppButton from "@/components/InstallAppButton";
 
+const SERVICE_NAV: { to: "/sfo-airport-limo" | "/san-francisco-limo-service" | "/corporate-transportation" | "/wedding-limo" | "/wine-country-tours"; label: string }[] = [
+  { to: "/sfo-airport-limo", label: "SFO Airport Limo" },
+  { to: "/san-francisco-limo-service", label: "San Francisco Limo Service" },
+  { to: "/corporate-transportation", label: "Corporate Transportation" },
+  { to: "/wedding-limo", label: "Wedding Limo" },
+  { to: "/wine-country-tours", label: "Wine Country Tours" },
+];
+
 const PHONE = SITE.contact.phoneDisplay;
 const PHONE_HREF = SITE.contact.phoneHref;
 const EMAIL = SITE.contact.email;
@@ -38,6 +46,14 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
             {SITE.brand.shortName}
           </div>
           <nav className="nav-links">
+            <div className="nav-dropdown">
+              <button type="button" className="nav-dropdown-toggle" aria-haspopup="true">Our services ▾</button>
+              <div className="nav-dropdown-menu">
+                {SERVICE_NAV.map((s) => (
+                  <Link key={s.to} to={s.to}>{s.label}</Link>
+                ))}
+              </div>
+            </div>
             {NAV_LINKS.map((l) => (
               <a key={l.href} href={home ? l.href : `/${l.href}`}>
                 {l.label}
@@ -63,6 +79,12 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
         </div>
         <div className={`mobile-panel ${menuOpen ? "open" : ""}`}>
           <div className="mobile-panel-inner">
+            <div className="mp-group-label">Our services</div>
+            {SERVICE_NAV.map((s) => (
+              <Link key={s.to} className="mp-link" to={s.to} onClick={() => setMenuOpen(false)}>
+                {s.label}
+              </Link>
+            ))}
             {NAV_LINKS.map((l) => (
               <a key={l.href} className="mp-link" href={home ? l.href : `/${l.href}`} onClick={() => setMenuOpen(false)}>
                 {l.label}
