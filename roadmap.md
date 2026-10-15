@@ -6,7 +6,7 @@
 - Verified every service URL, metadata, photos, strong tags, cross-links, homepage booking links, mobile menu, and absence of browser errors. No publishing performed.
 
 ## Done
-- FleetSites promo only: setup price $2,000 -> $1,500; contact line now "Email us at fleetsites1@gmail.com or call (415) 787-8776 to get started." with the address as a mailto link. No Global Link prices, fees or terms touched.
+- FleetSites promo only: setup price $2,000 -> $1,500; care plan $250/month -> $200/month; contact line now "Email us at fleetsites1@gmail.com or call (415) 787-8776 to get started." with the address as a mailto link. No Global Link prices, fees or terms touched.
 - SEO keyword-rich service descriptions, 8 new FAQ items, "Serving the San Francisco Bay Area" section.
 - Keyword variety pass: limo/limousine, car service, airport taxi alternative, ground transportation, black car, luxury car service, chauffeur, town car, executive car service, group transportation, buses, bus rental, charter bus, party bus.
 - Occasions pass: wedding limo service, prom limo, event transportation, concert transportation, sports game transportation (football/baseball/basketball/hockey).
