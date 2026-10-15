@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteHeader, SiteFooter } from "@/components/services/SiteChrome";
 import { SITE } from "@/config/site";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -151,7 +152,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Do you provide corporate transportation for large events?",
-    a: "Yes — we provide corporate transportation for conferences, roadshows, and large events across San Francisco and the Bay Area. Choose Sprinter vans, charter bus, bus rental, and coach service for up to 56 passengers, coordinated by one dispatch team as complete group transportation, with airport car service for SFO, OAK, and SJC arrivals and a single monthly invoice for your company.",
+    a: "Yes — we provide corporate transportation for conferences, roadshows, and large events across San Francisco and the Bay Area. Choose Sprinter vans, charter bus, bus rental, and coach service for up to 56 passengers, coordinated by one dispatch team as complete group transportation, with airport car service for SFO, OAK, and SJC arrivals. An invoice is sent automatically with your confirmation email for every reservation.",
   },
   {
     q: "What vehicles are available?",
@@ -1462,7 +1463,7 @@ const SERVICES: { title: string; img: string; desc: string }[] = [
   {
     title: "Corporate Transportation Service",
     img: "/images/services/corporate.jpg",
-    desc: "Our corporate car service in San Francisco and across the Bay Area supports business travel, executive transfers, and team logistics. Book a town car, black car, or executive car service with a professional chauffeur for SFO airport transfers, client meetings, and roadshows, or arrange group transportation and corporate airport car service for a visiting team. One dedicated dispatch team coordinates every ride across San Francisco, San Mateo, and San Jose — from a single sedan to a full Bay Area fleet for conferences. Enjoy a single monthly invoice and volume rates for corporate accounts.",
+    desc: "Our corporate car service in San Francisco and across the Bay Area supports business travel, executive transfers, and team logistics. Book a town car, black car, or executive car service with a professional chauffeur for SFO airport transfers, client meetings, and roadshows, or arrange group transportation and corporate airport car service for a visiting team. One dedicated dispatch team coordinates every ride across San Francisco, San Mateo, and San Jose — from a single sedan to a full Bay Area fleet for conferences. Enjoy volume rates for corporate accounts. An invoice is sent automatically with your confirmation email for every reservation.",
   },
   {
     title: "Airport Limo Service",
@@ -1486,20 +1487,7 @@ const SERVICES: { title: string; img: string; desc: string }[] = [
   },
 ];
 
-const NAV_LINKS: { href: string; label: string }[] = [
-  { href: "#about", label: "About" },
-  { href: "#fleet", label: "Fleet" },
-  { href: "#services", label: "Services" },
-  { href: "#hourly", label: "Hourly rates" },
-  { href: "#how", label: "How it works" },
-  { href: "#corporate", label: "Corporate" },
-  { href: "#reviews", label: "Reviews" },
-  { href: "#faq", label: "FAQ" },
-  { href: "#drive", label: "Drive with us" },
-];
-
 function Index() {
-  const [menuOpen, setMenuOpen] = useState(false);
 
   // After a Stripe checkout, the customer returns to /?payment=success&booking=GLxxxx —
   // flip that reservation's sheet row to Paid.
@@ -1516,64 +1504,7 @@ function Index() {
 
   return (
     <>
-      <div className="disclaimer-bar">
-        We are a global ground transportation arranger
-        <br />
-        <span className="disclaimer-sub">(we are not a limo company)</span>
-      </div>
-      <div className="announce-bar">Coming soon to more US cities and Dubai</div>
-      <header>
-        <div className="wrap nav-inner">
-          <div className="logo">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-              <circle cx="13" cy="13" r="12" stroke="#B08D3E" strokeWidth="1.4" />
-              <path d="M4 13H22M13 4V22M7 7L19 19M19 7L7 19" stroke="#B08D3E" strokeWidth="0.8" opacity="0.5" />
-            </svg>
-            {SITE.brand.shortName}
-          </div>
-          <nav className="nav-links">
-            {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href}>
-                {l.label}
-              </a>
-            ))}
-          </nav>
-          <div className="nav-cta">
-            <a href={PHONE_HREF} className="btn btn-outline-dark">
-              {PHONE}
-            </a>
-            <a href="#book" className="btn btn-brass">
-              Reserve a car
-            </a>
-          </div>
-          <button
-            className="menu-toggle"
-            aria-label="Menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((o) => !o)}
-          >
-            {menuOpen ? "×" : "☰"}
-          </button>
-        </div>
-        <div className={`mobile-panel ${menuOpen ? "open" : ""}`}>
-          <div className="mobile-panel-inner">
-            {NAV_LINKS.map((l) => (
-              <a key={l.href} className="mp-link" href={l.href} onClick={() => setMenuOpen(false)}>
-                {l.label}
-              </a>
-            ))}
-            <div className="mp-actions">
-              <a href={PHONE_HREF} className="btn btn-outline-dark">
-                Call {PHONE}
-              </a>
-              <a href="#book" className="btn btn-brass" onClick={() => setMenuOpen(false)}>
-                Reserve a car
-              </a>
-              <InstallAppButton className="btn btn-outline-dark" />
-            </div>
-          </div>
-        </div>
-      </header>
+      <SiteHeader home />
 
       <section className="hero">
         <svg className="route-motif" viewBox="0 0 1160 620" preserveAspectRatio="none">
@@ -1670,7 +1601,7 @@ function Index() {
           <p>
             <strong>98% on-time</strong> across the {SITE.market.metro} — {SITE.market.airports} included
           </p>
-          <p>Fixed pricing {"\u00A0·\u00A0"} One monthly invoice</p>
+          <p>Fixed pricing {"\u00A0·\u00A0"} An invoice is sent automatically with your confirmation email for every reservation.</p>
         </div>
       </div>
 
@@ -2135,76 +2066,7 @@ function Index() {
         </div>
       </section>
 
-      <footer>
-        <div className="wrap">
-          <div className="foot-grid">
-            <div>
-              <div className="foot-logo">{SITE.brand.shortName}</div>
-              <p style={{ maxWidth: 260, fontSize: 14 }}>
-                Chauffeured sedans, SUVs, limousines, sprinter vans and coaches across the {SITE.market.metro},
-                including {SITE.market.airports}.
-              </p>
-            </div>
-            <div>
-              <h4>Company</h4>
-              <ul>
-                <li>
-                  <a href="#fleet">Fleet</a>
-                </li>
-                <li>
-                  <a href="#how">How it works</a>
-                </li>
-                <li>
-                  <a href="#corporate">Corporate</a>
-                </li>
-                <li>
-                  <a href="#faq">FAQ</a>
-                </li>
-                <li>
-                  <a href="#book">Rental agreement</a>
-                </li>
-                <li>
-                  <Link to="/pay" search={{}} preload="intent">
-                    Custom reservations pay
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4>Contact</h4>
-              <ul>
-                <li>{PHONE}</li>
-                <li>{EMAIL}</li>
-                <li>Available 24/7</li>
-              </ul>
-            </div>
-            <div>
-              <h4>Follow</h4>
-              <ul>
-                <li>
-                  <a href={SITE.social.instagram} target="_blank" rel="noopener">
-                    Instagram
-                  </a>
-                </li>
-                <li>
-                  <a href={SITE.social.linkedin} target="_blank" rel="noopener">
-                    LinkedIn
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="foot-bottom">
-            <span>© 2026 {SITE.brand.legalName}. All rights reserved.</span>
-            <span>
-              Licensed for-hire chauffeur network {"\u00A0·\u00A0"}{" "}
-              <a href="#drive" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>
-                Drive with us
-              </a>
-            </span>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter home />
     </>
   );
 }
