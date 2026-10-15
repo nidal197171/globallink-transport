@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Current request
+- Include the follow-up's broad core and service-specific keyword coverage naturally across all five pages.
 - Create five dedicated service pages with exact metadata, four descriptive paragraphs, shared homepage header/footer, booking CTA, and cross-links.
 - Replace prohibited recurring-invoice wording across the site with the exact per-reservation invoice statement.
 - Verify all five pages and checks; do not publish.

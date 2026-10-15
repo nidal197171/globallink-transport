@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep homepage and dedicated service-page header/footer markup in shared SiteChrome components so navigation and branding stay consistent without coupling service pages to reservation logic.
+- Store dedicated service content in a browser-safe data module and render it through one shared page component; leaf route files own their metadata and canonical URLs for independent indexing.
