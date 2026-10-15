@@ -12,8 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AffiliateRouteImport } from './routes/affiliate'
 import { Route as AgreementRouteImport } from './routes/agreement'
+import { Route as CorporateTransportationRouteImport } from './routes/corporate-transportation'
 import { Route as PayRouteImport } from './routes/pay'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as SanFranciscoLimoServiceRouteImport } from './routes/san-francisco-limo-service'
+import { Route as SfoAirportLimoRouteImport } from './routes/sfo-airport-limo'
+import { Route as WeddingLimoRouteImport } from './routes/wedding-limo'
+import { Route as WineCountryToursRouteImport } from './routes/wine-country-tours'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -30,6 +35,11 @@ const AgreementRoute = AgreementRouteImport.update({
   path: '/agreement',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CorporateTransportationRoute = CorporateTransportationRouteImport.update({
+  id: '/corporate-transportation',
+  path: '/corporate-transportation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PayRoute = PayRouteImport.update({
   id: '/pay',
   path: '/pay',
@@ -40,43 +50,114 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SanFranciscoLimoServiceRoute = SanFranciscoLimoServiceRouteImport.update({
+  id: '/san-francisco-limo-service',
+  path: '/san-francisco-limo-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SfoAirportLimoRoute = SfoAirportLimoRouteImport.update({
+  id: '/sfo-airport-limo',
+  path: '/sfo-airport-limo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WeddingLimoRoute = WeddingLimoRouteImport.update({
+  id: '/wedding-limo',
+  path: '/wedding-limo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WineCountryToursRoute = WineCountryToursRouteImport.update({
+  id: '/wine-country-tours',
+  path: '/wine-country-tours',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/corporate-transportation': typeof CorporateTransportationRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
+  '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
+  '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/wedding-limo': typeof WeddingLimoRoute
+  '/wine-country-tours': typeof WineCountryToursRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/corporate-transportation': typeof CorporateTransportationRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
+  '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
+  '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/wedding-limo': typeof WeddingLimoRoute
+  '/wine-country-tours': typeof WineCountryToursRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/corporate-transportation': typeof CorporateTransportationRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
+  '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
+  '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/wedding-limo': typeof WeddingLimoRoute
+  '/wine-country-tours': typeof WineCountryToursRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/affiliate' | '/agreement' | '/pay' | '/privacy'
+  fullPaths:
+    | '/'
+    | '/affiliate'
+    | '/agreement'
+    | '/corporate-transportation'
+    | '/pay'
+    | '/privacy'
+    | '/san-francisco-limo-service'
+    | '/sfo-airport-limo'
+    | '/wedding-limo'
+    | '/wine-country-tours'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/affiliate' | '/agreement' | '/pay' | '/privacy'
-  id: '__root__' | '/' | '/affiliate' | '/agreement' | '/pay' | '/privacy'
+  to:
+    | '/'
+    | '/affiliate'
+    | '/agreement'
+    | '/corporate-transportation'
+    | '/pay'
+    | '/privacy'
+    | '/san-francisco-limo-service'
+    | '/sfo-airport-limo'
+    | '/wedding-limo'
+    | '/wine-country-tours'
+  id:
+    | '__root__'
+    | '/'
+    | '/affiliate'
+    | '/agreement'
+    | '/corporate-transportation'
+    | '/pay'
+    | '/privacy'
+    | '/san-francisco-limo-service'
+    | '/sfo-airport-limo'
+    | '/wedding-limo'
+    | '/wine-country-tours'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AffiliateRoute: typeof AffiliateRoute
   AgreementRoute: typeof AgreementRoute
+  CorporateTransportationRoute: typeof CorporateTransportationRoute
   PayRoute: typeof PayRoute
   PrivacyRoute: typeof PrivacyRoute
+  SanFranciscoLimoServiceRoute: typeof SanFranciscoLimoServiceRoute
+  SfoAirportLimoRoute: typeof SfoAirportLimoRoute
+  WeddingLimoRoute: typeof WeddingLimoRoute
+  WineCountryToursRoute: typeof WineCountryToursRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -102,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgreementRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/corporate-transportation': {
+      id: '/corporate-transportation'
+      path: '/corporate-transportation'
+      fullPath: '/corporate-transportation'
+      preLoaderRoute: typeof CorporateTransportationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pay': {
       id: '/pay'
       path: '/pay'
@@ -116,6 +204,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/san-francisco-limo-service': {
+      id: '/san-francisco-limo-service'
+      path: '/san-francisco-limo-service'
+      fullPath: '/san-francisco-limo-service'
+      preLoaderRoute: typeof SanFranciscoLimoServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sfo-airport-limo': {
+      id: '/sfo-airport-limo'
+      path: '/sfo-airport-limo'
+      fullPath: '/sfo-airport-limo'
+      preLoaderRoute: typeof SfoAirportLimoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wedding-limo': {
+      id: '/wedding-limo'
+      path: '/wedding-limo'
+      fullPath: '/wedding-limo'
+      preLoaderRoute: typeof WeddingLimoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wine-country-tours': {
+      id: '/wine-country-tours'
+      path: '/wine-country-tours'
+      fullPath: '/wine-country-tours'
+      preLoaderRoute: typeof WineCountryToursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -123,8 +239,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AffiliateRoute: AffiliateRoute,
   AgreementRoute: AgreementRoute,
+  CorporateTransportationRoute: CorporateTransportationRoute,
   PayRoute: PayRoute,
   PrivacyRoute: PrivacyRoute,
+  SanFranciscoLimoServiceRoute: SanFranciscoLimoServiceRoute,
+  SfoAirportLimoRoute: SfoAirportLimoRoute,
+  WeddingLimoRoute: WeddingLimoRoute,
+  WineCountryToursRoute: WineCountryToursRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
