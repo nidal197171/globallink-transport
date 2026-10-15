@@ -8,9 +8,11 @@
 - Wine tasting pass: wine tasting, wine tasting tours, Napa Valley wine tasting, Sonoma wine tasting tours, wine tasting experience.
 - Emphasis pass: SFO airport, airport transfer, airport limo, airport car service, limo service, limo rental, wedding limo, San Francisco, Bay Area, SFO repeated across all three areas.
 - Typecheck + production build pass; live preview verified (no "shuttle", no "winery to winery", prices/fees/terms unchanged).
+- "For someone else" card: added one required Email field (type=email, autoComplete=email, same styling); blocks submit when empty/invalid and is sent in the reservation details ("Booker email: ..."). Typecheck + build pass; verified live.
+- Stripe checkout works live again (a real payment page opened during testing) — the earlier "secrets disconnected" item is resolved.
 
 ## Open
 - Do NOT publish until the user says so. Head/SEO changes + all new copy are not yet live on globallinktransport.com.
 - Stripe secrets were disconnected by the user — dynamic checkout will fail until restored.
-- 30% markup (20% gratuity + 10% booking fee) still not applied to displayed fare / Stripe charge.
+- Fees ARE applied at checkout (base × 1.25 = 20% gratuity + 5% booking fee). Unresolved: the user earlier asked for 30% (20% + 10%) and the agreement/booking form say 10% — needs the user's call on 5% vs 10%.
 - Stale "opened in a new tab" confirmation text after the user's manual same-tab payment redirect.

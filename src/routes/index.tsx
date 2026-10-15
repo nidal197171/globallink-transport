@@ -297,6 +297,7 @@ type BookingState = {
   hotelName: string;
   conciergeName: string;
   conciergePhone: string;
+  conciergeEmail: string;
 };
 
 function validateBooking(s: BookingState): string | null {
@@ -314,6 +315,9 @@ function validateBooking(s: BookingState): string | null {
   }
   if (s.isConcierge && (!s.conciergeName.trim() || !s.conciergePhone.trim())) {
     return "Please enter your name and phone number.";
+  }
+  if (s.isConcierge && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.conciergeEmail.trim())) {
+    return "Please enter a valid email address for the person booking.";
   }
   return null;
 }
@@ -343,6 +347,7 @@ function reservationDetailsText(s: BookingState, fareText: string, bookingNo: st
       ? `Booking for someone else\n` +
         `Booked by: ${s.conciergeName.trim()}\n` +
         `Booker phone: ${s.conciergePhone.trim()}\n` +
+        `Booker email: ${s.conciergeEmail.trim()}\n` +
         (s.hotelName.trim() ? `Company / hotel: ${s.hotelName.trim()}\n` : "") +
         `\n`
       : "") +
@@ -429,6 +434,7 @@ function BookingCard() {
   const [hotelName, setHotelName] = useState("");
   const [conciergeName, setConciergeName] = useState("");
   const [conciergePhone, setConciergePhone] = useState("");
+  const [conciergeEmail, setConciergeEmail] = useState("");
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [paying, setPaying] = useState(false);
@@ -598,6 +604,7 @@ function BookingCard() {
     hotelName,
     conciergeName,
     conciergePhone,
+    conciergeEmail,
   });
 
   const fareTextNow = () =>
@@ -1126,6 +1133,18 @@ function BookingCard() {
                 onChange={(e) => setConciergePhone(e.target.value)}
               />
             </div>
+          </div>
+          <div className="field" style={{ marginTop: 10 }}>
+            <label htmlFor="conciergeEmail">Email</label>
+            <input
+              id="conciergeEmail"
+              type="email"
+              autoComplete="email"
+              required
+              placeholder="you@example.com"
+              value={conciergeEmail}
+              onChange={(e) => setConciergeEmail(e.target.value)}
+            />
           </div>
         </div>
       )}
