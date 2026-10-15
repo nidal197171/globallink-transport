@@ -8,6 +8,8 @@
 - Wine tasting pass: wine tasting, wine tasting tours, Napa Valley wine tasting, Sonoma wine tasting tours, wine tasting experience.
 - Emphasis pass: SFO airport, airport transfer, airport limo, airport car service, limo service, limo rental, wedding limo, San Francisco, Bay Area, SFO repeated across all three areas.
 - Typecheck + production build pass; live preview verified (no "shuttle", no "winery to winery", prices/fees/terms unchanged).
+- "For someone else" card: added one required Email field (type=email, autoComplete=email, same styling); blocks submit when empty/invalid and is sent in the reservation details ("Booker email: ..."). Typecheck + build pass; verified live.
+- Stripe checkout works live again (a real payment page opened during testing) — the earlier "secrets disconnected" item is resolved.
 
 ## Open
 - Do NOT publish until the user says so. Head/SEO changes + all new copy are not yet live on globallinktransport.com.
