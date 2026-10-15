@@ -2021,12 +2021,12 @@ function Index() {
             </p>
           </div>
           <div className="drive-req">
-            <div className="drive-req-item">{CheckIcon}$2,000 one-time setup</div>
+            <div className="drive-req-item">{CheckIcon}$1,500 one-time setup</div>
             <div className="drive-req-item">{CheckIcon}$250/month care plan — hosting, updates, support</div>
             <div className="drive-req-item">{CheckIcon}Booking, quotes &amp; payments built in</div>
           </div>
           <p style={{ textAlign: "center", marginTop: 20 }}>
-            <a href={`mailto:${EMAIL}`}>Email us</a> or call {PHONE} to get started.
+            <a href="mailto:fleetsites1@gmail.com">Email us at fleetsites1@gmail.com</a> or call {PHONE} to get started.
         </p>
         </div>
       </section>
