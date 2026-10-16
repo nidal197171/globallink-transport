@@ -1,5 +1,10 @@
 # Roadmap
 
+## Sprinter tiers — current request
+- Preserve prior homepage changes; add Luxury Sprinter and Limo Sprinter photos and cards with 14-passenger capacities.
+- Add hourly rates of $225 and $275 alongside unchanged base Sprinter $175; apply $50/$100 non-hourly uplifts through existing fare logic and keep tier names in reservation details.
+- Verify pricing rules, preview behavior, and build results. Do not publish.
+
 ## Current request — complete
 - Added five original AI fleet images; existing descriptions and capacities preserved.
 - Required flight numbers for airport pickups, with inline validation; carried them in checkout descriptions, reservation details, and existing sheet payloads without changing the logging mechanism.
