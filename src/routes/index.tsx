@@ -1771,7 +1771,7 @@ function Index() {
 
       <section id="fleet">
         <style>{`
-          .fleet-card .fleet-img{width:calc(100% + 48px); margin:-30px -24px 4px; aspect-ratio:4/3; object-fit:cover; display:block; background:var(--paper-2);}
+          .fleet-card .fleet-img{width:calc(100% + 48px); margin:-30px -24px 4px; max-width:none; aspect-ratio:4/3; object-fit:cover; display:block; background:var(--paper-2);}
           @media (max-width:900px){.fleet-card .fleet-img{width:calc(100% + 40px); margin:-24px -20px 4px; border-radius:8px 8px 0 0;}}
         `}</style>
         <div className="wrap">
