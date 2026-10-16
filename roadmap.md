@@ -1,10 +1,10 @@
 # Roadmap
 
-## Current request
-- Apply the corrected FAQ statement: 20% gratuity automatically added to all reservations, plus 5% booking fee.
-- Add five original fleet images while preserving descriptions and capacities.
-- Require flight numbers for airport pickups and carry them in existing booking details and sheet payloads.
-- Expand FAQs using confirmed guest policies; verify airport/non-airport validation and preview checks. Do not publish.
+## Current request — complete
+- Added five original AI fleet images; existing descriptions and capacities preserved.
+- Required flight numbers for airport pickups, with inline validation; carried them in checkout descriptions, reservation details, and existing sheet payloads without changing the logging mechanism.
+- Added 12 FAQ items using existing policies, including corrected automatic 20% gratuity wording plus 5% booking fee.
+- Typecheck and production build passed; three rule tests passed. Verified all five photos load, airport validation blocks empty flights, non-airport pickups hide the field, and an airport quote includes its flight number in copied reservation details. Narrow-screen overflow check passed. Nothing published.
 
 ## Previous request — complete
 - Created five dedicated service pages with exact metadata, four keyword-rich paragraphs, bold keyword occurrences, shared homepage header/footer, booking CTA, and cross-links; linked all five from the homepage services section.
