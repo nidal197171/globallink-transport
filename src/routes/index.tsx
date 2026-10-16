@@ -170,7 +170,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "What vehicles are available?",
-    a: "Choose from seven vehicle options: Sedan for up to 3 passengers, SUV for up to 5 passengers, Limousine for up to 6 passengers, Sprinter van for up to 12 passengers, Luxury Sprinter for up to 12 passengers, Limo Sprinter for up to 12 passengers, and Bus & coach for up to 56 passengers. Each vehicle comes with a licensed, background-checked chauffeur, and every option can be booked for SFO airport transfers, wedding limo service, prom limo nights, concert transportation, sports game transportation, and wine country tours across San Francisco and the Bay Area.",
+    a: "Choose from eight vehicle options: Sedan for up to 3 passengers, SUV for up to 5 passengers, Limousine for up to 6 passengers, Sprinter van for up to 12 passengers, Luxury Sprinter for up to 12 passengers, Limo Sprinter for up to 12 passengers, and Bus & coach for up to 56 passengers. Each vehicle comes with a licensed, background-checked chauffeur, and every option can be booked for SFO airport transfers, wedding limo service, prom limo nights, concert transportation, sports game transportation, and wine country tours across San Francisco and the Bay Area.",
   },
   {
     q: "How far in advance should I book?",
@@ -1786,7 +1786,7 @@ function Index() {
           <div className="section-head">
             <h2>Choose your ride</h2>
             <p>
-              Seven vehicle options, each with its own vetted chauffeur pool — from a single airport transfer to a
+              Eight vehicle options, each with its own vetted chauffeur pool — from a single airport transfer to a
               fifty-person conference charter bus.
             </p>
           </div>
