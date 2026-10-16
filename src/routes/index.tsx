@@ -179,7 +179,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Do you offer meet & greet service?",
-    a: `Yes — for airport pickups you can add greet & meet in the booking form, where your driver meets you inside the terminal with a name sign for $${GREET_MEET_PRICE}. For any other arrival details, note them in your booking or contact us.`,
+    a: "Yes — for airport pickups you can add greet & meet in the booking form, where your driver meets you inside the terminal with a name sign for $40. For any other arrival details, note them in your booking or contact us.",
   },
   {
     q: "Can I request a child seat?",
@@ -211,11 +211,11 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Is gratuity included?",
-    a: "A 20% gratuity and a 5% booking fee are added to the base fare at checkout.",
+    a: "A 20% gratuity is automatically added to all reservations. A 5% booking fee also applies.",
   },
   {
     q: "Can I add stops?",
-    a: `For pick up & drop off and city-to-city reservations, you can add extra pickups in the booking form at $${EXTRA_PICKUP_PRICE} per stop. For other route needs, contact us before your trip.`,
+    a: "For pick up & drop off and city-to-city reservations, you can add extra pickups in the booking form at $35 per stop. For other route needs, contact us before your trip.",
   },
   {
     q: "What is the difference between one-way and hourly service?",
@@ -982,7 +982,7 @@ function BookingCard() {
               So dispatch can track your flight and adjust pickup for delays.
             </div>
             {confirm?.kind === "error" && !flightNumber.trim() && (
-              <div className="fare-sub" role="alert" style={{ marginTop: "4px", color: "#c83c3c" }}>
+              <div className="mt-1 text-destructive" role="alert">
                 Flight number is required for airport pickups.
               </div>
             )}
@@ -1770,6 +1770,10 @@ function Index() {
       </section>
 
       <section id="fleet">
+        <style>{`
+          .fleet-card .fleet-img{width:calc(100% + 48px); margin:-30px -24px 4px; aspect-ratio:4/3; object-fit:cover; display:block; background:var(--paper-2);}
+          @media (max-width:900px){.fleet-card .fleet-img{width:calc(100% + 40px); margin:-24px -20px 4px; border-radius:8px 8px 0 0;}}
+        `}</style>
         <div className="wrap">
           <div className="section-head">
             <h2>Choose your ride</h2>

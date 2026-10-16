@@ -523,5 +523,3 @@ a.service-card:hover{transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0
 .nav-dropdown-menu a{display:block; background:var(--paper, #fff); color:#1B1B18; padding:10px 16px; white-space:nowrap; border-bottom:1px solid rgba(0,0,0,.06);}
 .nav-dropdown-menu a:hover{background:#F3EEE2;}
 .mp-group-label{font-size:11px; letter-spacing:.12em; text-transform:uppercase; opacity:.6; margin:4px 0 2px;}
-.fleet-card .fleet-img{width:calc(100% + 48px); margin:-30px -24px 4px; aspect-ratio:4/3; object-fit:cover; display:block; background:var(--paper-2);}
-@media (max-width:900px){.fleet-card .fleet-img{width:calc(100% + 40px); margin:-24px -20px 4px; border-radius:8px 8px 0 0;}}

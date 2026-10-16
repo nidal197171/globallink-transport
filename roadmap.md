@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Current request
+- Apply the corrected FAQ statement: 20% gratuity automatically added to all reservations, plus 5% booking fee.
 - Add five original fleet images while preserving descriptions and capacities.
 - Require flight numbers for airport pickups and carry them in existing booking details and sheet payloads.
 - Expand FAQs using confirmed guest policies; verify airport/non-airport validation and preview checks. Do not publish.
