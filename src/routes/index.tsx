@@ -26,6 +26,9 @@ import fleetSuv from "@/assets/fleet/suv.jpg";
 import fleetLimousine from "@/assets/fleet/limousine.jpg";
 import fleetSprinter from "@/assets/fleet/sprinter.jpg";
 import fleetCoach from "@/assets/fleet/coach.jpg";
+import fleetLuxurySprinter from "@/assets/fleet/luxury-sprinter.jpg";
+import fleetLimoSprinter from "@/assets/fleet/limo-sprinter.jpg";
+import { SPRINTER_TIERS, sprinterTier, sprinterTripFare } from "@/lib/sprinterTiers";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -66,7 +69,7 @@ const HOURLY_RATES: Record<string, number | null> = {
   sedan: 85,
   suv: 140,
   limousine: 140,
-  sprinter: 175,
+  ...Object.fromEntries(Object.entries(SPRINTER_TIERS).map(([value, tier]) => [value, tier.hourlyRate])),
   bus: null,
 };
 
@@ -588,11 +591,11 @@ function BookingCard() {
     const [dType, dCode] = dropoff.split(":");
     // Route miles are shown in the fare display ("· X miles").
     let routeMiles: number | null = null;
-    if (vehicle === "sprinter") {
+    if (sprinterTier(vehicle)) {
       routeMiles = sprinterRouteMiles(pType, pCode, dType, dCode);
     }
     const mult = VEHICLE_MULTIPLIER[vehicle];
-    if (vehicle !== "sprinter" && (mult === null || mult === undefined))
+    if (!sprinterTier(vehicle) && (mult === null || mult === undefined))
       return {
         cls: "has-price",
         amount: null as number | null,
@@ -607,9 +610,9 @@ function BookingCard() {
         ),
       };
     let pricedBase: number;
-    if (vehicle === "sprinter") {
+    if (sprinterTier(vehicle)) {
       // Sprinter is $200 over the sedan base fare on every route type.
-      pricedBase = (base as number) + 200;
+      pricedBase = sprinterTripFare(vehicle, (base as number) + 200);
     } else if (vehicle === "suv" || vehicle === "limousine") {
       // SUV and Limousine are $40 over the sedan base fare on every route type.
       pricedBase = (base as number) + 40;
@@ -1772,13 +1775,14 @@ function Index() {
       <section id="fleet">
         <style>{`
           .fleet-card .fleet-img{width:calc(100% + 48px); margin:-30px -24px 4px; max-width:none; aspect-ratio:4/3; object-fit:cover; display:block; background:var(--paper-2);}
+          @media (min-width:901px){#fleet .fleet-row{grid-template-columns:repeat(4,minmax(0,1fr));}}
           @media (max-width:900px){.fleet-card .fleet-img{width:calc(100% + 40px); margin:-24px -20px 4px; border-radius:8px 8px 0 0;}}
         `}</style>
         <div className="wrap">
           <div className="section-head">
             <h2>Choose your ride</h2>
             <p>
-              Five vehicle classes, each with its own vetted chauffeur pool — from a single airport transfer to a
+              Seven vehicle options, each with its own vetted chauffeur pool — from a single airport transfer to a
               fifty-person conference charter bus.
             </p>
           </div>
@@ -1809,6 +1813,20 @@ function Index() {
               <img className="fleet-img" src={fleetSprinter} alt="Black Sprinter passenger van for group transfers" loading="lazy" width={1024} height={768} />
               <h3>Sprinter van</h3>
               <p className="desc">Group transfers, roadshows and full teams travelling together.</p>
+              <div className="meta">Up to 14 passengers</div>
+            </div>
+
+            <div className="fleet-card">
+              <img className="fleet-img" src={fleetLuxurySprinter} alt="Black Luxury Sprinter with upgraded leather seats and premium wood finishes" loading="lazy" width={1024} height={768} />
+              <h3>Luxury Sprinter</h3>
+              <p className="desc">Group travel with upgraded trim and refined premium finishes.</p>
+              <div className="meta">Up to 14 passengers</div>
+            </div>
+
+            <div className="fleet-card">
+              <img className="fleet-img" src={fleetLimoSprinter} alt="Black Limo Sprinter with limo-style quilted leather and premium interior finishes" loading="lazy" width={1024} height={768} />
+              <h3>Limo Sprinter</h3>
+              <p className="desc">Group travel with limo-style trim and distinctive premium finishes.</p>
               <div className="meta">Up to 14 passengers</div>
             </div>
 
@@ -1856,6 +1874,16 @@ function Index() {
               <span className="name">Sprinter van</span>
               <span className="leader" />
               <span className="amount">$175/hr</span>
+            </div>
+            <div className="price-row">
+              <span className="name">Luxury Sprinter</span>
+              <span className="leader" />
+              <span className="amount">$225/hr</span>
+            </div>
+            <div className="price-row">
+              <span className="name">Limo Sprinter</span>
+              <span className="leader" />
+              <span className="amount">$275/hr</span>
             </div>
             <div className="price-row">
               <span className="name">Bus &amp; coach</span>
