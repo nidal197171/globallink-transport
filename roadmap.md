@@ -1,6 +1,12 @@
 # Roadmap
 
 ## Current request — complete
+- Added five original AI fleet images; existing descriptions and capacities preserved.
+- Required flight numbers for airport pickups, with inline validation; carried them in checkout descriptions, reservation details, and existing sheet payloads without changing the logging mechanism.
+- Added 12 FAQ items using existing policies, including corrected automatic 20% gratuity wording plus 5% booking fee.
+- Typecheck and production build passed; three rule tests passed. Verified all five photos load, airport validation blocks empty flights, non-airport pickups hide the field, and an airport quote includes its flight number in copied reservation details. Narrow-screen overflow check passed. Nothing published.
+
+## Previous request — complete
 - Created five dedicated service pages with exact metadata, four keyword-rich paragraphs, bold keyword occurrences, shared homepage header/footer, booking CTA, and cross-links; linked all five from the homepage services section.
 - Replaced incorrect recurring and consolidated invoice claims with the exact per-reservation invoice statement.
 - Verified every service URL, metadata, photos, strong tags, cross-links, homepage booking links, mobile menu, and absence of browser errors. No publishing performed.
