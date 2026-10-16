@@ -707,6 +707,7 @@ export const VEHICLES: { value: string; label: string; multiplier: number | null
   { value: "sprinter", label: "Sprinter van", multiplier: (285 / 85) * 0.9 },
   { value: "luxury-sprinter", label: "Luxury Sprinter", multiplier: (285 / 85) * 0.9 },
   { value: "limo-sprinter", label: "Limo Sprinter", multiplier: (285 / 85) * 0.9 },
+  { value: "mini-coach", label: "Mini Coach Buses", multiplier: null },
   { value: "bus", label: "Bus & coach", multiplier: null },
 ];
 
