@@ -1,6 +1,11 @@
 # Roadmap
 
-## Current request — complete
+## Current request
+- Add five original fleet images while preserving descriptions and capacities.
+- Require flight numbers for airport pickups and carry them in existing booking details and sheet payloads.
+- Expand FAQs using confirmed guest policies; verify airport/non-airport validation and preview checks. Do not publish.
+
+## Previous request — complete
 - Created five dedicated service pages with exact metadata, four keyword-rich paragraphs, bold keyword occurrences, shared homepage header/footer, booking CTA, and cross-links; linked all five from the homepage services section.
 - Replaced incorrect recurring and consolidated invoice claims with the exact per-reservation invoice statement.
 - Verified every service URL, metadata, photos, strong tags, cross-links, homepage booking links, mobile menu, and absence of browser errors. No publishing performed.
