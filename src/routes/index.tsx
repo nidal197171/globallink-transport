@@ -1813,21 +1813,21 @@ function Index() {
               <img className="fleet-img" src={fleetSprinter} alt="Black Sprinter passenger van for group transfers" loading="lazy" width={1024} height={768} />
               <h3>Sprinter van</h3>
               <p className="desc">Group transfers, roadshows and full teams travelling together.</p>
-              <div className="meta">Up to 12 passengers</div>
+              <div className="meta">Up to 14 passengers</div>
             </div>
 
             <div className="fleet-card">
               <img className="fleet-img" src={fleetLuxurySprinter} alt="Black Luxury Sprinter with upgraded leather seats and premium wood finishes" loading="lazy" width={1024} height={768} />
               <h3>Luxury Sprinter</h3>
               <p className="desc">Group travel with upgraded trim and refined premium finishes.</p>
-              <div className="meta">Up to 12 passengers</div>
+              <div className="meta">Up to 14 passengers</div>
             </div>
 
             <div className="fleet-card">
               <img className="fleet-img" src={fleetLimoSprinter} alt="Black Limo Sprinter with limo-style quilted leather and premium interior finishes" loading="lazy" width={1024} height={768} />
               <h3>Limo Sprinter</h3>
               <p className="desc">Group travel with limo-style trim and distinctive premium finishes.</p>
-              <div className="meta">Up to 12 passengers</div>
+              <div className="meta">Up to 14 passengers</div>
             </div>
 
             <div className="fleet-card">
