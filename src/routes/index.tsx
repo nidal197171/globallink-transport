@@ -1810,7 +1810,7 @@ function Index() {
               <img className="fleet-img" src={fleetLimousine} alt="Black stretch limousine for weddings and VIP arrivals" loading="lazy" width={1024} height={768} />
               <h3>Limousine</h3>
               <p className="desc">Weddings, galas and VIP arrivals that call for an entrance.</p>
-              <div className="meta">Up to 6 passengers</div>
+              <div className="meta">Up to 8 passengers</div>
             </div>
 
             <div className="fleet-card">
@@ -1848,7 +1848,6 @@ function Index() {
               <img className="fleet-img" src={fleetCoach} alt="Black motor coach bus for conferences and large events" loading="lazy" width={1024} height={768} />
               <h3>Bus &amp; coach</h3>
               <p className="desc">Conferences and large events, arriving on one schedule.</p>
-              <div className="meta">Up to 56 passengers</div>
             </div>
           </div>
         </div>
