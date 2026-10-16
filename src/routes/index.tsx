@@ -27,7 +27,10 @@ import fleetLimousine from "@/assets/fleet/limousine.jpg";
 import fleetSprinter from "@/assets/fleet/sprinter.jpg";
 import fleetCoach from "@/assets/fleet/coach.jpg";
 import fleetLuxurySprinter from "@/assets/fleet/luxury-sprinter.jpg";
-import fleetLimoSprinter from "@/assets/fleet/limo-sprinter.jpg";
+import fleetLimoSprinterAsset from "@/assets/fleet/limo-sprinter-new.webp.asset.json";
+import fleetMiniCoachExt from "@/assets/fleet/mini-coach-exterior.jpg.asset.json";
+import fleetMiniCoachInt from "@/assets/fleet/mini-coach-interior.jpg.asset.json";
+const fleetLimoSprinter = fleetLimoSprinterAsset.url;
 import { SPRINTER_TIERS, sprinterTier, sprinterTripFare } from "@/lib/sprinterTiers";
 
 export const Route = createFileRoute("/")({
@@ -70,6 +73,7 @@ const HOURLY_RATES: Record<string, number | null> = {
   suv: 140,
   limousine: 140,
   ...Object.fromEntries(Object.entries(SPRINTER_TIERS).map(([value, tier]) => [value, tier.hourlyRate])),
+  "mini-coach": null,
   bus: null,
 };
 
@@ -969,13 +973,13 @@ function BookingCard() {
       {isAirportPickup(pickup, placeLabel(pickup)) && (
         <div className="field-row">
           <div className="field">
-            <label htmlFor="flightNumber">Flight number</label>
+            <label htmlFor="flightNumber">Airline + flight number</label>
             <input
               id="flightNumber"
               type="text"
               required
               autoComplete="off"
-              placeholder="e.g. UA 1234"
+              placeholder="e.g. United UA 1234"
               value={flightNumber}
               aria-describedby="flightNumberHelp"
               aria-invalid={confirm?.kind === "error" && !flightNumber.trim()}
@@ -986,7 +990,7 @@ function BookingCard() {
             </div>
             {confirm?.kind === "error" && !flightNumber.trim() && (
               <div className="mt-1 text-destructive" role="alert">
-                Flight number is required for airport pickups.
+                Airline + flight number is required for airport pickups.
               </div>
             )}
           </div>
@@ -1824,10 +1828,20 @@ function Index() {
             </div>
 
             <div className="fleet-card">
-              <img className="fleet-img" src={fleetLimoSprinter} alt="Black Limo Sprinter with limo-style quilted leather and premium interior finishes" loading="lazy" width={1024} height={768} />
+              <img className="fleet-img" src={fleetLimoSprinter} alt="Black Limo Sprinter with a luxury limo interior and blue LED lighting" loading="lazy" width={1024} height={768} />
               <h3>Limo Sprinter</h3>
               <p className="desc">Group travel with limo-style trim and distinctive premium finishes.</p>
               <div className="meta">Up to 14 passengers</div>
+            </div>
+
+            <div className="fleet-card">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px" }}>
+                <img className="fleet-img" src={fleetMiniCoachExt.url} alt="Black mini coach bus exterior" loading="lazy" />
+                <img className="fleet-img" src={fleetMiniCoachInt.url} alt="Mini coach bus luxury interior with purple lighting" loading="lazy" />
+              </div>
+              <h3>Mini Coach Buses</h3>
+              <p className="desc">Mid-size group travel in a coach with a limo-style interior.</p>
+              <div className="meta">Get a quote</div>
             </div>
 
             <div className="fleet-card">
