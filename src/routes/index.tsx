@@ -404,7 +404,7 @@ function reservationDetailsText(s: BookingState, fareText: string, bookingNo: st
     `Booking number: ${bookingNo}\n` +
     `Service: ${s.service === "hourly" ? `Hourly (${s.hours} hours, 4-hour minimum)` : s.service === "city" ? "City to city" : "Airport pick up & drop off"}\n` +
     `Pickup: ${placeLabel(s.pickup)}\n` +
-    (s.flightNumber.trim() ? `Flight number: ${s.flightNumber.trim()}\n` : "") +
+    (s.flightNumber.trim() ? `Airline + flight number: ${s.flightNumber.trim()}\n` : "") +
     (s.service === "hourly" ? "" : `Drop-off: ${placeLabel(s.dropoff)}\n`) +
     `Date & time: ${s.dt}\n` +
     `Vehicle: ${VEHICLE_LABEL[s.vehicle]}\n` +
