@@ -20,6 +20,12 @@ import {
 import InstallAppButton from "@/components/InstallAppButton";
 import { mintBookingNumber } from "@/lib/bookingNumber";
 import { postToBookingSheet, markBookingPaid } from "@/lib/bookingSheet";
+import { flightNumberError, isAirportPickup } from "@/lib/airportPickup";
+import fleetSedan from "@/assets/fleet/sedan.jpg";
+import fleetSuv from "@/assets/fleet/suv.jpg";
+import fleetLimousine from "@/assets/fleet/limousine.jpg";
+import fleetSprinter from "@/assets/fleet/sprinter.jpg";
+import fleetCoach from "@/assets/fleet/coach.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -167,6 +173,54 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "Do you offer hourly service?",
     a: "Yes — hourly limo and car service is available with a 4-hour minimum, then billed in 30-minute increments after that, which suits wine country tours, wedding limo service, and special nights out across San Francisco and the Bay Area. Hourly rates are Sedan $85/hr, SUV $120/hr, Limo $120/hr, Sprinter $175/hr, and Bus available with a custom quote.",
   },
+  {
+    q: "How long will my chauffeur wait at airport pickup?",
+    a: "Waiting time up to 10 minutes is included. Any waiting time over 10 minutes is charged at $2 per minute. Flight tracking is included for SFO, OAK, and SJC, so your chauffeur adjusts to delays or early landings.",
+  },
+  {
+    q: "Do you offer meet & greet service?",
+    a: `Yes — for airport pickups you can add greet & meet in the booking form, where your driver meets you inside the terminal with a name sign for $${GREET_MEET_PRICE}. For any other arrival details, note them in your booking or contact us.`,
+  },
+  {
+    q: "Can I request a child seat?",
+    a: `Please note child seat needs when you book, or contact us at ${PHONE} or ${EMAIL} before your trip so dispatch can confirm what is available.`,
+  },
+  {
+    q: "Can I bring a pet?",
+    a: `Please contact us at ${PHONE} or ${EMAIL} before booking if you plan to travel with a pet, so dispatch can review your request.`,
+  },
+  {
+    q: "What is the cancellation policy?",
+    a: "Cancellations must be made at least 48 hours before your scheduled pickup. Cancellations inside the 48-hour window, or no-shows, will be charged the full reservation amount.",
+  },
+  {
+    q: "Will I receive an invoice?",
+    a: "An invoice is sent automatically with your confirmation email for every reservation.",
+  },
+  {
+    q: "How do I change a reservation?",
+    a: `Contact us at ${PHONE} or ${EMAIL} with your booking number. Please save your booking number, since you'll need it for any changes to your reservation.`,
+  },
+  {
+    q: "Can I book for someone else?",
+    a: "Yes — choose the someone-else option in the booking form and enter your name, phone, and email, plus a company or hotel name if relevant. The traveler details and signed rental agreement are included with the reservation.",
+  },
+  {
+    q: "How much luggage fits in each vehicle?",
+    a: "The Sedan carries up to 3 passengers and 2 bags, and the SUV carries up to 5 passengers and 4 bags. For limousine, Sprinter van, or bus and coach luggage needs, note them in your booking or contact us.",
+  },
+  {
+    q: "Is gratuity included?",
+    a: "A 20% gratuity and a 5% booking fee are added to the base fare at checkout.",
+  },
+  {
+    q: "Can I add stops?",
+    a: `For pick up & drop off and city-to-city reservations, you can add extra pickups in the booking form at $${EXTRA_PICKUP_PRICE} per stop. For other route needs, contact us before your trip.`,
+  },
+  {
+    q: "What is the difference between one-way and hourly service?",
+    a: "Pick up & drop off and city-to-city reservations cover a route from your pickup to your destination at a fixed fare. Hourly service keeps your chauffeur and vehicle with you, with a 4-hour minimum and billing in 30-minute increments after that.",
+  },
 ];
 
 const DRIVE_REQS = [
@@ -300,6 +354,7 @@ type BookingState = {
   conciergeName: string;
   conciergePhone: string;
   conciergeEmail: string;
+  flightNumber: string;
 };
 
 function validateBooking(s: BookingState): string | null {
@@ -309,6 +364,8 @@ function validateBooking(s: BookingState): string | null {
       ? "Please choose pickup, date & time, and sign your name before submitting."
       : "Please choose pickup, drop-off, date & time, and sign your name before submitting.";
   }
+  const flightErr = flightNumberError([s.pickup, placeLabel(s.pickup)], s.flightNumber);
+  if (flightErr) return flightErr;
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) {
     return "Please enter a valid email address for your receipt.";
   }
@@ -329,7 +386,8 @@ function buildDescription(s: BookingState): string {
     s.service === "hourly"
       ? `${s.hours} hours hourly service · ${VEHICLE_LABEL[s.vehicle]} · pickup ${placeLabel(s.pickup)} · ${s.dt}`
       : `${placeLabel(s.pickup)} to ${placeLabel(s.dropoff)} · ${VEHICLE_LABEL[s.vehicle]} · ${s.dt}`;
-  return `${base} · incl. 20% gratuity + 5% booking fee${s.greetMeet ? ` + greet & meet ($${GREET_MEET_PRICE})` : ""}${s.extraPickups > 0 ? ` + ${s.extraPickups} extra pickup${s.extraPickups > 1 ? "s" : ""} ($${s.extraPickups * EXTRA_PICKUP_PRICE})` : ""}`;
+  const flight = s.flightNumber.trim() ? ` · flight ${s.flightNumber.trim()}` : "";
+  return `${base}${flight} · incl. 20% gratuity + 5% booking fee${s.greetMeet ? ` + greet & meet ($${GREET_MEET_PRICE})` : ""}${s.extraPickups > 0 ? ` + ${s.extraPickups} extra pickup${s.extraPickups > 1 ? "s" : ""} ($${s.extraPickups * EXTRA_PICKUP_PRICE})` : ""}`;
 }
 
 function reservationDetailsText(s: BookingState, fareText: string, bookingNo: string): string {
@@ -339,6 +397,7 @@ function reservationDetailsText(s: BookingState, fareText: string, bookingNo: st
     `Booking number: ${bookingNo}\n` +
     `Service: ${s.service === "hourly" ? `Hourly (${s.hours} hours, 4-hour minimum)` : s.service === "city" ? "City to city" : "Airport pick up & drop off"}\n` +
     `Pickup: ${placeLabel(s.pickup)}\n` +
+    (s.flightNumber.trim() ? `Flight number: ${s.flightNumber.trim()}\n` : "") +
     (s.service === "hourly" ? "" : `Drop-off: ${placeLabel(s.dropoff)}\n`) +
     `Date & time: ${s.dt}\n` +
     `Vehicle: ${VEHICLE_LABEL[s.vehicle]}\n` +
@@ -389,6 +448,7 @@ function logBookingToSheet(s: BookingState, fareText: string, bookingNo: string,
     hotelName: s.hotelName.trim(),
     conciergeName: s.conciergeName.trim(),
     conciergePhone: s.conciergePhone.trim(),
+    flightNumber: s.flightNumber.trim(),
   });
 }
 
@@ -437,6 +497,7 @@ function BookingCard() {
   const [conciergeName, setConciergeName] = useState("");
   const [conciergePhone, setConciergePhone] = useState("");
   const [conciergeEmail, setConciergeEmail] = useState("");
+  const [flightNumber, setFlightNumber] = useState("");
   const [confirm, setConfirm] = useState<{ kind: "error" | "ok"; text: React.ReactNode } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [paying, setPaying] = useState(false);
@@ -607,6 +668,7 @@ function BookingCard() {
     conciergeName,
     conciergePhone,
     conciergeEmail,
+    flightNumber: isAirportPickup(pickup, placeLabel(pickup)) ? flightNumber : "",
   });
 
   const fareTextNow = () =>
@@ -901,6 +963,32 @@ function BookingCard() {
           />
         )}
       </div>
+      {isAirportPickup(pickup, placeLabel(pickup)) && (
+        <div className="field-row">
+          <div className="field">
+            <label htmlFor="flightNumber">Flight number</label>
+            <input
+              id="flightNumber"
+              type="text"
+              required
+              autoComplete="off"
+              placeholder="e.g. UA 1234"
+              value={flightNumber}
+              aria-describedby="flightNumberHelp"
+              aria-invalid={confirm?.kind === "error" && !flightNumber.trim()}
+              onChange={(e) => setFlightNumber(e.target.value)}
+            />
+            <div className="fare-sub" id="flightNumberHelp" style={{ marginTop: "4px" }}>
+              So dispatch can track your flight and adjust pickup for delays.
+            </div>
+            {confirm?.kind === "error" && !flightNumber.trim() && (
+              <div className="fare-sub" role="alert" style={{ marginTop: "4px", color: "#c83c3c" }}>
+                Flight number is required for airport pickups.
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       <div className="field-row">
         <div className="field">
           <label htmlFor="dt">Date &amp; time</label>
@@ -1693,89 +1781,35 @@ function Index() {
 
           <div className="fleet-row">
             <div className="fleet-card">
-              <div className="icon-box">
-                <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
-                  <path
-                    d="M4 22 L7 12 Q10 8 16 8 H30 Q36 8 39 12 L44 22"
-                    stroke="#0F1B2D"
-                    strokeWidth="1.6"
-                    fill="none"
-                  />
-                  <rect x="2" y="20" width="44" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
-                  <circle cx="13" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-                  <circle cx="35" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-                </svg>
-              </div>
+              <img className="fleet-img" src={fleetSedan} alt="Black luxury sedan for airport transfers" loading="lazy" width={1024} height={768} />
               <h3>Sedan</h3>
               <p className="desc">Airport runs and single meetings, understated and quick.</p>
               <div className="meta">Up to 3 passengers, 2 bags</div>
             </div>
 
             <div className="fleet-card">
-              <div className="icon-box">
-                <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
-                  <path
-                    d="M4 22 L6 10 Q8 7 14 7 H32 Q38 7 41 12 L44 22"
-                    stroke="#0F1B2D"
-                    strokeWidth="1.6"
-                    fill="none"
-                  />
-                  <rect x="2" y="20" width="44" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
-                  <circle cx="13" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-                  <circle cx="35" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-                </svg>
-              </div>
+              <img className="fleet-img" src={fleetSuv} alt="Black full-size SUV for small groups with luggage" loading="lazy" width={1024} height={768} />
               <h3>SUV</h3>
               <p className="desc">Small teams, extra luggage, or a more commanding presence.</p>
               <div className="meta">Up to 5 passengers, 4 bags</div>
             </div>
 
             <div className="fleet-card">
-              <div className="icon-box">
-                <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
-                  <path
-                    d="M2 22 L4 13 Q6 9 12 9 H20 L23 8 H30 Q33 8 34 11 L36 13 Q40 13 42 17 L46 22"
-                    stroke="#0F1B2D"
-                    strokeWidth="1.6"
-                    fill="none"
-                  />
-                  <rect x="1" y="20" width="46" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
-                  <circle cx="11" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-                  <circle cx="37" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-                </svg>
-              </div>
+              <img className="fleet-img" src={fleetLimousine} alt="Black stretch limousine for weddings and VIP arrivals" loading="lazy" width={1024} height={768} />
               <h3>Limousine</h3>
               <p className="desc">Weddings, galas and VIP arrivals that call for an entrance.</p>
               <div className="meta">Up to 6 passengers</div>
             </div>
 
             <div className="fleet-card">
-              <div className="icon-box">
-                <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
-                  <path d="M3 22 V11 Q3 8 6 8 H40 Q45 8 45 13 V22" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
-                  <rect x="2" y="20" width="44" height="6" rx="2" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
-                  <line x1="18" y1="8" x2="18" y2="20" stroke="#0F1B2D" strokeWidth="1.2" />
-                  <line x1="30" y1="8" x2="30" y2="20" stroke="#0F1B2D" strokeWidth="1.2" />
-                  <circle cx="12" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-                  <circle cx="37" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-                </svg>
-              </div>
+              <img className="fleet-img" src={fleetSprinter} alt="Black Sprinter passenger van for group transfers" loading="lazy" width={1024} height={768} />
               <h3>Sprinter van</h3>
               <p className="desc">Group transfers, roadshows and full teams travelling together.</p>
               <div className="meta">Up to 14 passengers</div>
             </div>
 
             <div className="fleet-card">
-              <div className="icon-box">
-                <svg width="48" height="30" viewBox="0 0 48 30" fill="none">
-                  <rect x="2" y="8" width="44" height="14" rx="3" stroke="#0F1B2D" strokeWidth="1.6" fill="none" />
-                  <line x1="12" y1="8" x2="12" y2="22" stroke="#0F1B2D" strokeWidth="1.2" />
-                  <line x1="22" y1="8" x2="22" y2="22" stroke="#0F1B2D" strokeWidth="1.2" />
-                  <line x1="32" y1="8" x2="32" y2="22" stroke="#0F1B2D" strokeWidth="1.2" />
-                  <circle cx="11" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-                  <circle cx="37" cy="26" r="3" stroke="#0F1B2D" strokeWidth="1.6" fill="#F6F4EF" />
-                </svg>
-              </div>
+              <img className="fleet-img" src={fleetCoach} alt="Black motor coach bus for conferences and large events" loading="lazy" width={1024} height={768} />
               <h3>Bus &amp; coach</h3>
               <p className="desc">Conferences and large events, arriving on one schedule.</p>
               <div className="meta">Up to 56 passengers</div>
