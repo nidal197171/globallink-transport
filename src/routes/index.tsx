@@ -166,11 +166,11 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Do you provide corporate transportation for large events?",
-    a: "Yes — we provide corporate transportation for conferences, roadshows, and large events across San Francisco and the Bay Area. Choose Sprinter vans, charter bus, bus rental, and coach service for up to 56 passengers, coordinated by one dispatch team as complete group transportation, with airport car service for SFO, OAK, and SJC arrivals. An invoice is sent automatically with your confirmation email for every reservation.",
+    a: "Yes — we provide corporate transportation for conferences, roadshows, and large events across San Francisco and the Bay Area. Choose Sprinter vans, charter bus, bus rental, and coach service (pricing quoted per trip), coordinated by one dispatch team as complete group transportation, with airport car service for SFO, OAK, and SJC arrivals. An invoice is sent automatically with your confirmation email for every reservation.",
   },
   {
     q: "What vehicles are available?",
-    a: "Choose from eight vehicle options: Sedan for up to 3 passengers, SUV for up to 5 passengers, Limousine for up to 6 passengers, Sprinter van for up to 14 passengers, Luxury Sprinter for up to 14 passengers, Limo Sprinter for up to 14 passengers, Mini Coach Buses (pricing quoted per trip), and Bus & coach for up to 56 passengers. Each vehicle comes with a licensed, background-checked chauffeur, and every option can be booked for SFO airport transfers, wedding limo service, prom limo nights, concert transportation, sports game transportation, and wine country tours across San Francisco and the Bay Area.",
+    a: "Choose from eight vehicle options: Sedan for up to 3 passengers, SUV for up to 5 passengers, Limousine for up to 8 passengers, Sprinter van for up to 14 passengers, Luxury Sprinter for up to 14 passengers, Limo Sprinter for up to 14 passengers, Mini Coach Buses (pricing quoted per trip), and Bus & coach (pricing quoted per trip). Each vehicle comes with a licensed, background-checked chauffeur, and every option can be booked for SFO airport transfers, wedding limo service, prom limo nights, concert transportation, sports game transportation, and wine country tours across San Francisco and the Bay Area.",
   },
   {
     q: "How far in advance should I book?",
