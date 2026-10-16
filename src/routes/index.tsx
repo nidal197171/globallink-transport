@@ -1775,7 +1775,7 @@ function Index() {
       <section id="fleet">
         <style>{`
           .fleet-card .fleet-img{width:calc(100% + 48px); margin:-30px -24px 4px; max-width:none; aspect-ratio:4/3; object-fit:cover; display:block; background:var(--paper-2);}
-          @media (min-width:901px){#fleet .fleet-row{grid-template-columns:repeat(4,minmax(0,1fr));}}
+          @media (min-width:901px){#fleet .fleet-row{grid-template-columns:repeat(12,minmax(0,1fr));}#fleet .fleet-card{grid-column:span 3;}#fleet .fleet-card:nth-child(n+5){grid-column:span 4;}}
           @media (max-width:900px){.fleet-card .fleet-img{width:calc(100% + 40px); margin:-24px -20px 4px; border-radius:8px 8px 0 0;}}
         `}</style>
         <div className="wrap">
