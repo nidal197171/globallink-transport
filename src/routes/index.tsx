@@ -1786,7 +1786,7 @@ function Index() {
           <div className="section-head">
             <h2>Choose your ride</h2>
             <p>
-              Seven vehicle options, each with its own vetted chauffeur pool — from a single airport transfer to a
+              Eight vehicle options, each with its own vetted chauffeur pool — from a single airport transfer to a
               fifty-person conference charter bus.
             </p>
           </div>
