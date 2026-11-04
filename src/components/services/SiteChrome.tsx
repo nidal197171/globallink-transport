@@ -141,6 +141,11 @@ export function SiteFooter({ home = false }: { home?: boolean }) {
                     Custom reservations pay
                   </Link>
                 </li>
+                <li>
+                  <Link to="/blog" preload="intent">
+                    Blog
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
