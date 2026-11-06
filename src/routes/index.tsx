@@ -155,7 +155,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "How much does an SFO airport transfer cost?",
-    a: "SFO airport transfers use fixed fares with no surge pricing — a private black car, SUV, or limousine with a chauffeur, not an airport taxi. Our airport car service covers San Francisco, Oakland, and San Jose, and every SFO airport transfer is priced before you book. Use the fare calculator on this page to see your exact fixed fare for your pickup, destination, and vehicle. A 20% gratuity and a 5% booking fee apply.",
+    a: "SFO airport transfers use fixed fares with no surge pricing — a private black car, SUV, or limousine with a chauffeur, not an airport taxi. Our airport car service covers San Francisco, Oakland, and San Jose, and every SFO airport transfer is priced before you book. Use the fare calculator on this page to see your exact fixed fare for your pickup, destination, and vehicle. A 20% gratuity, a 10% fuel surcharge, and a 5% booking fee apply.",
   },
   {
     q: "Do you offer wedding limo service in San Francisco?",
@@ -179,7 +179,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Do you offer hourly service?",
-    a: "Yes — hourly limo and car service is available with a 4-hour minimum, then billed in 30-minute increments after that, which suits wine country tours, wedding limo service, and special nights out across San Francisco and the Bay Area. Hourly rates are Sedan $85/hr, SUV $120/hr, Limo $120/hr, Sprinter $175/hr, and Bus available with a custom quote.",
+    a: "Yes — hourly limo and car service is available with a 4-hour minimum, then billed in 30-minute increments after that, which suits wine country tours, wedding limo service, and special nights out across San Francisco and the Bay Area. Hourly rates are Sedan $85/hr, SUV $120/hr, Limo $120/hr, Sprinter $120/hr, and Bus available with a custom quote.",
   },
   {
     q: "How long will my chauffeur wait at airport pickup?",
@@ -219,7 +219,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Is gratuity included?",
-    a: "A 20% gratuity is automatically added to all reservations. A 5% booking fee also applies.",
+    a: "A 20% gratuity and a 10% fuel surcharge are automatically added to all reservations. A 5% booking fee also applies.",
   },
   {
     q: "Can I add stops?",
@@ -333,7 +333,7 @@ function LocationSelect({
   );
 }
 
-type FeeParts = { base: number; gratuity: number; fee: number; total: number };
+type FeeParts = { base: number; gratuity: number; fuel: number; fee: number; total: number };
 
 // Google Sheet receiver for driver applications (Apps Script web app).
 const DRIVER_SHEET_URL =
@@ -395,7 +395,7 @@ function buildDescription(s: BookingState): string {
       ? `${s.hours} hours hourly service · ${VEHICLE_LABEL[s.vehicle]} · pickup ${placeLabel(s.pickup)} · ${s.dt}`
       : `${placeLabel(s.pickup)} to ${placeLabel(s.dropoff)} · ${VEHICLE_LABEL[s.vehicle]} · ${s.dt}`;
   const flight = s.flightNumber.trim() ? ` · flight ${s.flightNumber.trim()}` : "";
-  return `${base}${flight} · incl. 20% gratuity + 5% booking fee${s.greetMeet ? ` + greet & meet ($${GREET_MEET_PRICE})` : ""}${s.extraPickups > 0 ? ` + ${s.extraPickups} extra pickup${s.extraPickups > 1 ? "s" : ""} ($${s.extraPickups * EXTRA_PICKUP_PRICE})` : ""}`;
+  return `${base}${flight} · incl. 20% gratuity + 10% fuel surcharge + 5% booking fee${s.greetMeet ? ` + greet & meet ($${GREET_MEET_PRICE})` : ""}${s.extraPickups > 0 ? ` + ${s.extraPickups} extra pickup${s.extraPickups > 1 ? "s" : ""} ($${s.extraPickups * EXTRA_PICKUP_PRICE})` : ""}`;
 }
 
 function reservationDetailsText(s: BookingState, fareText: string, bookingNo: string): string {
@@ -517,11 +517,13 @@ function BookingCard() {
   const [ppClientId, setPpClientId] = useState<string | null>(null);
   const [ppChecked, setPpChecked] = useState(false);
 
-  // All reservations add 20% gratuity + 5% booking fee on top of the base fare at checkout.
+  // All reservations add 20% gratuity + 10% fuel surcharge + 5% booking fee
+  // on top of the base fare at checkout (fuel surcharge added 2026-11-06).
   const feeParts = (base: number): FeeParts => {
-    const total = Math.round(base * 1.25);
+    const total = Math.round(base * 1.35);
     const gratuity = Math.round(base * 0.2);
-    return { base, gratuity, fee: total - base - gratuity, total };
+    const fuel = Math.round(base * 0.1);
+    return { base, gratuity, fuel, fee: total - base - gratuity - fuel, total };
   };
 
   const fare = useMemo(() => {
@@ -552,7 +554,7 @@ function BookingCard() {
           <>
             <span className="fare-amount">${parts.base}</span>
             <span className="fare-sub">
-              {hours} hours × ${rate}/hr · {VEHICLE_LABEL[vehicle]} (4-hour minimum) + 20% gratuity + 5% booking fee at
+              {hours} hours × ${rate}/hr · {VEHICLE_LABEL[vehicle]} (4-hour minimum) + 20% gratuity + 10% fuel surcharge + 5% booking fee at
               checkout
             </span>
           </>
@@ -616,7 +618,8 @@ function BookingCard() {
       };
     let pricedBase: number;
     if (sprinterTier(vehicle)) {
-      // Sprinter is $200 over the sedan base fare on every route type.
+      // Sprinter is $200 over the sedan base fare on every route type;
+      // sprinterTripFare then applies the tier uplift and the 40% raise.
       pricedBase = sprinterTripFare(vehicle, (base as number) + 200);
     } else if (vehicle === "suv" || vehicle === "limousine") {
       // SUV and Limousine are $40 over the sedan base fare on every route type.
@@ -649,7 +652,7 @@ function BookingCard() {
         <>
           <span className="fare-amount">${parts.base + gm + ep}</span>
           <span className="fare-sub">
-            Estimated one-way fare{milesText} · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 5% booking fee at checkout
+            Estimated one-way fare{milesText} · {VEHICLE_LABEL[vehicle]} + 20% gratuity + 10% fuel surcharge + 5% booking fee at checkout
             {gm > 0 ? ` · incl. greet & meet ($${GREET_MEET_PRICE})` : ""}
             {ep > 0 ? ` · incl. ${extraPickups} extra pickup${extraPickups > 1 ? "s" : ""} ($${ep})` : ""}
           </span>
@@ -703,6 +706,7 @@ function BookingCard() {
           data: {
             base: fare.parts.base,
             gratuity: fare.parts.gratuity,
+            fuel: fare.parts.fuel,
             fee: fare.parts.fee,
             greetMeet: fare.greetMeet,
             extraPickups: fare.extraPickups,
@@ -858,6 +862,7 @@ function BookingCard() {
                 amount: fare.amount ?? 0,
                 base: fare.parts?.base,
                 gratuity: fare.parts?.gratuity,
+                fuel: fare.parts?.fuel,
                 fee: fare.parts?.fee,
                 greetMeet: fare.greetMeet,
                 extraPickups: fare.extraPickups,
@@ -1101,7 +1106,7 @@ function BookingCard() {
           <div className="agreement-box">
             <h4>Additional charges</h4>
             <p>
-              A <strong>20% gratuity</strong> and <strong>5% booking fee</strong> are added to all reservations.
+              A <strong>20% gratuity</strong>, a <strong>10% fuel surcharge</strong>, and a <strong>5% booking fee</strong> are added to all reservations.
               Overtime is billed at the hourly rate of the reserved vehicle.
             </p>
           </div>
@@ -1143,6 +1148,10 @@ function BookingCard() {
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, padding: "2px 0" }}>
               <span>Gratuity (20%)</span>
               <span>${fare.parts.gratuity}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, padding: "2px 0" }}>
+              <span>Fuel surcharge (10%)</span>
+              <span>${fare.parts.fuel}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, padding: "2px 0" }}>
               <span>Booking fee (5%)</span>
@@ -1890,17 +1899,17 @@ function Index() {
             <div className="price-row">
               <span className="name">Sprinter van</span>
               <span className="leader" />
-              <span className="amount">$175/hr</span>
+              <span className="amount">$120/hr</span>
             </div>
             <div className="price-row">
               <span className="name">Luxury Sprinter</span>
               <span className="leader" />
-              <span className="amount">$225/hr</span>
+              <span className="amount">$140/hr</span>
             </div>
             <div className="price-row">
               <span className="name">Limo Sprinter</span>
               <span className="leader" />
-              <span className="amount">$275/hr</span>
+              <span className="amount">$160/hr</span>
             </div>
             <div className="price-row">
               <span className="name">Bus &amp; coach</span>

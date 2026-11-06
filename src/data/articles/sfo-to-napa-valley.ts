@@ -108,7 +108,7 @@ export const article: Article = {
     },
     {
       t: "p",
-      text: "The option Napa travelers use most is rolling straight into a wine tour: book the car hourly, keep the same driver from SFO into your first tastings, and nobody in your group is the designated driver. Hourly rates are sedan $85/hr, SUV $120/hr, limousine $120/hr, Sprinter $175/hr, luxury Sprinter $225/hr, and limo Sprinter $275/hr, with a 4-hour minimum on hourly bookings and a 20% gratuity auto-added. See our [Napa Valley wine tour limo guide](/blog/napa-valley-wine-tour-limo) and the [wine country tours](/wine-country-tours) for how a chauffeured day works. The honest downside: for a solo traveler counting every dollar, a private car costs more than a shuttle seat. Its value is strongest for couples, groups splitting one vehicle, and tight schedules. As the tagline puts it: \"We treat your schedule like our own. Always on time.\" Global Link serves the Bay Area, Napa, Sonoma, Monterey, and Sacramento.",
+      text: "The option Napa travelers use most is rolling straight into a wine tour: book the car hourly, keep the same driver from SFO into your first tastings, and nobody in your group is the designated driver. Hourly rates are sedan $85/hr, SUV $120/hr, limousine $120/hr, Sprinter $120/hr, luxury Sprinter $140/hr, and limo Sprinter $160/hr, with a 4-hour minimum on hourly bookings and a 20% gratuity and 10% fuel surcharge auto-added. See our [Napa Valley wine tour limo guide](/blog/napa-valley-wine-tour-limo) and the [wine country tours](/wine-country-tours) for how a chauffeured day works. The honest downside: for a solo traveler counting every dollar, a private car costs more than a shuttle seat. Its value is strongest for couples, groups splitting one vehicle, and tight schedules. As the tagline puts it: \"We treat your schedule like our own. Always on time.\" Global Link serves the Bay Area, Napa, Sonoma, Monterey, and Sacramento.",
     },
     {
       t: "ul",
@@ -171,7 +171,7 @@ export const article: Article = {
     },
     {
       q: "Can a private car take us straight from SFO to a wine tour?",
-      a: "Yes. With Global Link Transportation you can book the airport pickup as the start of an hourly charter and go straight into tastings with the same driver. Hourly rates run from $85/hr for a sedan to $275/hr for a limo Sprinter, with a 4-hour minimum and 20% gratuity auto-added.",
+      a: "Yes. With Global Link Transportation you can book the airport pickup as the start of an hourly charter and go straight into tastings with the same driver. Hourly rates run from $85/hr for a sedan to $160/hr for a limo Sprinter, with a 4-hour minimum and a 20% gratuity and 10% fuel surcharge auto-added.",
     },
   ],
 };

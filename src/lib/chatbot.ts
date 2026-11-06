@@ -80,8 +80,15 @@ const HOURLY_RATES: Record<string, number> = {
   sedan: 85,
   suv: 140,
   limousine: 140,
-  sprinter: 175,
+  sprinter: 120,
 };
+
+// Sprinter transfer quote (airport + city-to-city): sedan fare + $200,
+// raised 40% (2026-11-06), rounded to the nearest $5 — mirrors
+// sprinterTripFare for the base Sprinter tier in the booking form.
+function sprinterTransferQuote(sedanFare: number): number {
+  return Math.round(((sedanFare + 200) * 1.4) / 5) * 5;
+}
 
 function esc(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -217,12 +224,12 @@ export class ChatEngine {
     // --- Info intents ---
     if (has(text, "hour", "per hour", "charter", "as directed"))
       return this.msg(
-        `Hourly service: sedan $${HOURLY_RATES["sedan"]}/hr, SUV or limousine $${HOURLY_RATES["suv"]}/hr, sprinter van $${HOURLY_RATES["sprinter"]}/hr (4-hour minimum). Bus & coach is a custom quote. 20% gratuity + 5% booking fee are added at checkout. Tap "Book a ride" below to book on our booking form.`,
+        `Hourly service: sedan $${HOURLY_RATES["sedan"]}/hr, SUV or limousine $${HOURLY_RATES["suv"]}/hr, sprinter van $${HOURLY_RATES["sprinter"]}/hr (4-hour minimum). Bus & coach is a custom quote. 20% gratuity + 10% fuel surcharge + 5% booking fee are added at checkout. Tap "Book a ride" below to book on our booking form.`,
         ["Book a ride", "Get a fare quote"]
       );
     if (has(text, "greet", "meet me", "name sign", "inside the terminal", "arrivals"))
       return this.msg(
-        `Our chauffeur meets you inside the terminal with a name sign. It's a flat $40 on airport pickups — no gratuity or booking fee on it.`
+        `Our chauffeur meets you inside the terminal with a name sign. It's a flat $40 on airport pickups — no gratuity, fuel surcharge, or booking fee on it.`
       );
     if (has(text, "wait", "delay", "my flight is late", "running late"))
       return this.msg(
@@ -230,7 +237,7 @@ export class ChatEngine {
       );
     if (has(text, "fee", "gratuity", "tip", "surcharge", "extra charge", "hidden"))
       return this.msg(
-        `No hidden fees. Every fare adds 20% gratuity + 5% booking fee at checkout. Optional extras: airport greet & meet ($40 flat), extra pickups ($35 each).`
+        `No hidden fees. Every fare adds 20% gratuity + 10% fuel surcharge + 5% booking fee at checkout. Optional extras: airport greet & meet ($40 flat), extra pickups ($35 each).`
       );
     if (has(text, "vehicle", "fleet", "what cars", "what kind of car", "sedan", "suv", "limo", "sprinter", "bus", "coach", "van"))
       return this.msg(
@@ -286,7 +293,7 @@ export class ChatEngine {
     if (note) lines.push(note);
     lines.push(
       "",
-      `20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`
+      `20% gratuity + 10% fuel surcharge + 5% booking fee are added at checkout. Tap "Book this ride" below to book this fare on our booking form.`
     );
     return lines.join("\n");
   }
@@ -303,7 +310,7 @@ export class ChatEngine {
       const key2 = `${b.code}-${a.code}`;
       const fare = AIRPORT_TO_AIRPORT[key1] ?? AIRPORT_TO_AIRPORT[key2];
       if (fare == null) return null;
-      const sprinterAA = fare + 200; // Sprinter is $200 over sedan on airport transfers
+      const sprinterAA = sprinterTransferQuote(fare); // Sprinter transfer fare: sedan + $200, raised 40%
       return this.msg(
         this.stackedQuote(
           `${a.label} → ${b.label} (each way)`,
@@ -326,7 +333,7 @@ export class ChatEngine {
         for (const slug of pair) {
           const fare = AIRPORT_RATES[ap.code]?.[slug];
           if (fare == null) continue;
-          const sp = fare + 200; // Sprinter is $200 over sedan on airport transfers
+          const sp = sprinterTransferQuote(fare); // Sprinter transfer fare: sedan + $200, raised 40%
           lines.push(
             `${cityName(slug)} — sedan $${fare}, SUV/limo $${fare + 40}${
               sp != null ? `, sprinter $${sp}` : ""
@@ -335,7 +342,7 @@ export class ChatEngine {
         }
         if (!lines.length) return null;
         return this.msg(
-          `${ap.label} (each way):\n${lines.join("\n")}\n\n20% gratuity + 5% booking fee are added at checkout. Tap "Book this ride" below to book on our booking form.`,
+          `${ap.label} (each way):\n${lines.join("\n")}\n\n20% gratuity + 10% fuel surcharge + 5% booking fee are added at checkout. Tap "Book this ride" below to book on our booking form.`,
           ["Book this ride", "Get another quote"]
         );
       }
@@ -348,7 +355,7 @@ export class ChatEngine {
           ["Book a ride", "Call us"]
         );
       }
-      const sp = fare + 200; // Sprinter is $200 over sedan on airport transfers
+      const sp = sprinterTransferQuote(fare); // Sprinter transfer fare: sedan + $200, raised 40%
       return this.msg(
         this.stackedQuote(
           `${ap.label} → ${cityName(slug)} (each way)`,
@@ -384,7 +391,7 @@ export class ChatEngine {
           `${cityName(from)} → ${cityName(to)} (about, ~${Math.round(miles)} road miles)`,
           `about $${base}`,
           `about $${base + 40}`,
-          `about $${base + 200}`,
+          `about $${sprinterTransferQuote(base)}`,
           undefined
         ),
         ["Book this ride", "Get another quote"]

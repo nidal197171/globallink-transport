@@ -87,14 +87,14 @@ export const article: Article = {
         "**Sedan — $85/hr.** Two to three passengers. Right for couples who want a quiet, simple day.",
         "**SUV — $120/hr.** Up to six passengers, with cargo room for wine cases. The default choice for small groups.",
         "**Limousine — $120/hr.** The classic wine country statement for groups celebrating — birthdays, anniversaries, bachelorettes.",
-        "**Sprinter — $175/hr.** Groups of eight to fourteen who want to stand, move around, and ride together in one cabin.",
-        "**Luxury Sprinter — $225/hr.** The same group size with upgraded seating and finishes.",
-        "**Limo Sprinter — $275/hr.** The party configuration — lounge seating for groups who want the vehicle to be part of the event.",
+        "**Sprinter — $120/hr.** Groups of eight to fourteen who want to stand, move around, and ride together in one cabin.",
+        "**Luxury Sprinter — $140/hr.** The same group size with upgraded seating and finishes.",
+        "**Limo Sprinter — $160/hr.** The party configuration — lounge seating for groups who want the vehicle to be part of the event.",
       ],
     },
     {
       t: "p",
-      text: "All charters carry a **4-hour minimum**, and a **20% gratuity is added automatically** — it's in the quote up front, not a surprise on your card statement. We're open 24 hours, so early pickups for balloon-ride mornings and late returns are both fine.",
+      text: "All charters carry a **4-hour minimum**, and a **20% gratuity and 10% fuel surcharge are added automatically** — they're in the quote up front, not a surprise on your card statement. We're open 24 hours, so early pickups for balloon-ride mornings and late returns are both fine.",
     },
     { t: "h2", text: "What a Napa Wine Tour Day Actually Costs" },
     {
@@ -104,14 +104,15 @@ export const article: Article = {
     {
       t: "ul",
       items: [
-        "8 hours × $175/hr = **$1,400**",
-        "20% gratuity = **$280**",
-        "**Total: $1,680**",
+        "8 hours × $120/hr = **$960**",
+        "20% gratuity = **$192**",
+        "10% fuel surcharge = **$96**",
+        "**Total: $1,248**",
       ],
     },
     {
       t: "p",
-      text: "Split ten ways, that's $168 per person for the entire day of transport — chauffeur, fuel, and the ride home included. A couple in the sedan for a shorter 6-hour day: 6 × $85 = $510, plus $102 gratuity, **$612 total**.",
+      text: "Split ten ways, that's $124.80 per person for the entire day of transport — chauffeur, fuel, and the ride home included. A couple in the sedan for a shorter 6-hour day: 6 × $85 = $510, plus $102 gratuity and a $51 fuel surcharge, **$663 total**.",
     },
     {
       t: "p",
@@ -124,13 +125,13 @@ export const article: Article = {
     },
     {
       t: "p",
-      text: "When you book, have ready: your date, pickup address, group size, and winery list (or ask us to help sequence one). We'll confirm the vehicle, the hours, and the all-in price — gratuity included — before you pay anything.",
+      text: "When you book, have ready: your date, pickup address, group size, and winery list (or ask us to help sequence one). We'll confirm the vehicle, the hours, and the all-in price — gratuity and fuel surcharge included — before you pay anything.",
     },
   ],
   faq: [
     {
       q: "How much does a Napa Valley wine tour limo cost?",
-      a: "Charters start at $85/hr for a sedan, $120/hr for an SUV or limousine, and $175/hr for a Sprinter, with a 4-hour minimum and 20% gratuity added. An 8-hour Sprinter day totals $1,680 including gratuity.",
+      a: "Charters start at $85/hr for a sedan, $120/hr for an SUV or limousine, and $120/hr for a Sprinter, with a 4-hour minimum and 20% gratuity and a 10% fuel surcharge added. An 8-hour Sprinter day totals $1,248 including gratuity and fuel surcharge.",
     },
     {
       q: "How many wineries can we visit in one day?",

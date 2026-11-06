@@ -71,19 +71,19 @@ export const article: Article = {
     { t: "h2", text: "Cost: What a Day Actually Costs" },
     {
       t: "p",
-      text: "Tasting fees are the one cost that differs between the valleys — Napa's run higher on average, Sonoma's lower — but the biggest cost of a wine country day is the same in both: getting there and getting between wineries without anyone in your group having to drive. Global Link Transportation's hourly rates are sedan $85/hr, SUV $120/hr, limousine $120/hr, Sprinter $175/hr, luxury Sprinter $225/hr, and limo Sprinter $275/hr, with a 4-hour minimum on hourly bookings and a 20% gratuity auto-added.",
+      text: "Tasting fees are the one cost that differs between the valleys — Napa's run higher on average, Sonoma's lower — but the biggest cost of a wine country day is the same in both: getting there and getting between wineries without anyone in your group having to drive. Global Link Transportation's hourly rates are sedan $85/hr, SUV $120/hr, limousine $120/hr, Sprinter $120/hr, luxury Sprinter $140/hr, and limo Sprinter $160/hr, with a 4-hour minimum on hourly bookings and a 20% gratuity and 10% fuel surcharge auto-added.",
     },
     {
       t: "p",
-      text: "A six-hour day in a sedan costs 6 × $85 = $510, plus 20% gratuity of $102, for a **$612 total**. The same six hours in a Sprinter costs 6 × $175 = $1,050, plus 20% gratuity of $210, for a **$1,260 total** — and split across ten friends, that is **$126 per person** for a full day with a driver, door to door. An eight-hour day in a limo Sprinter costs 8 × $275 = $2,200, plus 20% gratuity of $440, for a **$2,640 total**. The rate is the same whether you are in Napa or Sonoma; the difference is how far that time stretches. Get an exact price for your date and group with an [instant quote and booking](/#book) at globallinktransport.com, or call (415) 787-8776. Global Link serves the Bay Area, Napa, Sonoma, Monterey, and Sacramento, and operates 24 hours.",
+      text: "A six-hour day in a sedan costs 6 × $85 = $510, plus 20% gratuity of $102 and a 10% fuel surcharge of $51, for a **$663 total**. The same six hours in a Sprinter costs 6 × $120 = $720, plus 20% gratuity of $144 and a 10% fuel surcharge of $72, for a **$936 total** — and split across ten friends, that is **$93.60 per person** for a full day with a driver, door to door. An eight-hour day in a limo Sprinter costs 8 × $160 = $1,280, plus 20% gratuity of $256 and a 10% fuel surcharge of $128, for a **$1,664 total**. The rate is the same whether you are in Napa or Sonoma; the difference is how far that time stretches. Get an exact price for your date and group with an [instant quote and booking](/#book) at globallinktransport.com, or call (415) 787-8776. Global Link serves the Bay Area, Napa, Sonoma, Monterey, and Sacramento, and operates 24 hours.",
     },
     {
       t: "ul",
       items: [
         "**Sedan ($85/hr):** Couples and groups of two or three; the cheapest chauffeured option.",
         "**SUV or limousine ($120/hr):** Small groups that want space or a special-occasion feel.",
-        "**Sprinter ($175/hr):** Groups of up to 10–14; the best per-person value on a wine day.",
-        "**Luxury Sprinter ($225/hr) or limo Sprinter ($275/hr):** Larger groups and celebrations that want the vehicle to be part of the experience.",
+        "**Sprinter ($120/hr):** Groups of up to 10–14; the best per-person value on a wine day.",
+        "**Luxury Sprinter ($140/hr) or limo Sprinter ($160/hr):** Larger groups and celebrations that want the vehicle to be part of the experience.",
       ],
     },
     { t: "h2", text: "Which One Fits Your Group?" },
@@ -131,7 +131,7 @@ export const article: Article = {
     },
     {
       q: "Is Sonoma cheaper than Napa for a wine tour?",
-      a: "Generally yes. Tasting fees in Sonoma run lower on average than Napa's for wines of comparable quality, and the valley is less crowded. The chauffeur cost is the same in both valleys — for example, a six-hour sedan day is $510 plus 20% gratuity, $612 total — so the savings come from the tastings, not the transport.",
+      a: "Generally yes. Tasting fees in Sonoma run lower on average than Napa's for wines of comparable quality, and the valley is less crowded. The chauffeur cost is the same in both valleys — for example, a six-hour sedan day is $510 plus 20% gratuity ($102) and a 10% fuel surcharge ($51), $663 total — so the savings come from the tastings, not the transport.",
     },
     {
       q: "How far is Sonoma from San Francisco compared to Napa?",

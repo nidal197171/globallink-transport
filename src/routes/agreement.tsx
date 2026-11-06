@@ -115,7 +115,7 @@ function AgreementPage() {
             <div className="agree-fee">
               <h3>Additional charges</h3>
               <p>
-                A <strong>20% gratuity</strong> and <strong>5% booking fee</strong> are added to all
+                A <strong>20% gratuity</strong>, a <strong>10% fuel surcharge</strong>, and a <strong>5% booking fee</strong> are added to all
                 reservations. Overtime is billed at the hourly rate of the reserved vehicle.
               </p>
             </div>

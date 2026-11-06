@@ -4,16 +4,16 @@ export const article: Article = {
   slug: "wedding-limo-rental-san-francisco-cost",
   title: "Wedding Limo Rental in San Francisco: Real Costs, the 4-Hour Minimum, and What to Ask Before You Book",
   metaDescription:
-    "Wedding limo rental in San Francisco: hourly rates, the 4-hour minimum and 20% gratuity explained, plus questions to ask before you book.",
+    "Wedding limo rental in San Francisco: hourly rates, the 4-hour minimum, 20% gratuity and 10% fuel surcharge explained, plus questions to ask before you book.",
   excerpt:
-    "What a wedding limo in San Francisco actually costs once you add the 4-hour minimum and gratuity, how the day's timing works, and the questions to ask before you sign.",
+    "What a wedding limo in San Francisco actually costs once you add the 4-hour minimum, gratuity, and fuel surcharge, how the day's timing works, and the questions to ask before you sign.",
   cluster: "Occasions & Weddings",
   keyword: "wedding limo rental San Francisco cost",
   datePublished: "2026-11-05",
   blocks: [
     {
       t: "p",
-      text: "Most wedding transportation quotes look simple until you read the fine print. A low hourly rate means little if there is a minimum you did not expect, gratuity added at the end, or a charge for the time the car spends waiting between the ceremony and the reception. If you are comparing a wedding limo rental in San Francisco, cost is really three numbers working together: the hourly rate for the vehicle you choose, the 4-hour minimum on hourly bookings, and gratuity.",
+      text: "Most wedding transportation quotes look simple until you read the fine print. A low hourly rate means little if there is a minimum you did not expect, gratuity added at the end, or a charge for the time the car spends waiting between the ceremony and the reception. If you are comparing a wedding limo rental in San Francisco, cost is really four numbers working together: the hourly rate for the vehicle you choose, the 4-hour minimum on hourly bookings, gratuity, and a 10% fuel surcharge.",
     },
     {
       t: "p",
@@ -30,14 +30,14 @@ export const article: Article = {
         "**Sedan:** $85/hr",
         "**SUV:** $120/hr",
         "**Limousine:** $120/hr",
-        "**Sprinter:** $175/hr",
-        "**Luxury Sprinter:** $225/hr",
-        "**Limo Sprinter:** $275/hr",
+        "**Sprinter:** $120/hr",
+        "**Luxury Sprinter:** $140/hr",
+        "**Limo Sprinter:** $160/hr",
       ],
     },
     {
       t: "p",
-      text: "Two rules apply to every hourly booking. First, there is a **4-hour minimum** — even for a short ceremony-to-reception transfer, you book at least four hours. Second, a **20% gratuity is auto-added**. At Global Link it is included in the quote up front, not added after the wedding. When comparing quotes, ask whether gratuity is already in the number. A quote that excludes it is not cheaper; it is incomplete.",
+      text: "Two rules apply to every hourly booking. First, there is a **4-hour minimum** — even for a short ceremony-to-reception transfer, you book at least four hours. Second, a **20% gratuity and a 10% fuel surcharge are auto-added**. At Global Link they are included in the quote up front, not added after the wedding. When comparing quotes, ask whether gratuity is already in the number. A quote that excludes it is not cheaper; it is incomplete.",
     },
     {
       t: "p",
@@ -46,12 +46,12 @@ export const article: Article = {
     { t: "h3", text: "A Worked Example: The Couple's Limousine" },
     {
       t: "p",
-      text: "Book a limousine at $120/hr for five hours — enough for getting-ready photos, the ride to the ceremony, the wait during the ceremony, and the reception transfer. The math is $120 × 5 hours = $600, plus 20% gratuity of $120, for a total of **$720**. At the 4-hour minimum, the same limousine is $120 × 4 = $480, plus $96 gratuity, for **$576**. That is your floor for any hourly limousine booking, however short the drive.",
+      text: "Book a limousine at $120/hr for five hours — enough for getting-ready photos, the ride to the ceremony, the wait during the ceremony, and the reception transfer. The math is $120 × 5 hours = $600, plus 20% gratuity of $120 and a 10% fuel surcharge of $60, for a total of **$780**. At the 4-hour minimum, the same limousine is $120 × 4 = $480, plus $96 gratuity and a $48 fuel surcharge, for **$624**. That is your floor for any hourly limousine booking, however short the drive.",
     },
     { t: "h3", text: "A Worked Example: A Sprinter for the Wedding Party" },
     {
       t: "p",
-      text: "Now price the vehicle that moves everyone else. A Sprinter at $175/hr for the 4-hour minimum is $175 × 4 = $700, plus $140 gratuity, for **$840**. Stretch it to six hours — hotel pickup, ceremony, a photo stop, reception drop-off — and it is $175 × 6 = $1,050, plus $210 gratuity, for **$1,260**. Many couples book both a limousine for themselves and a Sprinter for the party, so add the two totals together in your budget rather than expecting one vehicle to do both jobs.",
+      text: "Now price the vehicle that moves everyone else. A Sprinter at $120/hr for the 4-hour minimum is $120 × 4 = $480, plus $96 gratuity and a $48 fuel surcharge, for **$624**. Stretch it to six hours — hotel pickup, ceremony, a photo stop, reception drop-off — and it is $120 × 6 = $720, plus $144 gratuity and a $72 fuel surcharge, for **$936**. Many couples book both a limousine for themselves and a Sprinter for the party, so add the two totals together in your budget rather than expecting one vehicle to do both jobs.",
     },
     {
       t: "p",
@@ -96,12 +96,12 @@ export const article: Article = {
     { t: "h3", text: "For the Wedding Party" },
     {
       t: "p",
-      text: "This is where Sprinters earn their price. Do not split bridesmaids, groomsmen, and family across rideshares that arrive at different times. A **Sprinter at $175/hr**, **luxury Sprinter at $225/hr**, or **limo Sprinter at $275/hr** keeps everyone in one vehicle, on one timeline, with one driver who knows the plan. Build any extra pickup stops into your booked hours from the start.",
+      text: "This is where Sprinters earn their price. Do not split bridesmaids, groomsmen, and family across rideshares that arrive at different times. A **Sprinter at $120/hr**, **luxury Sprinter at $140/hr**, or **limo Sprinter at $160/hr** keeps everyone in one vehicle, on one timeline, with one driver who knows the plan. Build any extra pickup stops into your booked hours from the start.",
     },
     { t: "h3", text: "For Guests" },
     {
       t: "p",
-      text: "Guest shuttles are the job couples add last and guests appreciate most. If ceremony and reception are in different places, or guests are staying at a hotel, a Sprinter running between venue and hotel removes the parking and driving problem. Price it the same way: Sprinter rate × hours (4-hour minimum), with the 20% gratuity already in the Global Link quote. Put the shuttle plan on your wedding website so guests actually use it.",
+      text: "Guest shuttles are the job couples add last and guests appreciate most. If ceremony and reception are in different places, or guests are staying at a hotel, a Sprinter running between venue and hotel removes the parking and driving problem. Price it the same way: Sprinter rate × hours (4-hour minimum), with the 20% gratuity and 10% fuel surcharge already in the Global Link quote. Put the shuttle plan on your wedding website so guests actually use it.",
     },
     { t: "h2", text: "How Far Ahead to Book in San Francisco" },
     {
@@ -120,7 +120,7 @@ export const article: Article = {
     {
       t: "ul",
       items: [
-        "**Is gratuity included in this quote?** If not, what percentage is added, and when? Our quotes include the 20% gratuity up front.",
+        "**Is gratuity included in this quote?** If not, what percentage is added, and when? Our quotes include the 20% gratuity and 10% fuel surcharge up front.",
         "**What is the minimum number of hours?** Ours is 4 hours on hourly bookings. A quote without a stated minimum is incomplete.",
         "**Is the time continuous?** Can you split the booking into a daytime block and a separate evening block, or does the clock run straight through the ceremony and photos?",
         "**What happens if the day runs long?** Ask how overtime is billed and whether the driver and vehicle can stay if the reception runs late.",
@@ -143,7 +143,7 @@ export const article: Article = {
   faq: [
     {
       q: "How much does a wedding limo rental cost in San Francisco?",
-      a: "A limousine is $120/hr with a 4-hour minimum and 20% gratuity included in the quote, so the minimum booking is $576. A 5-hour limousine booking is $720. Sedans start at $85/hr and Sprinters at $175/hr on the same terms.",
+      a: "A limousine is $120/hr with a 4-hour minimum and 20% gratuity and a 10% fuel surcharge included in the quote, so the minimum booking is $624. A 5-hour limousine booking is $780. Sedans start at $85/hr and Sprinters at $120/hr on the same terms.",
     },
     {
       q: "Why is there a 4-hour minimum for wedding limos?",
@@ -151,11 +151,11 @@ export const article: Article = {
     },
     {
       q: "Is gratuity included in a wedding limo quote?",
-      a: "At Global Link Transportation, a 20% gratuity is auto-added and included in the quote up front, so the price you see is the price you pay. Always ask other companies whether gratuity is in their quote or added later.",
+      a: "At Global Link Transportation, a 20% gratuity and a 10% fuel surcharge are auto-added and included in the quote up front, so the price you see is the price you pay. Always ask other companies whether gratuity is in their quote or added later.",
     },
     {
       q: "What vehicle should we book for the wedding party?",
-      a: "A Sprinter is the practical choice for the wedding party and guest shuttles because everyone travels together on one timeline. Rates are $175/hr for a Sprinter, $225/hr for a luxury Sprinter, and $275/hr for a limo Sprinter, with a 4-hour minimum.",
+      a: "A Sprinter is the practical choice for the wedding party and guest shuttles because everyone travels together on one timeline. Rates are $120/hr for a Sprinter, $140/hr for a luxury Sprinter, and $160/hr for a limo Sprinter, with a 4-hour minimum.",
     },
   ],
 };

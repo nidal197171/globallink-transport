@@ -63,7 +63,7 @@ export const article: Article = {
     },
     {
       t: "p",
-      text: "A booked chauffeur service works the other way. You get a quote first, and the quote is the price. With Global Link Transportation, hourly rates are published — sedan $85/hr, SUV $120/hr, limousine $120/hr, Sprinter $175/hr, luxury Sprinter $225/hr, limo Sprinter $275/hr — and the 20% gratuity is auto-added and fixed in the quote, so there is no end-of-ride tipping math. The price quoted is the price paid, whether traffic builds or every app in the city is surging at once. See the full breakdown in our guide to [how much a limo costs per hour](/blog/how-much-does-a-limo-cost-per-hour).",
+      text: "A booked chauffeur service works the other way. You get a quote first, and the quote is the price. With Global Link Transportation, hourly rates are published — sedan $85/hr, SUV $120/hr, limousine $120/hr, Sprinter $120/hr, luxury Sprinter $140/hr, limo Sprinter $160/hr — and the 20% gratuity and 10% fuel surcharge are auto-added and fixed in the quote, so there is no end-of-ride tipping math. The price quoted is the price paid, whether traffic builds or every app in the city is surging at once. See the full breakdown in our guide to [how much a limo costs per hour](/blog/how-much-does-a-limo-cost-per-hour).",
     },
     {
       t: "p",
@@ -89,7 +89,7 @@ export const article: Article = {
     },
     {
       t: "p",
-      text: "A group booking one Sprinter on an hourly charter pays one fixed price and travels together. The arithmetic: a Sprinter is $175/hr with a 4-hour minimum, so four hours is $700, plus the 20% gratuity of $140 — **$840 total, fixed at booking**. Split eight ways, that is $105 per person for four hours with the vehicle staying with the group — winery to winery, no re-ordering cars at every stop. Split ten ways, $84 per person. Whether that beats several rideshares depends on the day, but it is known before anyone commits.",
+      text: "A group booking one Sprinter on an hourly charter pays one fixed price and travels together. The arithmetic: a Sprinter is $120/hr with a 4-hour minimum, so four hours is $480, plus the 20% gratuity of $96 and a 10% fuel surcharge of $48 — **$624 total, fixed at booking**. Split eight ways, that is $78 per person for four hours with the vehicle staying with the group — winery to winery, no re-ordering cars at every stop. Split ten ways, $62.40 per person. Whether that beats several rideshares depends on the day, but it is known before anyone commits.",
     },
     {
       t: "p",
@@ -99,7 +99,7 @@ export const article: Article = {
     { t: "h3", text: "A Six-Hour Sedan Charter" },
     {
       t: "p",
-      text: "Say you book a sedan for six hours — a day of meetings with stops where the car waits, or a long afternoon in Sonoma with a driver who stays with you. At $85/hr, 6 hours is $510. Add the 20% gratuity, $102, and the total is **$612 — quoted in full before you pay**, unchanged by traffic or demand. Hourly bookings carry a 4-hour minimum, so the shortest sedan charter is four hours: $340 plus $68 gratuity, $408 total.",
+      text: "Say you book a sedan for six hours — a day of meetings with stops where the car waits, or a long afternoon in Sonoma with a driver who stays with you. At $85/hr, 6 hours is $510. Add the 20% gratuity, $102, and the 10% fuel surcharge, $51, and the total is **$663 — quoted in full before you pay**, unchanged by traffic or demand. Hourly bookings carry a 4-hour minimum, so the shortest sedan charter is four hours: $340 plus $68 gratuity and a $34 fuel surcharge, $442 total.",
     },
     { t: "h3", text: "The Sacramento to San Francisco Run" },
     {
@@ -142,7 +142,7 @@ export const article: Article = {
     },
     {
       q: "What does a six-hour sedan charter cost with Global Link Transportation?",
-      a: "A sedan is $85 per hour, so six hours is $510, plus the fixed 20% gratuity of $102, for a total of $612 quoted before you pay. Hourly bookings have a 4-hour minimum, so the shortest sedan charter is $408 total including gratuity.",
+      a: "A sedan is $85 per hour, so six hours is $510, plus the fixed 20% gratuity of $102 and a 10% fuel surcharge of $51, for a total of $663 quoted before you pay. Hourly bookings have a 4-hour minimum, so the shortest sedan charter is $442 total including gratuity and fuel surcharge.",
     },
     {
       q: "Which is more reliable for an early morning flight?",

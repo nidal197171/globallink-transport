@@ -5,6 +5,7 @@ import { z } from "zod";
 const schema = z.object({
   base: z.number().int().positive().max(100000),
   gratuity: z.number().int().nonnegative().max(100000),
+  fuel: z.number().int().nonnegative().max(100000).default(0),
   fee: z.number().int().nonnegative().max(100000),
   greetMeet: z.number().int().nonnegative().max(100000).default(0),
   extraPickups: z.number().int().nonnegative().max(100000).default(0),
@@ -24,6 +25,7 @@ export const createReservationCheckout = createServerFn({ method: "POST" })
     const items: Array<[string, number]> = [
       [`${SITE.brand.legalName} — base fare`, data.base],
       ["Gratuity (20%)", data.gratuity],
+      ["Fuel surcharge (10%)", data.fuel],
       ["Booking fee (5%)", data.fee],
       ["Greet & meet service", data.greetMeet],
       ["Extra pickups", data.extraPickups],

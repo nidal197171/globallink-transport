@@ -122,7 +122,7 @@ export const article: Article = {
     { t: "h2", text: "A Note on Cost, Kept Straight" },
     {
       t: "p",
-      text: "Airport departures are point-to-point trips booked by instant quote — they are not hourly bookings, so the 4-hour minimum for hourly charters does not apply to your ride to the airport. A 20% gratuity is auto-added, so there is no curbside math. For reference, hourly rates are sedan $85/hr, SUV $120/hr, limousine $120/hr, Sprinter $175/hr, luxury Sprinter $225/hr, and limo Sprinter $275/hr, with the 4-hour minimum on hourly bookings only. For your early departure, the [instant quote](/#book) is the number that matters.",
+      text: "Airport departures are point-to-point trips booked by instant quote — they are not hourly bookings, so the 4-hour minimum for hourly charters does not apply to your ride to the airport. A 20% gratuity and a 10% fuel surcharge are auto-added, so there is no curbside math. For reference, hourly rates are sedan $85/hr, SUV $120/hr, limousine $120/hr, Sprinter $120/hr, luxury Sprinter $140/hr, and limo Sprinter $160/hr, with the 4-hour minimum on hourly bookings only. For your early departure, the [instant quote](/#book) is the number that matters.",
     },
     { t: "h2", text: "Sleep Like Your Ride Is Already Handled" },
     {
@@ -149,7 +149,7 @@ export const article: Article = {
     },
     {
       q: "Does the 4-hour minimum apply to an early morning airport ride?",
-      a: "No. Airport departures are point-to-point trips priced by instant quote at globallinktransport.com, not hourly bookings. The 4-hour minimum applies only to hourly charters. A 20% gratuity is auto-added to your trip.",
+      a: "No. Airport departures are point-to-point trips priced by instant quote at globallinktransport.com, not hourly bookings. The 4-hour minimum applies only to hourly charters. A 20% gratuity and a 10% fuel surcharge are auto-added to your trip.",
     },
   ],
 };

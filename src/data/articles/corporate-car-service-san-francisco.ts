@@ -61,9 +61,9 @@ export const article: Article = {
         "**Sedan:** $85/hr",
         "**SUV:** $120/hr",
         "**Limousine:** $120/hr",
-        "**Sprinter:** $175/hr",
-        "**Luxury Sprinter:** $225/hr",
-        "**Limo Sprinter:** $275/hr",
+        "**Sprinter:** $120/hr",
+        "**Luxury Sprinter:** $140/hr",
+        "**Limo Sprinter:** $160/hr",
       ],
     },
     {
@@ -73,7 +73,7 @@ export const article: Article = {
     { t: "h3", text: "Gratuity should be standardized, not improvised" },
     {
       t: "p",
-      text: "One quiet source of billing inconsistency is gratuity handled differently by every driver, or added at an amount you only discover after the trip. At Global Link Transportation, a 20% gratuity is auto-added and included in the quote up front. The number you approve is built the same way every time — no per-driver surprises, no tipping decisions handed to your executive at the curb, and no explaining line-item variation to finance.",
+      text: "One quiet source of billing inconsistency is gratuity handled differently by every driver, or added at an amount you only discover after the trip. At Global Link Transportation, a 20% gratuity and a 10% fuel surcharge are auto-added and included in the quote up front. The number you approve is built the same way every time — no per-driver surprises, no tipping decisions handed to your executive at the curb, and no explaining line-item variation to finance.",
     },
     {
       t: "p",
@@ -104,7 +104,7 @@ export const article: Article = {
     },
     {
       t: "p",
-      text: "Demand instant quotes and online booking. At globallinktransport.com you can [book a corporate car and get an instant quote](/#book) in minutes: enter the trip, choose the vehicle, see the price — including that standardized gratuity — and confirm. Phone booking should still exist for complex itineraries and changes, and it does: (415) 787-8776. But a routine airport pickup or hourly charter should never depend on catching someone at a desk. Review the full range of [corporate transportation services](/corporate-transportation) to see how executive travel, events, and group charters fit together before your first booking.",
+      text: "Demand instant quotes and online booking. At globallinktransport.com you can [book a corporate car and get an instant quote](/#book) in minutes: enter the trip, choose the vehicle, see the price — including that standardized gratuity and fuel surcharge — and confirm. Phone booking should still exist for complex itineraries and changes, and it does: (415) 787-8776. But a routine airport pickup or hourly charter should never depend on catching someone at a desk. Review the full range of [corporate transportation services](/corporate-transportation) to see how executive travel, events, and group charters fit together before your first booking.",
     },
     { t: "h2", text: "Reliability Standards to Verify Before a CEO Pickup" },
     {
@@ -128,7 +128,7 @@ export const article: Article = {
     },
     {
       t: "p",
-      text: "The right vehicle is a Sprinter at $175/hr, booked as an hourly charter for 8 hours. The arithmetic is straightforward: 8 hours × $175 = $1,400. The standardized 20% gratuity adds $280, for a total of $1,680 — known in full before the day begins, comfortably above the 4-hour hourly minimum, and unchanged if a meeting runs long within the booked window, because the car is yours for the day rather than dispatched trip by trip.",
+      text: "The right vehicle is a Sprinter at $120/hr, booked as an hourly charter for 8 hours. The arithmetic is straightforward: 8 hours × $120 = $960. The standardized 20% gratuity adds $192 and the 10% fuel surcharge adds $96, for a total of $1,248 — known in full before the day begins, comfortably above the 4-hour hourly minimum, and unchanged if a meeting runs long within the booked window, because the car is yours for the day rather than dispatched trip by trip.",
     },
     {
       t: "p",
@@ -136,7 +136,7 @@ export const article: Article = {
     },
     {
       t: "p",
-      text: "At smaller scale: a sedan held for a 5-hour executive day is 5 × $85 = $425, plus the 20% gratuity of $85, totaling $510. No surprises for finance.",
+      text: "At smaller scale: a sedan held for a 5-hour executive day is 5 × $85 = $425, plus the 20% gratuity of $85 and a 10% fuel surcharge of $42.50, totaling $552.50. No surprises for finance.",
     },
     { t: "h2", text: "The Standard to Hold Every Provider To" },
     {
@@ -155,7 +155,7 @@ export const article: Article = {
     },
     {
       q: "How much does a corporate car service cost in San Francisco?",
-      a: "Hourly rates at Global Link Transportation are $85/hr for a sedan, $120/hr for an SUV or limousine, $175/hr for a Sprinter, $225/hr for a luxury Sprinter, and $275/hr for a limo Sprinter, with a 4-hour minimum on hourly bookings and a 20% gratuity included in the quote up front.",
+      a: "Hourly rates at Global Link Transportation are $85/hr for a sedan, $120/hr for an SUV or limousine, $120/hr for a Sprinter, $140/hr for a luxury Sprinter, and $160/hr for a limo Sprinter, with a 4-hour minimum on hourly bookings and a 20% gratuity and 10% fuel surcharge included in the quote up front.",
     },
     {
       q: "What happens if an executive's flight is delayed?",
@@ -163,7 +163,7 @@ export const article: Article = {
     },
     {
       q: "Can I book a car for a full day of meetings or an investor roadshow?",
-      a: "Yes. Book an hourly charter — a Sprinter at $175/hr suits teams and multi-stop days. An 8-hour Sprinter charter is $1,400 plus the standardized 20% gratuity ($280), totaling $1,680, with the car and driver held for your group all day.",
+      a: "Yes. Book an hourly charter — a Sprinter at $120/hr suits teams and multi-stop days. An 8-hour Sprinter charter is $960 plus the standardized 20% gratuity ($192) and a 10% fuel surcharge ($96), totaling $1,248, with the car and driver held for your group all day.",
     },
   ],
 };

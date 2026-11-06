@@ -30,6 +30,7 @@ const orderSchema = z.object({
   amount: z.number().int().positive().max(100000),
   base: z.number().int().positive().max(100000).optional(),
   gratuity: z.number().int().nonnegative().max(100000).optional(),
+  fuel: z.number().int().nonnegative().max(100000).optional(),
   fee: z.number().int().nonnegative().max(100000).optional(),
   greetMeet: z.number().int().nonnegative().max(100000).optional(),
   extraPickups: z.number().int().nonnegative().max(100000).optional(),
@@ -72,6 +73,15 @@ export const createPayPalOrder = createServerFn({ method: "POST" })
                     unit_amount: { currency_code: "USD", value: data.gratuity.toFixed(2) },
                     quantity: "1",
                   },
+                  ...(data.fuel && data.fuel > 0
+                    ? [
+                        {
+                          name: "Fuel surcharge (10%)",
+                          unit_amount: { currency_code: "USD", value: data.fuel.toFixed(2) },
+                          quantity: "1",
+                        },
+                      ]
+                    : []),
                   {
                     name: "Booking fee (5%)",
                     unit_amount: { currency_code: "USD", value: data.fee.toFixed(2) },

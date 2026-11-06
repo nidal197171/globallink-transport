@@ -3,18 +3,18 @@ import type { Article } from "./types";
 export const article: Article = {
   slug: "how-much-does-a-limo-cost-per-hour",
   title:
-    "How Much Does a Limo Cost Per Hour? Bay Area Rates Explained (Sedan $85 – Limo Sprinter $275)",
+    "How Much Does a Limo Cost Per Hour? Bay Area Rates Explained (Sedan $85 – Limo Sprinter $160)",
   metaDescription:
-    "Limo cost per hour in the Bay Area: sedan $85, SUV $120, limousine $120, Sprinter $175–$275. 4-hour minimum, 20% gratuity in the quote.",
+    "Limo cost per hour in the Bay Area: sedan $85, SUV $120, limousine $120, Sprinter $120–$160. 4-hour minimum, 20% gratuity and 10% fuel surcharge in the quote.",
   excerpt:
-    "The full hourly rate card for Bay Area limo hire — sedan $85 to limo Sprinter $275 — plus the minimum, the gratuity, and worked totals.",
+    "The full hourly rate card for Bay Area limo hire — sedan $85 to limo Sprinter $160 — plus the minimum, the gratuity, and worked totals.",
   cluster: "Vehicles & Costs",
   keyword: "how much does it cost to rent a limo per hour",
   datePublished: "2026-11-05",
   blocks: [
     {
       t: "p",
-      text: "Short answer first: at Global Link Transportation, renting a limo by the hour in the Bay Area costs **$85 per hour for a sedan, $120 for an SUV, $120 for a limousine, $175 for a Sprinter, $225 for a luxury Sprinter, and $275 for a limo Sprinter**. Hourly bookings carry a 4-hour minimum, and a 20% gratuity is auto-added and shown in your quote up front, so the number you see is the number you plan around.",
+      text: "Short answer first: at Global Link Transportation, renting a limo by the hour in the Bay Area costs **$85 per hour for a sedan, $120 for an SUV, $120 for a limousine, $120 for a Sprinter, $140 for a luxury Sprinter, and $160 for a limo Sprinter**. Hourly bookings carry a 4-hour minimum, and a 20% gratuity and 10% fuel surcharge are auto-added and shown in your quote up front, so the number you see is the number you plan around.",
     },
     {
       t: "p",
@@ -27,14 +27,14 @@ export const article: Article = {
         "**Sedan — $85/hr:** One or two passengers, business travel, a quiet night out.",
         "**SUV — $120/hr:** More room for passengers and luggage, families and small groups.",
         "**Limousine — $120/hr:** The classic stretch for weddings, proms, and nights where the arrival matters.",
-        "**Sprinter — $175/hr:** Groups traveling together with headroom and luggage space.",
-        "**Luxury Sprinter — $225/hr:** The upgraded Sprinter interior for corporate and special-occasion groups.",
-        "**Limo Sprinter — $275/hr:** The top vehicle in the fleet — limo-style seating for a larger party.",
+        "**Sprinter — $120/hr:** Groups traveling together with headroom and luggage space.",
+        "**Luxury Sprinter — $140/hr:** The upgraded Sprinter interior for corporate and special-occasion groups.",
+        "**Limo Sprinter — $160/hr:** The top vehicle in the fleet — limo-style seating for a larger party.",
       ],
     },
     {
       t: "p",
-      text: "Two rules apply to every vehicle on that list. First, the **4-hour minimum**: an hourly charter is booked for at least four hours, even if your plans only need the car for part of that time. Second, **20% gratuity is auto-added** and included in the quote up front — it is not a surprise line item added after the trip. You can see the complete breakdown on our [hourly charter page](/#hourly) before you book anything.",
+      text: "Two rules apply to every vehicle on that list. First, the **4-hour minimum**: an hourly charter is booked for at least four hours, even if your plans only need the car for part of that time. Second, **20% gratuity and a 10% fuel surcharge are auto-added** and included in the quote up front — it is not a surprise line item added after the trip. You can see the complete breakdown on our [hourly charter page](/#hourly) before you book anything.",
     },
     { t: "h2", text: "What Moves the Price" },
     {
@@ -44,7 +44,7 @@ export const article: Article = {
     { t: "h3", text: "The vehicle you choose" },
     {
       t: "p",
-      text: "This is the biggest lever. The same six hours cost $510 in a sedan at $85/hr and $1,650 in a limo Sprinter at $275/hr, before gratuity. Pick for the job: a sedan is the right tool for an executive moving between meetings, while a Sprinter earns its rate when twelve people would otherwise need three separate cars and three separate pickup times.",
+      text: "This is the biggest lever. The same six hours cost $510 in a sedan at $85/hr and $960 in a limo Sprinter at $160/hr, before gratuity and fuel surcharge. Pick for the job: a sedan is the right tool for an executive moving between meetings, while a Sprinter earns its rate when twelve people would otherwise need three separate cars and three separate pickup times.",
     },
     { t: "h3", text: "How many hours you book" },
     {
@@ -54,7 +54,7 @@ export const article: Article = {
     { t: "h3", text: "The 4-hour minimum" },
     {
       t: "p",
-      text: "The minimum sets the floor for every hourly booking. The cheapest possible hourly charter is a sedan for four hours: $85 × 4 = $340, plus 20% gratuity of $68, for a **total of $408**. If your trip is a single ride from A to B, that floor is exactly why hourly may be the wrong product — more on that below.",
+      text: "The minimum sets the floor for every hourly booking. The cheapest possible hourly charter is a sedan for four hours: $85 × 4 = $340, plus 20% gratuity of $68 and a 10% fuel surcharge of $34, for a **total of $442**. If your trip is a single ride from A to B, that floor is exactly why hourly may be the wrong product — more on that below.",
     },
     { t: "h3", text: "Gratuity" },
     {
@@ -77,7 +77,7 @@ export const article: Article = {
         "**A chauffeur who waits:** The car stays with you. No re-booking, no waiting for a new driver between stops.",
         "**Multiple stops:** Dinner, then a venue, then a second venue, then home — one booking covers the whole evening.",
         "**Your itinerary, your order:** Change the sequence on the night and the charter follows your plans.",
-        "**Fuel included in the rate:** The hourly price covers the driving you do within your booked time.",
+        "**Fuel surcharge, stated up front:** A 10% fuel surcharge is added to every booking and shown in the quote — it covers the driving you do within your booked time, with no per-mile add-ons.",
         "**24-hour availability:** Early starts and late finishes run on the same rate card. The service is open 24 hours.",
       ],
     },
@@ -93,16 +93,16 @@ export const article: Article = {
     { t: "h3", text: "Example 1: A 6-hour SUV day" },
     {
       t: "p",
-      text: "A family books an SUV for six hours — a day split between shopping, lunch, and visiting relatives across the Bay Area, with the car waiting at each stop. The math: **$120/hr × 6 hours = $720**. Gratuity at 20% is $144. **Total: $864**, quoted up front before the day begins. No per-stop charges, no new driver at each leg, and no one in the group has to sit out the driving.",
+      text: "A family books an SUV for six hours — a day split between shopping, lunch, and visiting relatives across the Bay Area, with the car waiting at each stop. The math: **$120/hr × 6 hours = $720**. Gratuity at 20% is $144 and the 10% fuel surcharge is $72. **Total: $936**, quoted up front before the day begins. No per-stop charges, no new driver at each leg, and no one in the group has to sit out the driving.",
     },
     { t: "h3", text: "Example 2: An 8-hour limo Sprinter day" },
     {
       t: "p",
-      text: 'A wedding party books the limo Sprinter for eight hours — party pickup, ceremony, photo stops, and the reception, with the vehicle on hand all day. The math: **$275/hr × 8 hours = $2,200**. Gratuity at 20% is $440. **Total: $2,640**. Split across a wedding party, that is the cost of keeping the whole group together, on schedule, in one vehicle for the entire day — and the schedule point is the company\'s own standard: "We treat your schedule like our own. Always on time."',
+      text: 'A wedding party books the limo Sprinter for eight hours — party pickup, ceremony, photo stops, and the reception, with the vehicle on hand all day. The math: **$160/hr × 8 hours = $1,280**. Gratuity at 20% is $256 and the 10% fuel surcharge is $128. **Total: $1,664**. Split across a wedding party, that is the cost of keeping the whole group together, on schedule, in one vehicle for the entire day — and the schedule point is the company\'s own standard: "We treat your schedule like our own. Always on time."',
     },
     {
       t: "p",
-      text: "Run your own numbers the same way: hourly rate × hours booked, then add 20%. If your total surprises you, change the vehicle or trim the hours before you book — not after.",
+      text: "Run your own numbers the same way: hourly rate × hours booked, then add 30% — 20% gratuity plus a 10% fuel surcharge. If your total surprises you, change the vehicle or trim the hours before you book — not after.",
     },
     { t: "h2", text: "Why Some Companies Hide Their Rates" },
     {
@@ -130,7 +130,7 @@ export const article: Article = {
     { t: "h2", text: "When Hourly Is Not the Right Product" },
     {
       t: "p",
-      text: "Hourly is built for evenings and days with multiple stops and a waiting car. For a single ride from one place to another, it is usually the expensive way to buy it — the 4-hour minimum alone means a sedan airport run booked hourly starts at $408 with gratuity, before you have gone anywhere.",
+      text: "Hourly is built for evenings and days with multiple stops and a waiting car. For a single ride from one place to another, it is usually the expensive way to buy it — the 4-hour minimum alone means a sedan airport run booked hourly starts at $442 with gratuity and fuel surcharge included, before you have gone anywhere.",
     },
     {
       t: "p",
@@ -143,17 +143,17 @@ export const article: Article = {
     { t: "h2", text: "Get Your Exact Total Before You Book" },
     {
       t: "p",
-      text: "You now know the rate card: $85 to $275 per hour depending on the vehicle, a 4-hour minimum, and 20% gratuity included in the quote up front. For an exact total on your date, [get an instant quote and book](/#book) at globallinktransport.com, or call (415) 787-8776 and ask for the full total — hourly rate, minimum, and gratuity included — for the vehicle you have in mind.",
+      text: "You now know the rate card: $85 to $160 per hour depending on the vehicle, a 4-hour minimum, and 20% gratuity and a 10% fuel surcharge included in the quote up front. For an exact total on your date, [get an instant quote and book](/#book) at globallinktransport.com, or call (415) 787-8776 and ask for the full total — hourly rate, minimum, gratuity, and fuel surcharge included — for the vehicle you have in mind.",
     },
   ],
   faq: [
     {
       q: "How much does it cost to rent a limo per hour in the Bay Area?",
-      a: "At Global Link Transportation, hourly rates are: sedan $85/hr, SUV $120/hr, limousine $120/hr, Sprinter $175/hr, luxury Sprinter $225/hr, and limo Sprinter $275/hr. Hourly bookings have a 4-hour minimum and a 20% gratuity auto-added, shown in the quote up front.",
+      a: "At Global Link Transportation, hourly rates are: sedan $85/hr, SUV $120/hr, limousine $120/hr, Sprinter $120/hr, luxury Sprinter $140/hr, and limo Sprinter $160/hr. Hourly bookings have a 4-hour minimum and a 20% gratuity and 10% fuel surcharge auto-added, shown in the quote up front.",
     },
     {
       q: "What is the minimum number of hours for a limo rental?",
-      a: "Hourly bookings carry a 4-hour minimum on every vehicle. The lowest-cost hourly charter is a sedan for four hours: $85 × 4 = $340, plus 20% gratuity ($68), for a total of $408.",
+      a: "Hourly bookings carry a 4-hour minimum on every vehicle. The lowest-cost hourly charter is a sedan for four hours: $85 × 4 = $340, plus 20% gratuity ($68) and a 10% fuel surcharge ($34), for a total of $442.",
     },
     {
       q: "Is gratuity included in the hourly limo price?",
