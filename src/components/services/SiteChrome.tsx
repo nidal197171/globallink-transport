@@ -30,12 +30,6 @@ const NAV_LINKS: { href: string; label: string }[] = [
 export function SiteHeader({ home = false }: { home?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   return (<>
-      <div className="disclaimer-bar">
-        We are a global ground transportation arranger
-        <br />
-        <span className="disclaimer-sub">(we are not a limo company)</span>
-      </div>
-      <div className="announce-bar">Coming soon to more US cities and Dubai</div>
       <header className={home ? undefined : "service-site-header"}>
         <div className="wrap nav-inner">
           <div className="logo">

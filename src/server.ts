@@ -46,6 +46,15 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    // SEO patch-01 (2026-11-06): the Lovable staging host serves a full duplicate
+    // of the site — 301 every staging request to the real domain, same path.
+    const url = new URL(request.url);
+    if (url.hostname.endsWith(".lovable.app")) {
+      return new Response(null, {
+        status: 301,
+        headers: { Location: `https://globallinktransport.com${url.pathname}${url.search}` },
+      });
+    }
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

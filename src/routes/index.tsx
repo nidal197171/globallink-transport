@@ -56,6 +56,7 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://globallinktransport.com/" }],
   }),
   component: Index,
 });
@@ -1628,14 +1629,17 @@ function Index() {
           <div>
             <div className="eyebrow-line">
               <span className="dot" />
-              Built for corporate travel and event teams
+              SAN FRANCISCO · BAY AREA · SFO / OAK / SJC
             </div>
-            <h1>San Francisco Limo Service &amp; Bay Area Black Car Transfers</h1>
-            <p className="lead">One dispatch team for every ride your company books — sedan to coach.</p>
+            <h1>San Francisco Limo &amp; Black Car Service</h1>
+            <p className="lead">
+              Chauffeured sedans, SUVs, limousines and Sprinters with flight-tracked airport pickups, fixed fares and a
+              driver waiting when you land — not when the app finds one.
+            </p>
             <div className="hero-actions">
               <div className="hero-cta-stack">
                 <a href="#book" className="btn btn-brass">
-                  Reserve & Pay
+                  Check your fare
                 </a>
                 <Link to="/pay" search={{}} className="btn btn-brass" preload="intent">
                   Custom reservations pay
@@ -1651,7 +1655,7 @@ function Index() {
                 View the fleet
               </a>
               <a href={PHONE_HREF} className="btn btn-outline-dark">
-                Call us: {PHONE}
+                Call {PHONE}
               </a>
               <a href={`mailto:${EMAIL}`} className="btn btn-outline-dark">
                 Email us: {EMAIL}
@@ -1986,7 +1990,7 @@ function Index() {
                 "Every chauffeur showed up early for our three-day roadshow across four cities. Not one delay."
               </p>
               <div className="who">
-                <strong>Priya N.</strong>Event planner, London
+                <strong>Priya N.</strong>Event planner
               </div>
             </div>
             <div className="test-card">

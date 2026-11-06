@@ -15,6 +15,55 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SITE } from "@/config/site";
 import { ChatWidget } from "@/components/ChatWidget";
 
+// LocalBusiness structured data (SEO patch-03, 2026-11-06). Sitewide in the root
+// head. No aggregateRating / review data until real Google reviews exist.
+const LOCAL_BUSINESS_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "LimousineService",
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "US",
+    addressLocality: "Burlingame",
+    addressRegion: "CA",
+    postalCode: "94010",
+    streetAddress: "405 California Dr",
+  },
+  areaServed: [
+    "San Francisco",
+    "San Mateo",
+    "San Jose",
+    "Oakland",
+    "Berkeley",
+    "Palo Alto",
+    "Mountain View",
+    "Daly City",
+    "South San Francisco",
+    "Redwood City",
+    "Fremont",
+    "Santa Clara",
+    "Sunnyvale",
+    "Walnut Creek",
+    "Burlingame",
+    "Napa",
+    "Sonoma",
+    "Livermore",
+    "Monterey",
+    "Sacramento",
+  ],
+  email: "info@globallinktransport.com",
+  name: "Global Link Transportation",
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    closes: "23:59",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    opens: "00:00",
+  },
+  priceRange: "$$",
+  sameAs: ["https://www.instagram.com/global.link1"],
+  telephone: "+1-415-787-8776",
+  url: "https://globallinktransport.com/",
+};
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -105,6 +154,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/icons/apple-touch-icon.png" },
     ],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(LOCAL_BUSINESS_JSON_LD) }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
