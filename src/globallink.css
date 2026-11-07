@@ -502,6 +502,26 @@
 .service-related-links a{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--hairline);padding:20px 0;font-size:16px;}
 .service-related-links a:hover{color:var(--brass-dark);}
 .service-related-links span{flex-shrink:0;color:var(--brass-dark);}
+.service-rates{padding:56px 0;border-top:1px solid var(--hairline);}
+.service-rates-inner{max-width:880px;}
+.service-rates h2{font-size:28px;letter-spacing:0;margin-bottom:12px;}
+.service-rates p{font-size:17px;line-height:1.7;color:var(--steel);}
+.service-rates table{width:100%;border-collapse:collapse;margin:28px 0 20px;}
+.service-rates th,.service-rates td{text-align:left;padding:12px 0;border-top:1px solid var(--hairline);font-size:16px;}
+.service-rates th{color:var(--charcoal);font-weight:600;}
+.service-rates td{color:var(--steel);}
+.service-rates td:last-child,.service-rates th:last-child{text-align:right;color:var(--charcoal);font-weight:600;}
+.service-rates-note{font-size:15px !important;}
+.service-faqs{padding:56px 0;background:var(--paper-2);border-top:1px solid var(--hairline);}
+.service-faqs-inner{max-width:880px;}
+.service-faqs h2{font-size:28px;letter-spacing:0;margin-bottom:24px;}
+.service-faqs dl>div{padding:20px 0;border-top:1px solid var(--hairline);}
+.service-faqs dt{font-size:17px;font-weight:600;color:var(--charcoal);margin-bottom:8px;}
+.service-faqs dd{font-size:16px;line-height:1.7;color:var(--steel);margin:0;}
+.service-faqs dd strong{font-weight:600;color:var(--charcoal);}
+.service-nap{padding:32px 0;border-top:1px solid var(--hairline);}
+.service-nap-inner{max-width:880px;}
+.service-nap address{font-style:normal;font-size:15px;line-height:1.7;color:var(--steel);}
 .service-page-link{display:inline-block;color:var(--brass-dark);font-size:13px;font-weight:600;margin-bottom:18px;text-decoration:underline;}
 .service-site-header .nav-inner{gap:20px;}
 .service-site-header .logo{flex-shrink:0;}

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AffiliateRouteImport } from './routes/affiliate'
 import { Route as AgreementRouteImport } from './routes/agreement'
+import { Route as BurlingameLimoServiceRouteImport } from './routes/burlingame-limo-service'
 import { Route as CorporateTransportationRouteImport } from './routes/corporate-transportation'
 import { Route as PayRouteImport } from './routes/pay'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -35,6 +36,11 @@ const AffiliateRoute = AffiliateRouteImport.update({
 const AgreementRoute = AgreementRouteImport.update({
   id: '/agreement',
   path: '/agreement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BurlingameLimoServiceRoute = BurlingameLimoServiceRouteImport.update({
+  id: '/burlingame-limo-service',
+  path: '/burlingame-limo-service',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CorporateTransportationRoute = CorporateTransportationRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/'
     | '/affiliate'
     | '/agreement'
+    | '/burlingame-limo-service'
     | '/corporate-transportation'
     | '/pay'
     | '/privacy'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/'
     | '/affiliate'
     | '/agreement'
+    | '/burlingame-limo-service'
     | '/corporate-transportation'
     | '/pay'
     | '/privacy'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/'
     | '/affiliate'
     | '/agreement'
+    | '/burlingame-limo-service'
     | '/corporate-transportation'
     | '/pay'
     | '/privacy'
@@ -175,6 +187,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AffiliateRoute: typeof AffiliateRoute
   AgreementRoute: typeof AgreementRoute
+  BurlingameLimoServiceRoute: typeof BurlingameLimoServiceRoute
   CorporateTransportationRoute: typeof CorporateTransportationRoute
   PayRoute: typeof PayRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/agreement'
       fullPath: '/agreement'
       preLoaderRoute: typeof AgreementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/burlingame-limo-service': {
+      id: '/burlingame-limo-service'
+      path: '/burlingame-limo-service'
+      fullPath: '/burlingame-limo-service'
+      preLoaderRoute: typeof BurlingameLimoServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/corporate-transportation': {
@@ -279,6 +299,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AffiliateRoute: AffiliateRoute,
   AgreementRoute: AgreementRoute,
+  BurlingameLimoServiceRoute: BurlingameLimoServiceRoute,
   CorporateTransportationRoute: CorporateTransportationRoute,
   PayRoute: PayRoute,
   PrivacyRoute: PrivacyRoute,

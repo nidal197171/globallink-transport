@@ -1,3 +1,19 @@
+export interface ServiceFaq {
+  question: string;
+  answer: string;
+}
+
+export interface ServicePageData {
+  title: string;
+  description: string;
+  h1: string;
+  image: string;
+  alt: string;
+  paragraphs: readonly string[];
+  /** City/service-specific FAQs — rendered only when present. */
+  faqs?: readonly ServiceFaq[];
+}
+
 export const SERVICE_PAGES = {
   "/sfo-airport-limo": {
     title: "SFO Airport Limo & Black Car Service | Global Link",
@@ -10,6 +26,63 @@ export const SERVICE_PAGES = {
       "Flight tracking helps your chauffeur coordinate SFO airport pickup around flight delays and early arrivals. Include your flight information when booking your airport transfer, and confirm the terminal and meeting location with dispatch before pickup. Meet & greet can be selected for your reservation; follow your confirmed pickup instructions at the airport terminals. SFO airport limo service pairs that arrival coordination with black car comfort and luxury car service throughout the Bay Area.",
       "For business arrivals in San Francisco, executive car service and corporate transportation connect the airport with hotels, offices, meetings, and conferences. A town car or limousine suits individual travelers, while group transportation can include a charter bus or bus rental for a larger visiting team. Our chauffeur network coordinates airport car service and onward ground transportation, so an SFO airport transfer fits into your wider Bay Area itinerary.",
       "An SFO airport limo reservation can also start a wedding limo itinerary, prom limo evening, or wine country tours from San Francisco. Arrange luxury car service for a Napa Valley wine tour or Sonoma wine tours and wine tasting, or ask about party bus options for a group celebration. Book your airport transfer on the homepage and choose the vehicle and journey that suit your Bay Area plans, from black car and town car rides to limousine transportation.",
+    ],
+    faqs: [
+      {
+        question: "Where does my driver meet me at SFO?",
+        answer:
+          "With meet & greet selected, your chauffeur waits at arrivals with a name sign. Flight tracking keeps pickup coordinated around delays and early arrivals — confirm the terminal and meeting location with dispatch before pickup and follow your confirmed pickup instructions at the terminal.",
+      },
+      {
+        question: "What happens if my flight is delayed?",
+        answer:
+          "Your chauffeur tracks your flight and coordinates pickup around the delay, so a late arrival does not mean a missed ride. Include your airline and flight number when booking so dispatch can follow the flight.",
+      },
+      {
+        question: "Do I need to give my flight number to book an SFO pickup?",
+        answer:
+          "Yes. Airport pickups require your airline and flight number — a single field at booking — so your chauffeur can track the flight and be at the terminal when you land.",
+      },
+      {
+        question: "Can an SFO pickup start a Napa wine tour or a wedding day?",
+        answer:
+          "Yes. An SFO airport transfer can connect straight on to a Napa Valley or Sonoma wine tour, a wedding venue, or a hotel, with the same chauffeur and vehicle — book the onward journey with your airport transfer.",
+      },
+    ],
+  },
+  "/burlingame-limo-service": {
+    title: "Burlingame Limo Service & SFO-Area Black Car | Global Link",
+    description: "Burlingame limo and black car service minutes from SFO. Airport pickups, hotel transfers, weddings and hourly chauffeur — book online.",
+    h1: "Burlingame Limo Service & Black Car Near SFO",
+    image: "/images/services/airport.jpg",
+    alt: "Burlingame chauffeured car service near SFO",
+    paragraphs: [
+      "Burlingame is the closest Peninsula city to San Francisco International Airport, and Global Link Transportation arranges limo and black car service across it — from SFO to downtown Burlingame Avenue, the bayfront hotels, and the Caltrain station on California Drive. A chauffeur handles the short airport run or the longer trip into San Francisco, the Peninsula, or Silicon Valley, with a sedan, SUV, limousine, or Sprinter to match the party. Book an airport transfer or an hourly chauffeur and your car is confirmed before you land.",
+      "Pickup points cover the whole SFO hotel cluster: the Hyatt Regency San Francisco Airport, San Francisco Airport Marriott Waterfront, Embassy Suites, and Hilton San Francisco Airport Bayfront, plus downtown Burlingame Avenue addresses, the Burlingame Caltrain station, and Bayfront Park. The drive from SFO to Burlingame is about five minutes; downtown San Francisco is roughly 25–30 minutes via US-101, Palo Alto about 25 minutes, and San Jose about 35–40 minutes. Airport pickups include flight tracking and a name-sign meet at arrivals, with the airline and flight number taken at booking.",
+      "Burlingame is where flight crews, airline staff, and business travelers staying at the airport hotels book most — a 5 AM departure or a midnight arrival is a routine pickup here, and the service runs 24 hours. Wedding parties book Burlingame too, with Kohl Mansion the best-known local venue, and conference guests at the bayfront hotels use an hourly chauffeur for multi-stop days. A Sprinter suits a crew or a wedding party traveling together; a sedan or SUV suits a solo traveler or a couple.",
+      "A Burlingame booking can also be the start of a longer day: an SFO pickup that continues to a Napa Valley or Sonoma wine tour, a corporate roadshow down the Peninsula, or a wedding weekend. Hourly chauffeur service carries a 4-hour minimum, and airport transfers come with fixed fares and no surge pricing. Get an instant quote on the homepage and book your Burlingame car service online, or call (415) 787-8776.",
+    ],
+    faqs: [
+      {
+        question: "How long is the drive from SFO to Burlingame?",
+        answer:
+          "About five minutes by car — Burlingame is the closest Peninsula city to the airport. Your chauffeur tracks your flight and meets you at arrivals with a name sign, so the short ride starts the moment you land.",
+      },
+      {
+        question: "Do you pick up from hotels near SFO in Burlingame?",
+        answer:
+          "Yes. We pick up from the airport hotels in Burlingame — Hyatt Regency San Francisco Airport, San Francisco Airport Marriott Waterfront, Embassy Suites, and Hilton San Francisco Airport Bayfront — as well as downtown Burlingame Avenue addresses and the Burlingame Caltrain station.",
+      },
+      {
+        question: "Can I book a car from Burlingame to downtown San Francisco?",
+        answer:
+          "Yes. The drive to downtown San Francisco is roughly 25–30 minutes via US-101. Book it as a one-way transfer or as an hourly chauffeur if you have several stops — get an instant quote on the homepage.",
+      },
+      {
+        question: "Do you provide wedding transportation in Burlingame?",
+        answer:
+          "Yes. We arrange wedding limousines and Sprinter group transport for Burlingame venues including Kohl Mansion, with an hourly chauffeur on a 4-hour minimum for the ceremony, photos, and reception.",
+      },
     ],
   },
   "/san-francisco-limo-service": {
@@ -64,9 +137,29 @@ export const SERVICE_PAGES = {
       "Connect your wine country tours with an airport transfer when arriving through SFO. Our SFO airport limo and airport car service provide flight tracking for your San Francisco airport arrival, followed by black car, town car, limousine, or executive car service for the next part of your journey. Book your Napa Valley wine tour, Sonoma wine tours, or wine tasting tours on the homepage and include your Bay Area pickup, planned tasting rooms, and full-day travel needs.",
     ],
   },
-} as const;
+} satisfies Record<string, ServicePageData>;
 
 export type ServicePath = keyof typeof SERVICE_PAGES;
+
+/**
+ * Hourly chauffeur rates, from the SEO fact sheet (NED 2026-11-06).
+ * NOTE: these are the fact-sheet values — sedan $85, SUV $120, limousine
+ * $120, Sprinter $120 / $140 / $160. The booking form's HOURLY_RATES still
+ * shows SUV/limousine at $140; that is a known open item and NED's call —
+ * content keeps $120 here. Do NOT "sync" this table to HOURLY_RATES.
+ */
+export const HOURLY_RATES_FACT_SHEET: readonly { label: string; rate: number }[] = [
+  { label: "Sedan", rate: 85 },
+  { label: "SUV", rate: 120 },
+  { label: "Limousine", rate: 120 },
+  { label: "Sprinter", rate: 120 },
+  { label: "Luxury Sprinter", rate: 140 },
+  { label: "Limo Sprinter", rate: 160 },
+];
+
+/** Canonical NAP — the exact string used on the site, GBP and every citation. */
+export const CANONICAL_NAP =
+  "Global Link Transportation · 405 California Dr, Burlingame, CA 94010 · (415) 787-8776 · https://globallinktransport.com/";
 
 export const BOLD_TERMS = [
   "airport", "limo", "limousine", "San Francisco", "Bay Area", "SFO", "black car",
