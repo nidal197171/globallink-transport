@@ -85,6 +85,41 @@ export const SERVICE_PAGES = {
       },
     ],
   },
+  "/san-jose-limo-service": {
+    title: "San Jose Limo Service & Silicon Valley Black Car | Global Link",
+    description: "San Jose limo and black car service across Silicon Valley. SJC airport pickups, corporate roadshows, events and hourly chauffeur — book online.",
+    h1: "San Jose Limo Service & Silicon Valley Black Car",
+    image: "/images/services/business.jpg",
+    alt: "San Jose chauffeured car service in Silicon Valley",
+    paragraphs: [
+      "San Jose is the capital of Silicon Valley, and Global Link Transportation arranges limo and black car service across it — from Norman Y. Mineta San Jose International Airport (SJC) to downtown San Jose, the convention center, Santana Row, and the tech campuses that line the valley. A chauffeur handles the airport run, the cross-Bay Area trip to San Francisco, or a full day of meetings across Santa Clara County, with a sedan, SUV, limousine, or Sprinter to match the party. Book an airport transfer or an hourly chauffeur and your car is confirmed before you land.",
+      "Pickup points cover the whole city: SJC terminals, downtown hotels and the San Jose McEnery Convention Center, the SAP Center, San Jose State University, Santana Row, and offices across North San Jose and the Golden Triangle. The drive from SJC to downtown San Jose is about 5–10 minutes; Palo Alto is roughly 20–25 minutes, SFO about 45–60 minutes via US-101, and downtown San Francisco about an hour. Airport pickups include flight tracking and a name-sign meet at arrivals, with the airline and flight number taken at booking.",
+      "San Jose is where tech executives, conference attendees, and event groups book most — a roadshow that starts at a North San Jose campus, runs through meetings in Palo Alto and Mountain View, and ends at SFO is a routine day here, and the service runs 24 hours. Event groups book for the SAP Center and for Levi's Stadium in neighboring Santa Clara, where a Sprinter keeps a whole group together instead of five separate cars. A sedan or SUV suits a solo executive or a couple; a Sprinter suits a team or a wedding party.",
+      "A San Jose booking can also be the start of a longer day: an SJC pickup that continues to a Napa Valley or Sonoma wine tour, a wedding at a San Jose venue such as Hayes Mansion, or a corporate event in San Francisco. Hourly chauffeur service carries a 4-hour minimum, and airport transfers come with fixed fares and no surge pricing. Get an instant quote on the homepage and book your San Jose car service online, or call (415) 787-8776.",
+    ],
+    faqs: [
+      {
+        question: "How long is the drive from SJC to downtown San Jose?",
+        answer:
+          "About 5–10 minutes by car — SJC sits just north of downtown. Your chauffeur tracks your flight and meets you at arrivals with a name sign, so the short ride starts the moment you land.",
+      },
+      {
+        question: "Do you pick up from San Jose airport (SJC)?",
+        answer:
+          "Yes. We pick up from Norman Y. Mineta San Jose International Airport with flight tracking and a name-sign meet at arrivals. Include your airline and flight number when booking so dispatch can follow the flight.",
+      },
+      {
+        question: "Can I book a car from San Jose to SFO?",
+        answer:
+          "Yes. The drive to SFO is roughly 45–60 minutes via US-101. Book it as a one-way transfer or as an hourly chauffeur if you have several stops — get an instant quote on the homepage.",
+      },
+      {
+        question: "Do you provide transportation for events at the SAP Center or Levi's Stadium?",
+        answer:
+          "Yes. We arrange limousines and Sprinter group transport for events at the SAP Center in downtown San Jose and Levi's Stadium in neighboring Santa Clara, with an hourly chauffeur on a 4-hour minimum for the game, concert, or tailgate.",
+      },
+    ],
+  },
   "/san-francisco-limo-service": {
     title: "San Francisco Limo Service & Black Car | Global Link",
     description: "Luxury limo service in San Francisco. Black car, town car, executive car service for airport transfers, events, and hourly chauffeur.",

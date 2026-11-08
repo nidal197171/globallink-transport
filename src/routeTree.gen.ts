@@ -17,6 +17,7 @@ import { Route as CorporateTransportationRouteImport } from './routes/corporate-
 import { Route as PayRouteImport } from './routes/pay'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SanFranciscoLimoServiceRouteImport } from './routes/san-francisco-limo-service'
+import { Route as SanJoseLimoServiceRouteImport } from './routes/san-jose-limo-service'
 import { Route as SfoAirportLimoRouteImport } from './routes/sfo-airport-limo'
 import { Route as WeddingLimoRouteImport } from './routes/wedding-limo'
 import { Route as WineCountryToursRouteImport } from './routes/wine-country-tours'
@@ -63,6 +64,11 @@ const SanFranciscoLimoServiceRoute = SanFranciscoLimoServiceRouteImport.update({
   path: '/san-francisco-limo-service',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SanJoseLimoServiceRoute = SanJoseLimoServiceRouteImport.update({
+  id: '/san-jose-limo-service',
+  path: '/san-jose-limo-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SfoAirportLimoRoute = SfoAirportLimoRouteImport.update({
   id: '/sfo-airport-limo',
   path: '/sfo-airport-limo',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
+  '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
   '/wedding-limo': typeof WeddingLimoRoute
   '/wine-country-tours': typeof WineCountryToursRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
+  '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
   '/wedding-limo': typeof WeddingLimoRoute
   '/wine-country-tours': typeof WineCountryToursRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
+  '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
   '/wedding-limo': typeof WeddingLimoRoute
   '/wine-country-tours': typeof WineCountryToursRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/pay'
     | '/privacy'
     | '/san-francisco-limo-service'
+    | '/san-jose-limo-service'
     | '/sfo-airport-limo'
     | '/wedding-limo'
     | '/wine-country-tours'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/pay'
     | '/privacy'
     | '/san-francisco-limo-service'
+    | '/san-jose-limo-service'
     | '/sfo-airport-limo'
     | '/wedding-limo'
     | '/wine-country-tours'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/pay'
     | '/privacy'
     | '/san-francisco-limo-service'
+    | '/san-jose-limo-service'
     | '/sfo-airport-limo'
     | '/wedding-limo'
     | '/wine-country-tours'
@@ -192,6 +204,7 @@ export interface RootRouteChildren {
   PayRoute: typeof PayRoute
   PrivacyRoute: typeof PrivacyRoute
   SanFranciscoLimoServiceRoute: typeof SanFranciscoLimoServiceRoute
+  SanJoseLimoServiceRoute: typeof SanJoseLimoServiceRoute
   SfoAirportLimoRoute: typeof SfoAirportLimoRoute
   WeddingLimoRoute: typeof WeddingLimoRoute
   WineCountryToursRoute: typeof WineCountryToursRoute
@@ -257,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SanFranciscoLimoServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/san-jose-limo-service': {
+      id: '/san-jose-limo-service'
+      path: '/san-jose-limo-service'
+      fullPath: '/san-jose-limo-service'
+      preLoaderRoute: typeof SanJoseLimoServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sfo-airport-limo': {
       id: '/sfo-airport-limo'
       path: '/sfo-airport-limo'
@@ -304,6 +324,7 @@ const rootRouteChildren: RootRouteChildren = {
   PayRoute: PayRoute,
   PrivacyRoute: PrivacyRoute,
   SanFranciscoLimoServiceRoute: SanFranciscoLimoServiceRoute,
+  SanJoseLimoServiceRoute: SanJoseLimoServiceRoute,
   SfoAirportLimoRoute: SfoAirportLimoRoute,
   WeddingLimoRoute: WeddingLimoRoute,
   WineCountryToursRoute: WineCountryToursRoute,
