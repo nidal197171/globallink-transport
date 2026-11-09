@@ -120,6 +120,41 @@ export const SERVICE_PAGES = {
       },
     ],
   },
+  "/palo-alto-limo-service": {
+    title: "Palo Alto Limo Service & Stanford Black Car | Global Link",
+    description: "Palo Alto limo and black car service for Stanford, SFO and SJC airport pickups, medical visits, corporate travel and hourly chauffeur — book online.",
+    h1: "Palo Alto Limo Service & Stanford Black Car",
+    image: "/images/services/business.jpg",
+    alt: "Palo Alto chauffeured car service near Stanford",
+    paragraphs: [
+      "Palo Alto is the heart of the Peninsula, and Global Link Transportation arranges limo and black car service across it — from SFO and SJC to Stanford University, Stanford Health Care, downtown University Avenue, and the offices of Stanford Research Park. A chauffeur handles the airport run, the cross-Bay Area trip to San Francisco, or a full day of meetings and appointments across the city, with a sedan, SUV, limousine, or Sprinter to match the party. Book an airport transfer or an hourly chauffeur and your car is confirmed before you land.",
+      "Pickup points cover the whole city: SFO and SJC terminals, the Palo Alto Caltrain station, Stanford University campus, Stanford Health Care and the Palo Alto VA Medical Center, downtown University Avenue and California Avenue addresses, the Stanford Shopping Center, and offices across Stanford Research Park. The drive from SFO to Palo Alto is about 30–35 minutes via US-101; SJC is roughly 20–25 minutes, San Jose about 25 minutes, and downtown San Francisco about 45–50 minutes. Airport pickups include flight tracking and a name-sign meet at arrivals, with the airline and flight number taken at booking.",
+      "Palo Alto is where Stanford visitors, medical patients and their families, and tech executives book most — a parent arriving for a campus tour, a family coming for a hospital appointment, or an executive with back-to-back meetings in Stanford Research Park and Mountain View is a routine day here, and the service runs 24 hours. Event groups book for Stanford ceremonies and weddings at Gamble Garden and other local venues, where a Sprinter keeps a whole party together instead of several separate cars. A sedan or SUV suits a solo traveler or a couple; a Sprinter suits a family group or a wedding party.",
+      "A Palo Alto booking can also be the start of a longer day: an SFO pickup that continues to a Napa Valley or Sonoma wine tour, a corporate roadshow down the Peninsula, or a wedding weekend. Hourly chauffeur service carries a 4-hour minimum, and airport transfers come with fixed fares and no surge pricing. Get an instant quote on the homepage and book your Palo Alto car service online, or call (415) 787-8776.",
+    ],
+    faqs: [
+      {
+        question: "How long is the drive from SFO to Palo Alto?",
+        answer:
+          "About 30–35 minutes by car via US-101. Your chauffeur tracks your flight and meets you at arrivals with a name sign, so the ride starts the moment you land.",
+      },
+      {
+        question: "Do you pick up from Stanford University and Stanford Health Care?",
+        answer:
+          "Yes. We pick up from Stanford University campus, Stanford Health Care, and the Palo Alto VA Medical Center, as well as downtown University Avenue and California Avenue addresses, the Palo Alto Caltrain station, and the Stanford Shopping Center.",
+      },
+      {
+        question: "Can I book a car from Palo Alto to SJC or SFO?",
+        answer:
+          "Yes. The drive to SJC is roughly 20–25 minutes and to SFO about 30–35 minutes via US-101. Book it as a one-way transfer or as an hourly chauffeur if you have several stops — get an instant quote on the homepage.",
+      },
+      {
+        question: "Do you provide transportation for Stanford events and weddings in Palo Alto?",
+        answer:
+          "Yes. We arrange limousines and Sprinter group transport for Stanford ceremonies, weddings at venues such as Gamble Garden, and family gatherings, with an hourly chauffeur on a 4-hour minimum for the ceremony, photos, and reception.",
+      },
+    ],
+  },
   "/san-francisco-limo-service": {
     title: "San Francisco Limo Service & Black Car | Global Link",
     description: "Luxury limo service in San Francisco. Black car, town car, executive car service for airport transfers, events, and hourly chauffeur.",

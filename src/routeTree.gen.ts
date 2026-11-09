@@ -14,6 +14,7 @@ import { Route as AffiliateRouteImport } from './routes/affiliate'
 import { Route as AgreementRouteImport } from './routes/agreement'
 import { Route as BurlingameLimoServiceRouteImport } from './routes/burlingame-limo-service'
 import { Route as CorporateTransportationRouteImport } from './routes/corporate-transportation'
+import { Route as PaloAltoLimoServiceRouteImport } from './routes/palo-alto-limo-service'
 import { Route as PayRouteImport } from './routes/pay'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SanFranciscoLimoServiceRouteImport } from './routes/san-francisco-limo-service'
@@ -47,6 +48,11 @@ const BurlingameLimoServiceRoute = BurlingameLimoServiceRouteImport.update({
 const CorporateTransportationRoute = CorporateTransportationRouteImport.update({
   id: '/corporate-transportation',
   path: '/corporate-transportation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaloAltoLimoServiceRoute = PaloAltoLimoServiceRouteImport.update({
+  id: '/palo-alto-limo-service',
+  path: '/palo-alto-limo-service',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PayRoute = PayRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/agreement': typeof AgreementRoute
   '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
+  '/palo-alto-limo-service': typeof PaloAltoLimoServiceRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/agreement': typeof AgreementRoute
   '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
+  '/palo-alto-limo-service': typeof PaloAltoLimoServiceRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/agreement': typeof AgreementRoute
   '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
+  '/palo-alto-limo-service': typeof PaloAltoLimoServiceRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/agreement'
     | '/burlingame-limo-service'
     | '/corporate-transportation'
+    | '/palo-alto-limo-service'
     | '/pay'
     | '/privacy'
     | '/san-francisco-limo-service'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/agreement'
     | '/burlingame-limo-service'
     | '/corporate-transportation'
+    | '/palo-alto-limo-service'
     | '/pay'
     | '/privacy'
     | '/san-francisco-limo-service'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/agreement'
     | '/burlingame-limo-service'
     | '/corporate-transportation'
+    | '/palo-alto-limo-service'
     | '/pay'
     | '/privacy'
     | '/san-francisco-limo-service'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   AgreementRoute: typeof AgreementRoute
   BurlingameLimoServiceRoute: typeof BurlingameLimoServiceRoute
   CorporateTransportationRoute: typeof CorporateTransportationRoute
+  PaloAltoLimoServiceRoute: typeof PaloAltoLimoServiceRoute
   PayRoute: typeof PayRoute
   PrivacyRoute: typeof PrivacyRoute
   SanFranciscoLimoServiceRoute: typeof SanFranciscoLimoServiceRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/corporate-transportation'
       fullPath: '/corporate-transportation'
       preLoaderRoute: typeof CorporateTransportationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/palo-alto-limo-service': {
+      id: '/palo-alto-limo-service'
+      path: '/palo-alto-limo-service'
+      fullPath: '/palo-alto-limo-service'
+      preLoaderRoute: typeof PaloAltoLimoServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pay': {
@@ -321,6 +341,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgreementRoute: AgreementRoute,
   BurlingameLimoServiceRoute: BurlingameLimoServiceRoute,
   CorporateTransportationRoute: CorporateTransportationRoute,
+  PaloAltoLimoServiceRoute: PaloAltoLimoServiceRoute,
   PayRoute: PayRoute,
   PrivacyRoute: PrivacyRoute,
   SanFranciscoLimoServiceRoute: SanFranciscoLimoServiceRoute,
