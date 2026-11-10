@@ -155,6 +155,41 @@ export const SERVICE_PAGES = {
       },
     ],
   },
+  "/oakland-limo-service": {
+    title: "Oakland Limo Service & OAK Airport Black Car | Global Link",
+    description: "Oakland limo and black car service for OAK airport pickups, Jack London Square, downtown events and hourly chauffeur — book online.",
+    h1: "Oakland Limo Service & OAK Airport Black Car",
+    image: "/images/services/airport.jpg",
+    alt: "Oakland chauffeured car service at OAK airport",
+    paragraphs: [
+      "Oakland is the East Bay's front door, and Global Link Transportation arranges limo and black car service across it — from Oakland International Airport (OAK) to downtown Oakland, Jack London Square, and the neighborhoods around Lake Merritt. A chauffeur handles the airport run, the Bay Bridge trip into San Francisco, or a full day of meetings and events across the East Bay, with a sedan, SUV, limousine, or Sprinter to match the party. Book an airport transfer or an hourly chauffeur and your car is confirmed before you land.",
+      "Pickup points cover the whole city: OAK Terminals 1 and 2 off I-880 via Hegenberger Road, downtown hotels including the Oakland Marriott City Center and the Hilton Oakland Airport, Jack London Square, the Oakland Convention Center, and the Fox Theater and Paramount Theatre. The drive from OAK to downtown Oakland is about 15–20 minutes; downtown San Francisco is roughly 25–45 minutes via the Bay Bridge, Berkeley about 20–25 minutes, and San Jose about 45–55 minutes via I-880. Airport pickups include flight tracking and a name-sign meet at arrivals, with the airline and flight number taken at booking.",
+      "Oakland is where OAK flyers, concert and event groups, and business travelers book most — OAK is the calmer Bay Area airport, and a pre-booked car beats the curbside scramble when the flight lands late or the Bay Bridge is backing up. Event groups book for shows at the Oakland Arena, the Fox Theater, and the Paramount Theatre, where a Sprinter keeps a whole party together instead of several separate cars. Wedding parties book Oakland too, with venues around Lake Merritt and Preservation Park, and a sedan or SUV suits a solo traveler or a couple.",
+      "An Oakland booking can also be the start of a longer day: an OAK pickup that continues to a Napa Valley or Sonoma wine tour, a corporate roadshow across the Bay Area, or a wedding weekend. Hourly chauffeur service carries a 4-hour minimum, and airport transfers come with fixed fares and no surge pricing. Get an instant quote on the homepage and book your Oakland car service online, or call (415) 787-8776.",
+    ],
+    faqs: [
+      {
+        question: "How long is the drive from OAK to downtown Oakland?",
+        answer:
+          "About 15–20 minutes by car — OAK sits just south of downtown off I-880. Your chauffeur tracks your flight and meets you at arrivals with a name sign, so the ride starts the moment you land.",
+      },
+      {
+        question: "Do you pick up from Oakland airport (OAK)?",
+        answer:
+          "Yes. We pick up from Oakland International Airport Terminals 1 and 2 with flight tracking and a name-sign meet at arrivals. Include your airline and flight number when booking so dispatch can follow the flight.",
+      },
+      {
+        question: "Can I book a car from Oakland to downtown San Francisco?",
+        answer:
+          "Yes. The drive to downtown San Francisco is roughly 25–45 minutes via the Bay Bridge, depending on traffic. Book it as a one-way transfer or as an hourly chauffeur if you have several stops — get an instant quote on the homepage.",
+      },
+      {
+        question: "Do you provide transportation for concerts and events in Oakland?",
+        answer:
+          "Yes. We arrange limousines and Sprinter group transport for events at the Oakland Arena, the Fox Theater, and the Paramount Theatre, with an hourly chauffeur on a 4-hour minimum for the show and the ride home.",
+      },
+    ],
+  },
   "/san-francisco-limo-service": {
     title: "San Francisco Limo Service & Black Car | Global Link",
     description: "Luxury limo service in San Francisco. Black car, town car, executive car service for airport transfers, events, and hourly chauffeur.",
