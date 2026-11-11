@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AffiliateRouteImport } from './routes/affiliate'
 import { Route as AgreementRouteImport } from './routes/agreement'
+import { Route as BerkeleyLimoServiceRouteImport } from './routes/berkeley-limo-service'
 import { Route as BurlingameLimoServiceRouteImport } from './routes/burlingame-limo-service'
 import { Route as CorporateTransportationRouteImport } from './routes/corporate-transportation'
 import { Route as OaklandLimoServiceRouteImport } from './routes/oakland-limo-service'
@@ -39,6 +40,11 @@ const AffiliateRoute = AffiliateRouteImport.update({
 const AgreementRoute = AgreementRouteImport.update({
   id: '/agreement',
   path: '/agreement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BerkeleyLimoServiceRoute = BerkeleyLimoServiceRouteImport.update({
+  id: '/berkeley-limo-service',
+  path: '/berkeley-limo-service',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BurlingameLimoServiceRoute = BurlingameLimoServiceRouteImport.update({
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/berkeley-limo-service': typeof BerkeleyLimoServiceRoute
   '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
   '/oakland-limo-service': typeof OaklandLimoServiceRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/berkeley-limo-service': typeof BerkeleyLimoServiceRoute
   '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
   '/oakland-limo-service': typeof OaklandLimoServiceRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/affiliate': typeof AffiliateRoute
   '/agreement': typeof AgreementRoute
+  '/berkeley-limo-service': typeof BerkeleyLimoServiceRoute
   '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
   '/oakland-limo-service': typeof OaklandLimoServiceRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
     | '/'
     | '/affiliate'
     | '/agreement'
+    | '/berkeley-limo-service'
     | '/burlingame-limo-service'
     | '/corporate-transportation'
     | '/oakland-limo-service'
@@ -186,6 +196,7 @@ export interface FileRouteTypes {
     | '/'
     | '/affiliate'
     | '/agreement'
+    | '/berkeley-limo-service'
     | '/burlingame-limo-service'
     | '/corporate-transportation'
     | '/oakland-limo-service'
@@ -204,6 +215,7 @@ export interface FileRouteTypes {
     | '/'
     | '/affiliate'
     | '/agreement'
+    | '/berkeley-limo-service'
     | '/burlingame-limo-service'
     | '/corporate-transportation'
     | '/oakland-limo-service'
@@ -223,6 +235,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AffiliateRoute: typeof AffiliateRoute
   AgreementRoute: typeof AgreementRoute
+  BerkeleyLimoServiceRoute: typeof BerkeleyLimoServiceRoute
   BurlingameLimoServiceRoute: typeof BurlingameLimoServiceRoute
   CorporateTransportationRoute: typeof CorporateTransportationRoute
   OaklandLimoServiceRoute: typeof OaklandLimoServiceRoute
@@ -259,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/agreement'
       fullPath: '/agreement'
       preLoaderRoute: typeof AgreementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/berkeley-limo-service': {
+      id: '/berkeley-limo-service'
+      path: '/berkeley-limo-service'
+      fullPath: '/berkeley-limo-service'
+      preLoaderRoute: typeof BerkeleyLimoServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/burlingame-limo-service': {
@@ -359,6 +379,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AffiliateRoute: AffiliateRoute,
   AgreementRoute: AgreementRoute,
+  BerkeleyLimoServiceRoute: BerkeleyLimoServiceRoute,
   BurlingameLimoServiceRoute: BurlingameLimoServiceRoute,
   CorporateTransportationRoute: CorporateTransportationRoute,
   OaklandLimoServiceRoute: OaklandLimoServiceRoute,

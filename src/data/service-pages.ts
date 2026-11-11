@@ -190,6 +190,41 @@ export const SERVICE_PAGES = {
       },
     ],
   },
+  "/berkeley-limo-service": {
+    title: "Berkeley Limo Service & UC Berkeley Black Car | Global Link",
+    description: "Berkeley limo and black car service for UC Berkeley, OAK and SFO airport pickups, graduations, events and hourly chauffeur — book online.",
+    h1: "Berkeley Limo Service & UC Berkeley Black Car",
+    image: "/images/services/business.jpg",
+    alt: "Berkeley chauffeured car service at UC Berkeley",
+    paragraphs: [
+      "Berkeley is the East Bay's university city, and Global Link Transportation arranges limo and black car service across it — from Oakland International Airport (OAK) and SFO to the UC Berkeley campus, downtown Berkeley, the Berkeley Marina, and the neighborhoods along Shattuck Avenue and Fourth Street. A chauffeur handles the airport run, the Bay Bridge trip into San Francisco, or a full day of meetings and events across the East Bay, with a sedan, SUV, limousine, or Sprinter to match the party. Book an airport transfer or an hourly chauffeur and your car is confirmed before you land.",
+      "Pickup points cover the whole city: OAK Terminals 1 and 2, SFO terminals, the Downtown Berkeley BART station, the UC Berkeley campus, the Claremont Hotel, the Berkeley Marina, the Lawrence Hall of Science, Fourth Street shops, and the Berkeley Amtrak station. The drive from OAK to downtown Berkeley is about 25–30 minutes via I-880 and I-980; SFO is roughly 45–60 minutes via the Bay Bridge, downtown San Francisco about 25–40 minutes, and San Jose about 60–70 minutes via I-880. Airport pickups include flight tracking and a name-sign meet at arrivals, with the airline and flight number taken at booking.",
+      "Berkeley is where UC Berkeley visitors, graduation families, and event groups book most — a parent arriving for a campus tour, a visiting scholar with a week of meetings, or a whole family flying in for commencement is a routine day here, and the service runs 24 hours. Wedding parties book Berkeley too, with the Claremont Hotel and the Berkeley Rose Garden the best-known local venues, and groups book for shows at Berkeley Repertory Theatre and the Greek Theatre. A Sprinter keeps a graduation party or a wedding group together instead of several separate cars; a sedan or SUV suits a solo traveler or a couple.",
+      "A Berkeley booking can also be the start of a longer day: an OAK pickup that continues to a Napa Valley or Sonoma wine tour, a corporate roadshow across the Bay Area, or a wedding weekend. Hourly chauffeur service carries a 4-hour minimum, and airport transfers come with fixed fares and no surge pricing. Get an instant quote on the homepage and book your Berkeley car service online, or call (415) 787-8776.",
+    ],
+    faqs: [
+      {
+        question: "How long is the drive from OAK to UC Berkeley?",
+        answer:
+          "About 25–30 minutes by car via I-880 and I-980 — OAK is the closest airport to Berkeley. Your chauffeur tracks your flight and meets you at arrivals with a name sign, so the ride starts the moment you land.",
+      },
+      {
+        question: "Do you pick up from the UC Berkeley campus?",
+        answer:
+          "Yes. We pick up from the UC Berkeley campus, the Downtown Berkeley BART station, the Claremont Hotel, the Berkeley Marina, Fourth Street, and the Berkeley Amtrak station, as well as SFO and OAK with flight tracking and a name-sign meet at arrivals.",
+      },
+      {
+        question: "Can I book a car from Berkeley to SFO?",
+        answer:
+          "Yes. The drive to SFO is roughly 45–60 minutes via the Bay Bridge, depending on traffic. Book it as a one-way transfer or as an hourly chauffeur if you have several stops — get an instant quote on the homepage.",
+      },
+      {
+        question: "Do you provide transportation for UC Berkeley graduations and Berkeley weddings?",
+        answer:
+          "Yes. We arrange limousines and Sprinter group transport for UC Berkeley graduation weekends and weddings at venues such as the Claremont Hotel and the Berkeley Rose Garden, with an hourly chauffeur on a 4-hour minimum for the ceremony, photos, and reception.",
+      },
+    ],
+  },
   "/san-francisco-limo-service": {
     title: "San Francisco Limo Service & Black Car | Global Link",
     description: "Luxury limo service in San Francisco. Black car, town car, executive car service for airport transfers, events, and hourly chauffeur.",
