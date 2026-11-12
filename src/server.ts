@@ -55,6 +55,20 @@ export default {
         headers: { Location: `https://globallinktransport.com${url.pathname}${url.search}` },
       });
     }
+    // SEO (2026-11-12): trailing-slash URLs 200 as duplicates of their
+    // slash-less canonicals, so GSC lists them as "Alternate page with
+    // proper canonical tag" (validation failed 11/10/26 on all 5 service
+    // pages) and the sitemap fed Google the slash variants. 301 every
+    // non-root trailing-slash path to its canonical — the sitemap now
+    // lists the slash-less URLs too.
+    if (url.pathname.length > 1 && url.pathname.endsWith("/")) {
+      return new Response(null, {
+        status: 301,
+        headers: {
+          Location: `https://globallinktransport.com${url.pathname.slice(0, -1)}${url.search}`,
+        },
+      });
+    }
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
