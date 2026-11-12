@@ -15,6 +15,7 @@ import { Route as AgreementRouteImport } from './routes/agreement'
 import { Route as BerkeleyLimoServiceRouteImport } from './routes/berkeley-limo-service'
 import { Route as BurlingameLimoServiceRouteImport } from './routes/burlingame-limo-service'
 import { Route as CorporateTransportationRouteImport } from './routes/corporate-transportation'
+import { Route as FremontLimoServiceRouteImport } from './routes/fremont-limo-service'
 import { Route as OaklandLimoServiceRouteImport } from './routes/oakland-limo-service'
 import { Route as PaloAltoLimoServiceRouteImport } from './routes/palo-alto-limo-service'
 import { Route as PayRouteImport } from './routes/pay'
@@ -55,6 +56,11 @@ const BurlingameLimoServiceRoute = BurlingameLimoServiceRouteImport.update({
 const CorporateTransportationRoute = CorporateTransportationRouteImport.update({
   id: '/corporate-transportation',
   path: '/corporate-transportation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FremontLimoServiceRoute = FremontLimoServiceRouteImport.update({
+  id: '/fremont-limo-service',
+  path: '/fremont-limo-service',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OaklandLimoServiceRoute = OaklandLimoServiceRouteImport.update({
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/berkeley-limo-service': typeof BerkeleyLimoServiceRoute
   '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
+  '/fremont-limo-service': typeof FremontLimoServiceRoute
   '/oakland-limo-service': typeof OaklandLimoServiceRoute
   '/palo-alto-limo-service': typeof PaloAltoLimoServiceRoute
   '/pay': typeof PayRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/berkeley-limo-service': typeof BerkeleyLimoServiceRoute
   '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
+  '/fremont-limo-service': typeof FremontLimoServiceRoute
   '/oakland-limo-service': typeof OaklandLimoServiceRoute
   '/palo-alto-limo-service': typeof PaloAltoLimoServiceRoute
   '/pay': typeof PayRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/berkeley-limo-service': typeof BerkeleyLimoServiceRoute
   '/burlingame-limo-service': typeof BurlingameLimoServiceRoute
   '/corporate-transportation': typeof CorporateTransportationRoute
+  '/fremont-limo-service': typeof FremontLimoServiceRoute
   '/oakland-limo-service': typeof OaklandLimoServiceRoute
   '/palo-alto-limo-service': typeof PaloAltoLimoServiceRoute
   '/pay': typeof PayRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/berkeley-limo-service'
     | '/burlingame-limo-service'
     | '/corporate-transportation'
+    | '/fremont-limo-service'
     | '/oakland-limo-service'
     | '/palo-alto-limo-service'
     | '/pay'
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/berkeley-limo-service'
     | '/burlingame-limo-service'
     | '/corporate-transportation'
+    | '/fremont-limo-service'
     | '/oakland-limo-service'
     | '/palo-alto-limo-service'
     | '/pay'
@@ -218,6 +229,7 @@ export interface FileRouteTypes {
     | '/berkeley-limo-service'
     | '/burlingame-limo-service'
     | '/corporate-transportation'
+    | '/fremont-limo-service'
     | '/oakland-limo-service'
     | '/palo-alto-limo-service'
     | '/pay'
@@ -238,6 +250,7 @@ export interface RootRouteChildren {
   BerkeleyLimoServiceRoute: typeof BerkeleyLimoServiceRoute
   BurlingameLimoServiceRoute: typeof BurlingameLimoServiceRoute
   CorporateTransportationRoute: typeof CorporateTransportationRoute
+  FremontLimoServiceRoute: typeof FremontLimoServiceRoute
   OaklandLimoServiceRoute: typeof OaklandLimoServiceRoute
   PaloAltoLimoServiceRoute: typeof PaloAltoLimoServiceRoute
   PayRoute: typeof PayRoute
@@ -293,6 +306,13 @@ declare module '@tanstack/react-router' {
       path: '/corporate-transportation'
       fullPath: '/corporate-transportation'
       preLoaderRoute: typeof CorporateTransportationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fremont-limo-service': {
+      id: '/fremont-limo-service'
+      path: '/fremont-limo-service'
+      fullPath: '/fremont-limo-service'
+      preLoaderRoute: typeof FremontLimoServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/oakland-limo-service': {
@@ -382,6 +402,7 @@ const rootRouteChildren: RootRouteChildren = {
   BerkeleyLimoServiceRoute: BerkeleyLimoServiceRoute,
   BurlingameLimoServiceRoute: BurlingameLimoServiceRoute,
   CorporateTransportationRoute: CorporateTransportationRoute,
+  FremontLimoServiceRoute: FremontLimoServiceRoute,
   OaklandLimoServiceRoute: OaklandLimoServiceRoute,
   PaloAltoLimoServiceRoute: PaloAltoLimoServiceRoute,
   PayRoute: PayRoute,

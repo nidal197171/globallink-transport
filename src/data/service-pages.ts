@@ -225,6 +225,41 @@ export const SERVICE_PAGES = {
       },
     ],
   },
+  "/fremont-limo-service": {
+    title: "Fremont Limo Service & Tri-City Black Car | Global Link",
+    description: "Fremont limo and black car service for SJC and OAK airport pickups, Tesla and Warm Springs corporate travel, weddings and hourly chauffeur — book online.",
+    h1: "Fremont Limo Service & Tri-City Black Car",
+    image: "/images/services/business.jpg",
+    alt: "Fremont chauffeured car service in the Tri-City area",
+    paragraphs: [
+      "Fremont is the Tri-City area's largest city, where Silicon Valley meets the East Bay, and Global Link Transportation arranges limo and black car service across it — from San Jose International Airport (SJC) and Oakland International Airport (OAK) to the Tesla Fremont Factory, the Warm Springs tech district, and the historic Niles and Mission San José neighborhoods. A chauffeur handles the airport run, the cross-Bay Area trip to San Francisco, or a full day of meetings and events across the city, with a sedan, SUV, limousine, or Sprinter to match the party. Book an airport transfer or an hourly chauffeur and your car is confirmed before you land.",
+      "Pickup points cover the whole city: SJC, OAK, and SFO terminals, the Fremont BART station and the Warm Springs/South Fremont BART station, the Tesla Fremont Factory on Fremont Boulevard, the Fremont Marriott Silicon Valley, Washington Hospital, Mission San José, the Niles district and Niles Canyon Railway depot, Central Park and Lake Elizabeth, and Pacific Commons. The drive from SJC to Fremont is about 20–25 minutes — SJC is Fremont's closest airport; OAK is roughly 25–40 minutes via I-880, SFO about 35–55 minutes via I-880 and the San Mateo Bridge, and downtown San Francisco about 45–60 minutes. Airport pickups include flight tracking and a name-sign meet at arrivals, with the airline and flight number taken at booking.",
+      "Fremont is where Tesla and Warm Springs tech travelers book most — factory visitors, engineers, and corporate teams from the Warm Springs district, home to the Tesla Fremont Factory and employers such as Zoox, Seagate, Western Digital, and ThermoFisher, use a pre-booked car for SJC runs and multi-stop roadshows across Silicon Valley, and the service runs 24 hours. Wedding parties book Fremont too, with the Fremont Marriott Silicon Valley ballroom, Century House and Gardens in Centerville, Paradise Ballrooms, and the Garden Court Inn the best-known local venues, and families book for visits to Mission San José, the Niles Canyon Railway, and Central Park. A Sprinter keeps a corporate team or a wedding party together instead of several separate cars; a sedan or SUV suits a solo traveler or a couple.",
+      "A Fremont booking can also be the start of a longer day: an SJC pickup that continues to a Napa Valley or Sonoma wine tour, a corporate roadshow down the Peninsula, or a wedding weekend. Hourly chauffeur service carries a 4-hour minimum, and airport transfers come with fixed fares and no surge pricing. Get an instant quote on the homepage and book your Fremont car service online, or call (415) 787-8776.",
+    ],
+    faqs: [
+      {
+        question: "How long is the drive from SJC to Fremont?",
+        answer:
+          "About 20–25 minutes by car — SJC is Fremont's closest airport. Your chauffeur tracks your flight and meets you at arrivals with a name sign, so the ride starts the moment you land.",
+      },
+      {
+        question: "Do you pick up from the Tesla Fremont Factory and Warm Springs?",
+        answer:
+          "Yes. We pick up from the Tesla Fremont Factory on Fremont Boulevard, the Warm Springs/South Fremont BART station, the Fremont Marriott Silicon Valley, and offices across the Warm Springs tech district, as well as SJC, OAK, and SFO with flight tracking and a name-sign meet at arrivals.",
+      },
+      {
+        question: "Can I book a car from Fremont to SFO or OAK?",
+        answer:
+          "Yes. The drive to OAK is roughly 25–40 minutes via I-880 and to SFO about 35–55 minutes via I-880 and the San Mateo Bridge. Book it as a one-way transfer or as an hourly chauffeur if you have several stops — get an instant quote on the homepage.",
+      },
+      {
+        question: "Do you provide transportation for weddings in Fremont?",
+        answer:
+          "Yes. We arrange limousines and Sprinter group transport for weddings at venues such as the Fremont Marriott Silicon Valley, Century House and Gardens, Paradise Ballrooms, and the Garden Court Inn, with an hourly chauffeur on a 4-hour minimum for the ceremony, photos, and reception.",
+      },
+    ],
+  },
   "/san-francisco-limo-service": {
     title: "San Francisco Limo Service & Black Car | Global Link",
     description: "Luxury limo service in San Francisco. Black car, town car, executive car service for airport transfers, events, and hourly chauffeur.",
