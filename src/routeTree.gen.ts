@@ -23,6 +23,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SanFranciscoLimoServiceRouteImport } from './routes/san-francisco-limo-service'
 import { Route as SanJoseLimoServiceRouteImport } from './routes/san-jose-limo-service'
 import { Route as SfoAirportLimoRouteImport } from './routes/sfo-airport-limo'
+import { Route as WalnutCreekLimoServiceRouteImport } from './routes/walnut-creek-limo-service'
 import { Route as WeddingLimoRouteImport } from './routes/wedding-limo'
 import { Route as WineCountryToursRouteImport } from './routes/wine-country-tours'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -98,6 +99,11 @@ const SfoAirportLimoRoute = SfoAirportLimoRouteImport.update({
   path: '/sfo-airport-limo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WalnutCreekLimoServiceRoute = WalnutCreekLimoServiceRouteImport.update({
+  id: '/walnut-creek-limo-service',
+  path: '/walnut-creek-limo-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WeddingLimoRoute = WeddingLimoRouteImport.update({
   id: '/wedding-limo',
   path: '/wedding-limo',
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
   '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/walnut-creek-limo-service': typeof WalnutCreekLimoServiceRoute
   '/wedding-limo': typeof WeddingLimoRoute
   '/wine-country-tours': typeof WineCountryToursRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
   '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/walnut-creek-limo-service': typeof WalnutCreekLimoServiceRoute
   '/wedding-limo': typeof WeddingLimoRoute
   '/wine-country-tours': typeof WineCountryToursRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -175,6 +183,7 @@ export interface FileRoutesById {
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
   '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/walnut-creek-limo-service': typeof WalnutCreekLimoServiceRoute
   '/wedding-limo': typeof WeddingLimoRoute
   '/wine-country-tours': typeof WineCountryToursRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/san-francisco-limo-service'
     | '/san-jose-limo-service'
     | '/sfo-airport-limo'
+    | '/walnut-creek-limo-service'
     | '/wedding-limo'
     | '/wine-country-tours'
     | '/blog/$slug'
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/san-francisco-limo-service'
     | '/san-jose-limo-service'
     | '/sfo-airport-limo'
+    | '/walnut-creek-limo-service'
     | '/wedding-limo'
     | '/wine-country-tours'
     | '/blog/$slug'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/san-francisco-limo-service'
     | '/san-jose-limo-service'
     | '/sfo-airport-limo'
+    | '/walnut-creek-limo-service'
     | '/wedding-limo'
     | '/wine-country-tours'
     | '/blog/$slug'
@@ -258,6 +270,7 @@ export interface RootRouteChildren {
   SanFranciscoLimoServiceRoute: typeof SanFranciscoLimoServiceRoute
   SanJoseLimoServiceRoute: typeof SanJoseLimoServiceRoute
   SfoAirportLimoRoute: typeof SfoAirportLimoRoute
+  WalnutCreekLimoServiceRoute: typeof WalnutCreekLimoServiceRoute
   WeddingLimoRoute: typeof WeddingLimoRoute
   WineCountryToursRoute: typeof WineCountryToursRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -364,6 +377,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SfoAirportLimoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/walnut-creek-limo-service': {
+      id: '/walnut-creek-limo-service'
+      path: '/walnut-creek-limo-service'
+      fullPath: '/walnut-creek-limo-service'
+      preLoaderRoute: typeof WalnutCreekLimoServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wedding-limo': {
       id: '/wedding-limo'
       path: '/wedding-limo'
@@ -410,6 +430,7 @@ const rootRouteChildren: RootRouteChildren = {
   SanFranciscoLimoServiceRoute: SanFranciscoLimoServiceRoute,
   SanJoseLimoServiceRoute: SanJoseLimoServiceRoute,
   SfoAirportLimoRoute: SfoAirportLimoRoute,
+  WalnutCreekLimoServiceRoute: WalnutCreekLimoServiceRoute,
   WeddingLimoRoute: WeddingLimoRoute,
   WineCountryToursRoute: WineCountryToursRoute,
   BlogSlugRoute: BlogSlugRoute,

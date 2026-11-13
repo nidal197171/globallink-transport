@@ -260,6 +260,41 @@ export const SERVICE_PAGES = {
       },
     ],
   },
+  "/walnut-creek-limo-service": {
+    title: "Walnut Creek Limo Service & East Bay Black Car | Global Link",
+    description: "Walnut Creek limo and black car service for OAK airport pickups, downtown, weddings and hourly chauffeur — book online.",
+    h1: "Walnut Creek Limo Service & East Bay Black Car",
+    image: "/images/services/business.jpg",
+    alt: "Walnut Creek chauffeured car service in the East Bay",
+    paragraphs: [
+      "Walnut Creek is Contra Costa County's downtown — Broadway Plaza, the Lesher Center for the Arts, and Mount Diablo on the skyline — and Global Link Transportation arranges limo and black car service across it, from Oakland International Airport (OAK) to downtown Walnut Creek, the BART station, and the hotels and venues around the city. A chauffeur handles the airport run, the cross-Bay Area trip to San Francisco, or a full day of meetings and events across the East Bay, with a sedan, SUV, limousine, or Sprinter to match the party. Book an airport transfer or an hourly chauffeur and your car is confirmed before you land.",
+      "Pickup points cover the whole city: OAK, SFO, and SJC terminals, the Walnut Creek BART station, the Walnut Creek Marriott, Renaissance ClubSport, John Muir Health Walnut Creek Medical Center, Broadway Plaza, the Lesher Center for the Arts, and the Shadelands business park. The drive from OAK to Walnut Creek is about 30–40 minutes via I-880 and I-580/I-680 — OAK is Walnut Creek's closest airport; SFO is roughly 50–60 minutes, downtown San Francisco about 35–45 minutes via the Bay Bridge, and SJC about an hour via I-680. Airport pickups include flight tracking and a name-sign meet at arrivals, with the airline and flight number taken at booking.",
+      "Walnut Creek is where OAK flyers, wedding parties, and Lesher Center audiences book most — a family flying into OAK for a weekend in the East Bay, a couple heading to a ceremony at the Gardens at Heather Farm or Shadelands Ranch Museum, or theatergoers arriving for an evening at the Lesher Center is a routine day here, and the service runs 24 hours. Corporate travelers book for the downtown offices and the Shadelands business park, and medical families book for appointments at John Muir Health. A Sprinter keeps a wedding party or a group together instead of several separate cars; a sedan or SUV suits a solo traveler or a couple.",
+      "A Walnut Creek booking can also be the start of a longer day: an OAK pickup that continues to a Napa Valley or Sonoma wine tour, a corporate roadshow down the Peninsula, or a wedding weekend. Hourly chauffeur service carries a 4-hour minimum, and airport transfers come with fixed fares and no surge pricing. Get an instant quote on the homepage and book your Walnut Creek car service online, or call (415) 787-8776.",
+    ],
+    faqs: [
+      {
+        question: "How long is the drive from OAK to Walnut Creek?",
+        answer:
+          "About 30–40 minutes by car via I-880 and I-580/I-680 — OAK is Walnut Creek's closest airport. Your chauffeur tracks your flight and meets you at arrivals with a name sign, so the ride starts the moment you land.",
+      },
+      {
+        question: "Do you pick up from Walnut Creek BART and the Walnut Creek Marriott?",
+        answer:
+          "Yes. We pick up from the Walnut Creek BART station, the Walnut Creek Marriott, and Renaissance ClubSport, as well as Broadway Plaza, the Lesher Center for the Arts, John Muir Health Walnut Creek Medical Center, and OAK, SFO, and SJC with flight tracking and a name-sign meet at arrivals.",
+      },
+      {
+        question: "Can I book a car from Walnut Creek to SFO or downtown San Francisco?",
+        answer:
+          "Yes. The drive to SFO is roughly 50–60 minutes and to downtown San Francisco about 35–45 minutes via the Bay Bridge. Book it as a one-way transfer or as an hourly chauffeur if you have several stops — get an instant quote on the homepage.",
+      },
+      {
+        question: "Do you provide transportation for weddings in Walnut Creek?",
+        answer:
+          "Yes. We arrange limousines and Sprinter group transport for weddings at venues such as the Gardens at Heather Farm, Shadelands Ranch Museum, the Clubhouse at Boundary Oak, and the Ruth Bancroft Garden, with an hourly chauffeur on a 4-hour minimum for the ceremony, photos, and reception.",
+      },
+    ],
+  },
   "/san-francisco-limo-service": {
     title: "San Francisco Limo Service & Black Car | Global Link",
     description: "Luxury limo service in San Francisco. Black car, town car, executive car service for airport transfers, events, and hourly chauffeur.",
