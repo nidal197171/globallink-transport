@@ -23,6 +23,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SanFranciscoLimoServiceRouteImport } from './routes/san-francisco-limo-service'
 import { Route as SanJoseLimoServiceRouteImport } from './routes/san-jose-limo-service'
 import { Route as SfoAirportLimoRouteImport } from './routes/sfo-airport-limo'
+import { Route as SfoToSanFranciscoLimoRouteImport } from './routes/sfo-to-san-francisco-limo'
 import { Route as WalnutCreekLimoServiceRouteImport } from './routes/walnut-creek-limo-service'
 import { Route as WeddingLimoRouteImport } from './routes/wedding-limo'
 import { Route as WineCountryToursRouteImport } from './routes/wine-country-tours'
@@ -99,6 +100,11 @@ const SfoAirportLimoRoute = SfoAirportLimoRouteImport.update({
   path: '/sfo-airport-limo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SfoToSanFranciscoLimoRoute = SfoToSanFranciscoLimoRouteImport.update({
+  id: '/sfo-to-san-francisco-limo',
+  path: '/sfo-to-san-francisco-limo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WalnutCreekLimoServiceRoute = WalnutCreekLimoServiceRouteImport.update({
   id: '/walnut-creek-limo-service',
   path: '/walnut-creek-limo-service',
@@ -140,6 +146,7 @@ export interface FileRoutesByFullPath {
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
   '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/sfo-to-san-francisco-limo': typeof SfoToSanFranciscoLimoRoute
   '/walnut-creek-limo-service': typeof WalnutCreekLimoServiceRoute
   '/wedding-limo': typeof WeddingLimoRoute
   '/wine-country-tours': typeof WineCountryToursRoute
@@ -161,6 +168,7 @@ export interface FileRoutesByTo {
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
   '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/sfo-to-san-francisco-limo': typeof SfoToSanFranciscoLimoRoute
   '/walnut-creek-limo-service': typeof WalnutCreekLimoServiceRoute
   '/wedding-limo': typeof WeddingLimoRoute
   '/wine-country-tours': typeof WineCountryToursRoute
@@ -183,6 +191,7 @@ export interface FileRoutesById {
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
   '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/sfo-to-san-francisco-limo': typeof SfoToSanFranciscoLimoRoute
   '/walnut-creek-limo-service': typeof WalnutCreekLimoServiceRoute
   '/wedding-limo': typeof WeddingLimoRoute
   '/wine-country-tours': typeof WineCountryToursRoute
@@ -206,6 +215,7 @@ export interface FileRouteTypes {
     | '/san-francisco-limo-service'
     | '/san-jose-limo-service'
     | '/sfo-airport-limo'
+    | '/sfo-to-san-francisco-limo'
     | '/walnut-creek-limo-service'
     | '/wedding-limo'
     | '/wine-country-tours'
@@ -227,6 +237,7 @@ export interface FileRouteTypes {
     | '/san-francisco-limo-service'
     | '/san-jose-limo-service'
     | '/sfo-airport-limo'
+    | '/sfo-to-san-francisco-limo'
     | '/walnut-creek-limo-service'
     | '/wedding-limo'
     | '/wine-country-tours'
@@ -248,6 +259,7 @@ export interface FileRouteTypes {
     | '/san-francisco-limo-service'
     | '/san-jose-limo-service'
     | '/sfo-airport-limo'
+    | '/sfo-to-san-francisco-limo'
     | '/walnut-creek-limo-service'
     | '/wedding-limo'
     | '/wine-country-tours'
@@ -270,6 +282,7 @@ export interface RootRouteChildren {
   SanFranciscoLimoServiceRoute: typeof SanFranciscoLimoServiceRoute
   SanJoseLimoServiceRoute: typeof SanJoseLimoServiceRoute
   SfoAirportLimoRoute: typeof SfoAirportLimoRoute
+  SfoToSanFranciscoLimoRoute: typeof SfoToSanFranciscoLimoRoute
   WalnutCreekLimoServiceRoute: typeof WalnutCreekLimoServiceRoute
   WeddingLimoRoute: typeof WeddingLimoRoute
   WineCountryToursRoute: typeof WineCountryToursRoute
@@ -377,6 +390,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SfoAirportLimoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sfo-to-san-francisco-limo': {
+      id: '/sfo-to-san-francisco-limo'
+      path: '/sfo-to-san-francisco-limo'
+      fullPath: '/sfo-to-san-francisco-limo'
+      preLoaderRoute: typeof SfoToSanFranciscoLimoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/walnut-creek-limo-service': {
       id: '/walnut-creek-limo-service'
       path: '/walnut-creek-limo-service'
@@ -430,6 +450,7 @@ const rootRouteChildren: RootRouteChildren = {
   SanFranciscoLimoServiceRoute: SanFranciscoLimoServiceRoute,
   SanJoseLimoServiceRoute: SanJoseLimoServiceRoute,
   SfoAirportLimoRoute: SfoAirportLimoRoute,
+  SfoToSanFranciscoLimoRoute: SfoToSanFranciscoLimoRoute,
   WalnutCreekLimoServiceRoute: WalnutCreekLimoServiceRoute,
   WeddingLimoRoute: WeddingLimoRoute,
   WineCountryToursRoute: WineCountryToursRoute,

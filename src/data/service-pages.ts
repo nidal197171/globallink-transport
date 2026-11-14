@@ -50,6 +50,41 @@ export const SERVICE_PAGES = {
       },
     ],
   },
+  "/sfo-to-san-francisco-limo": {
+    title: "SFO to San Francisco Limo & Airport Transfer | Global Link",
+    description: "SFO to downtown San Francisco limo and black car transfer. Flight tracking, meet & greet at every terminal, 24/7 — book online.",
+    h1: "SFO to San Francisco Limo & Airport Transfer",
+    image: "/images/services/airport.jpg",
+    alt: "SFO to downtown San Francisco chauffeured airport transfer",
+    paragraphs: [
+      "San Francisco International Airport sits about 14 miles south of downtown San Francisco on the bay, and Global Link Transportation arranges limo and black car transfers between the airport and downtown — Union Square, the Financial District, SoMa, and the Embarcadero. A chauffeur handles the US-101 drive north, about 20–30 minutes in light traffic and 35–50 minutes at commute times, with a sedan, SUV, limousine, or Sprinter to match the party. Book a one-way airport transfer or an hourly chauffeur and your car is confirmed before you land.",
+      "Pickup covers all four SFO terminals: Harvey Milk Terminal 1, Terminal 2, Terminal 3, and the International Terminal with Boarding Areas A and G. Terminal 1 serves Southwest, Delta, Alaska, American, and JetBlue; Terminal 3 is United's domestic hub; international arrivals clear customs at the International Terminal. Airport pickups include flight tracking and a name-sign meet at arrivals, with the airline and flight number taken at booking — confirm the terminal and meeting location with dispatch before pickup.",
+      "Drop-offs cover the whole downtown core: the Westin St. Francis and Grand Hyatt on Union Square, Hotel Nikko, the Financial District hotels, Moscone Center, the Ferry Building, and SoMa addresses, plus Chase Center, Oracle Park, and Fisherman's Wharf. Business travelers and convention attendees book this route most — a direct car from the terminal to the hotel or meeting beats the train-plus-walk or the curbside queue — and the service runs 24 hours for red-eyes and early departures. Families and event groups book too, with a Sprinter keeping a whole party together instead of several separate cars; a sedan or SUV suits a solo traveler or a couple.",
+      "A downtown booking can also be the start of a longer day: an SFO pickup that continues to a Napa Valley or Sonoma wine tour, a corporate roadshow across the Bay Area, or a wedding weekend. The return trip works the same way — a downtown pickup to SFO, booked as a one-way transfer or as an hourly chauffeur if you have several stops, with extra time allowed at peak. Hourly chauffeur service carries a 4-hour minimum, and airport transfers come with fixed fares and no surge pricing. Get an instant quote on the homepage and book your SFO to San Francisco transfer online, or call (415) 787-8776.",
+    ],
+    faqs: [
+      {
+        question: "How long is the drive from SFO to downtown San Francisco?",
+        answer:
+          "About 20–30 minutes via US-101 in light traffic, and 35–50 minutes during commute times. Your chauffeur tracks your flight and meets you at arrivals with a name sign, so the ride starts the moment you land.",
+      },
+      {
+        question: "Where does my driver meet me at SFO?",
+        answer:
+          "With meet & greet selected, your chauffeur waits at arrivals with a name sign. Flight tracking keeps pickup coordinated around delays and early arrivals — confirm the terminal and meeting location with dispatch before pickup and follow your confirmed pickup instructions at the terminal.",
+      },
+      {
+        question: "Which SFO terminal do I arrive at?",
+        answer:
+          "SFO has four terminals: Harvey Milk Terminal 1 (Southwest, Delta, Alaska, American, JetBlue), Terminal 2, Terminal 3 (United's domestic hub), and the International Terminal (Boarding Areas A and G). Include your airline and flight number when booking so dispatch can confirm the right terminal.",
+      },
+      {
+        question: "Can I book a return trip from downtown San Francisco to SFO?",
+        answer:
+          "Yes. Book it as a one-way transfer or as an hourly chauffeur if you have several stops, and allow extra time at peak commute — get an instant quote on the homepage.",
+      },
+    ],
+  },
   "/burlingame-limo-service": {
     title: "Burlingame Limo Service & SFO-Area Black Car | Global Link",
     description: "Burlingame limo and black car service minutes from SFO. Airport pickups, hotel transfers, weddings and hourly chauffeur — book online.",
