@@ -85,6 +85,41 @@ export const SERVICE_PAGES = {
       },
     ],
   },
+  "/sfo-to-palo-alto-limo": {
+    title: "SFO to Palo Alto Limo & Airport Transfer | Global Link",
+    description: "SFO to Palo Alto limo and black car transfer. Flight tracking, meet & greet at every terminal, Stanford and downtown drop-offs, 24/7 — book online.",
+    h1: "SFO to Palo Alto Limo & Airport Transfer",
+    image: "/images/services/airport.jpg",
+    alt: "SFO to Palo Alto chauffeured airport transfer",
+    paragraphs: [
+      "San Francisco International Airport sits about 20 miles north of Palo Alto on the bay, and Global Link Transportation arranges limo and black car transfers between the airport and the city — Stanford University, downtown University Avenue, Stanford Research Park, and the hotels along El Camino Real. A chauffeur handles the US-101 drive south, about 25–35 minutes in light traffic and 40–55 minutes at commute times, with a sedan, SUV, limousine, or Sprinter to match the party. Book a one-way airport transfer or an hourly chauffeur and your car is confirmed before you land.",
+      "Pickup covers all four SFO terminals: Harvey Milk Terminal 1, Terminal 2, Terminal 3, and the International Terminal with Boarding Areas A and G. Terminal 1 serves Southwest, Delta, Alaska, American, and JetBlue; Terminal 3 is United's domestic hub; international arrivals clear customs at the International Terminal. Airport pickups include flight tracking and a name-sign meet at arrivals, with the airline and flight number taken at booking — confirm the terminal and meeting location with dispatch before pickup.",
+      "Drop-offs cover the whole Palo Alto core: the Stanford University campus, Stanford Health Care and the Palo Alto VA Medical Center, downtown University Avenue and California Avenue addresses, Stanford Research Park offices, the Palo Alto Caltrain station, the Stanford Shopping Center, and hotels including the Garden Court Hotel, Hotel Keen, and The Clement Palo Alto. Stanford visitors, medical patients and their families, and tech executives book this route most — a direct car from the terminal to the campus, hospital, or office beats the train-plus-walk or the curbside queue — and the service runs 24 hours for red-eyes and early departures. Families and event groups book too, with a Sprinter keeping a whole party together instead of several separate cars; a sedan or SUV suits a solo traveler or a couple.",
+      "A Palo Alto booking can also be the start of a longer day: an SFO pickup that continues to a Napa Valley or Sonoma wine tour, a corporate roadshow across Silicon Valley, or a wedding at Gamble Garden. The return trip works the same way — a Palo Alto pickup to SFO, booked as a one-way transfer or as an hourly chauffeur if you have several stops, with extra time allowed at peak. Hourly chauffeur service carries a 4-hour minimum, and airport transfers come with fixed fares and no surge pricing. Get an instant quote on the homepage and book your SFO to Palo Alto transfer online, or call (415) 787-8776.",
+    ],
+    faqs: [
+      {
+        question: "How long is the drive from SFO to Palo Alto?",
+        answer:
+          "About 25–35 minutes via US-101 in light traffic, and 40–55 minutes during commute times, for the roughly 20-mile drive. Your chauffeur tracks your flight and meets you at arrivals with a name sign, so the ride starts the moment you land.",
+      },
+      {
+        question: "Where does my driver meet me at SFO?",
+        answer:
+          "With meet & greet selected, your chauffeur waits at arrivals with a name sign. Flight tracking keeps pickup coordinated around delays and early arrivals — confirm the terminal and meeting location with dispatch before pickup and follow your confirmed pickup instructions at the terminal.",
+      },
+      {
+        question: "Do you drop off at Stanford University and Stanford Health Care?",
+        answer:
+          "Yes. We drop off at the Stanford University campus, Stanford Health Care, and the Palo Alto VA Medical Center, as well as downtown University Avenue and California Avenue addresses, Stanford Research Park offices, the Palo Alto Caltrain station, and the Stanford Shopping Center.",
+      },
+      {
+        question: "Can I book a return trip from Palo Alto to SFO?",
+        answer:
+          "Yes. Book it as a one-way transfer or as an hourly chauffeur if you have several stops, and allow extra time at peak commute — get an instant quote on the homepage.",
+      },
+    ],
+  },
   "/burlingame-limo-service": {
     title: "Burlingame Limo Service & SFO-Area Black Car | Global Link",
     description: "Burlingame limo and black car service minutes from SFO. Airport pickups, hotel transfers, weddings and hourly chauffeur — book online.",
