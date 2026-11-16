@@ -120,6 +120,41 @@ export const SERVICE_PAGES = {
       },
     ],
   },
+  "/sfo-to-san-jose-limo": {
+    title: "SFO to San Jose Limo & Airport Transfer | Global Link",
+    description: "SFO to San Jose limo and black car transfer. Flight tracking, meet & greet at every terminal, downtown and Silicon Valley drop-offs, 24/7 — book online.",
+    h1: "SFO to San Jose Limo & Airport Transfer",
+    image: "/images/services/airport.jpg",
+    alt: "SFO to San Jose chauffeured airport transfer",
+    paragraphs: [
+      "San Francisco International Airport sits about 36 miles north of downtown San Jose, and Global Link Transportation arranges limo and black car transfers between the airport and the city — downtown San Jose, the convention center, Santana Row, and the tech campuses of North San Jose. A chauffeur handles the US-101 drive south through Silicon Valley, about 40–50 minutes in light traffic and 60–75 minutes or more at commute times, with a sedan, SUV, limousine, or Sprinter to match the party. Book a one-way airport transfer or an hourly chauffeur and your car is confirmed before you land.",
+      "Pickup covers all four SFO terminals: Harvey Milk Terminal 1, Terminal 2, Terminal 3, and the International Terminal with Boarding Areas A and G. Terminal 1 serves Southwest, Delta, Alaska, American, and JetBlue; Terminal 3 is United's domestic hub; international arrivals clear customs at the International Terminal. Airport pickups include flight tracking and a name-sign meet at arrivals, with the airline and flight number taken at booking — confirm the terminal and meeting location with dispatch before pickup.",
+      "Drop-offs cover the whole San Jose core: downtown hotels, the San Jose McEnery Convention Center, the SAP Center, San Jose State University, Santana Row, Diridon Station, and offices across North San Jose and the Golden Triangle, plus Levi's Stadium in neighboring Santa Clara. Tech executives, conference attendees, and event groups book this route most — a direct car from the terminal to the hotel, convention, or campus beats the train-plus-walk or the curbside queue — and the service runs 24 hours for red-eyes and early departures. Families and event groups book too, with a Sprinter keeping a whole party together instead of several separate cars; a sedan or SUV suits a solo traveler or a couple.",
+      "A San Jose booking can also be the start of a longer day: an SFO pickup that continues to a Napa Valley or Sonoma wine tour, a corporate roadshow across Silicon Valley, or a wedding at Hayes Mansion. The return trip works the same way — a San Jose pickup to SFO, booked as a one-way transfer or as an hourly chauffeur if you have several stops, with extra time allowed at peak. Hourly chauffeur service carries a 4-hour minimum, and airport transfers come with fixed fares and no surge pricing. Get an instant quote on the homepage and book your SFO to San Jose transfer online, or call (415) 787-8776.",
+    ],
+    faqs: [
+      {
+        question: "How long is the drive from SFO to San Jose?",
+        answer:
+          "About 40–50 minutes via US-101 in light traffic, and 60–75 minutes or more during commute times, for the roughly 36-mile drive. Your chauffeur tracks your flight and meets you at arrivals with a name sign, so the ride starts the moment you land.",
+      },
+      {
+        question: "Where does my driver meet me at SFO?",
+        answer:
+          "With meet & greet selected, your chauffeur waits at arrivals with a name sign. Flight tracking keeps pickup coordinated around delays and early arrivals — confirm the terminal and meeting location with dispatch before pickup and follow your confirmed pickup instructions at the terminal.",
+      },
+      {
+        question: "Do you drop off at the San Jose convention center and SAP Center?",
+        answer:
+          "Yes. We drop off at the San Jose McEnery Convention Center, the SAP Center, San Jose State University, Santana Row, Diridon Station, and downtown hotels, as well as offices across North San Jose and the Golden Triangle and Levi's Stadium in neighboring Santa Clara.",
+      },
+      {
+        question: "Can I book a return trip from San Jose to SFO?",
+        answer:
+          "Yes. Book it as a one-way transfer or as an hourly chauffeur if you have several stops, and allow extra time at peak commute — get an instant quote on the homepage.",
+      },
+    ],
+  },
   "/burlingame-limo-service": {
     title: "Burlingame Limo Service & SFO-Area Black Car | Global Link",
     description: "Burlingame limo and black car service minutes from SFO. Airport pickups, hotel transfers, weddings and hourly chauffeur — book online.",
