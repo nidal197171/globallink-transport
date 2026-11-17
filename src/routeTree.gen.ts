@@ -23,6 +23,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SanFranciscoLimoServiceRouteImport } from './routes/san-francisco-limo-service'
 import { Route as SanJoseLimoServiceRouteImport } from './routes/san-jose-limo-service'
 import { Route as SfoAirportLimoRouteImport } from './routes/sfo-airport-limo'
+import { Route as SfoToNapaLimoRouteImport } from './routes/sfo-to-napa-limo'
 import { Route as SfoToPaloAltoLimoRouteImport } from './routes/sfo-to-palo-alto-limo'
 import { Route as SfoToSanFranciscoLimoRouteImport } from './routes/sfo-to-san-francisco-limo'
 import { Route as SfoToSanJoseLimoRouteImport } from './routes/sfo-to-san-jose-limo'
@@ -102,6 +103,11 @@ const SfoAirportLimoRoute = SfoAirportLimoRouteImport.update({
   path: '/sfo-airport-limo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SfoToNapaLimoRoute = SfoToNapaLimoRouteImport.update({
+  id: '/sfo-to-napa-limo',
+  path: '/sfo-to-napa-limo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SfoToPaloAltoLimoRoute = SfoToPaloAltoLimoRouteImport.update({
   id: '/sfo-to-palo-alto-limo',
   path: '/sfo-to-palo-alto-limo',
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
   '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/sfo-to-napa-limo': typeof SfoToNapaLimoRoute
   '/sfo-to-palo-alto-limo': typeof SfoToPaloAltoLimoRoute
   '/sfo-to-san-francisco-limo': typeof SfoToSanFranciscoLimoRoute
   '/sfo-to-san-jose-limo': typeof SfoToSanJoseLimoRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
   '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/sfo-to-napa-limo': typeof SfoToNapaLimoRoute
   '/sfo-to-palo-alto-limo': typeof SfoToPaloAltoLimoRoute
   '/sfo-to-san-francisco-limo': typeof SfoToSanFranciscoLimoRoute
   '/sfo-to-san-jose-limo': typeof SfoToSanJoseLimoRoute
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/san-francisco-limo-service': typeof SanFranciscoLimoServiceRoute
   '/san-jose-limo-service': typeof SanJoseLimoServiceRoute
   '/sfo-airport-limo': typeof SfoAirportLimoRoute
+  '/sfo-to-napa-limo': typeof SfoToNapaLimoRoute
   '/sfo-to-palo-alto-limo': typeof SfoToPaloAltoLimoRoute
   '/sfo-to-san-francisco-limo': typeof SfoToSanFranciscoLimoRoute
   '/sfo-to-san-jose-limo': typeof SfoToSanJoseLimoRoute
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/san-francisco-limo-service'
     | '/san-jose-limo-service'
     | '/sfo-airport-limo'
+    | '/sfo-to-napa-limo'
     | '/sfo-to-palo-alto-limo'
     | '/sfo-to-san-francisco-limo'
     | '/sfo-to-san-jose-limo'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/san-francisco-limo-service'
     | '/san-jose-limo-service'
     | '/sfo-airport-limo'
+    | '/sfo-to-napa-limo'
     | '/sfo-to-palo-alto-limo'
     | '/sfo-to-san-francisco-limo'
     | '/sfo-to-san-jose-limo'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/san-francisco-limo-service'
     | '/san-jose-limo-service'
     | '/sfo-airport-limo'
+    | '/sfo-to-napa-limo'
     | '/sfo-to-palo-alto-limo'
     | '/sfo-to-san-francisco-limo'
     | '/sfo-to-san-jose-limo'
@@ -306,6 +318,7 @@ export interface RootRouteChildren {
   SanFranciscoLimoServiceRoute: typeof SanFranciscoLimoServiceRoute
   SanJoseLimoServiceRoute: typeof SanJoseLimoServiceRoute
   SfoAirportLimoRoute: typeof SfoAirportLimoRoute
+  SfoToNapaLimoRoute: typeof SfoToNapaLimoRoute
   SfoToPaloAltoLimoRoute: typeof SfoToPaloAltoLimoRoute
   SfoToSanFranciscoLimoRoute: typeof SfoToSanFranciscoLimoRoute
   SfoToSanJoseLimoRoute: typeof SfoToSanJoseLimoRoute
@@ -416,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SfoAirportLimoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sfo-to-napa-limo': {
+      id: '/sfo-to-napa-limo'
+      path: '/sfo-to-napa-limo'
+      fullPath: '/sfo-to-napa-limo'
+      preLoaderRoute: typeof SfoToNapaLimoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sfo-to-palo-alto-limo': {
       id: '/sfo-to-palo-alto-limo'
       path: '/sfo-to-palo-alto-limo'
@@ -490,6 +510,7 @@ const rootRouteChildren: RootRouteChildren = {
   SanFranciscoLimoServiceRoute: SanFranciscoLimoServiceRoute,
   SanJoseLimoServiceRoute: SanJoseLimoServiceRoute,
   SfoAirportLimoRoute: SfoAirportLimoRoute,
+  SfoToNapaLimoRoute: SfoToNapaLimoRoute,
   SfoToPaloAltoLimoRoute: SfoToPaloAltoLimoRoute,
   SfoToSanFranciscoLimoRoute: SfoToSanFranciscoLimoRoute,
   SfoToSanJoseLimoRoute: SfoToSanJoseLimoRoute,
