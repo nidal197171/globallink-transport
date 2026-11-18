@@ -8,6 +8,7 @@ import { article as sfoToNapa } from "./sfo-to-napa-valley";
 import { article as limoVsRideshare } from "./limo-service-vs-rideshare-cost";
 import { article as earlyMorningFlight } from "./early-morning-flight-airport-ride-san-francisco";
 import { article as napaVsSonoma } from "./napa-vs-sonoma-wine-tour";
+import { article as oakAirportPickup } from "./oak-airport-pickup-service";
 
 export type { Article, ArticleBlock, ArticleFaq } from "./types";
 
@@ -26,6 +27,7 @@ export const articles: Article[] = [
   limoVsRideshare,
   earlyMorningFlight,
   napaVsSonoma,
+  oakAirportPickup,
 ];
 
 export function getArticle(slug: string): Article | undefined {
