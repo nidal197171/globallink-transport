@@ -11,6 +11,7 @@ import { article as napaVsSonoma } from "./napa-vs-sonoma-wine-tour";
 import { article as oakAirportPickup } from "./oak-airport-pickup-service";
 import { article as sjcAirportCarService } from "./sjc-airport-car-service";
 import { article as napaOneDayItinerary } from "./napa-valley-one-day-itinerary";
+import { article as sonomaWineTour } from "./sonoma-wine-tour-from-san-francisco";
 
 export type { Article, ArticleBlock, ArticleFaq } from "./types";
 
@@ -32,6 +33,7 @@ export const articles: Article[] = [
   oakAirportPickup,
   sjcAirportCarService,
   napaOneDayItinerary,
+  sonomaWineTour,
 ];
 
 export function getArticle(slug: string): Article | undefined {
