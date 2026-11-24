@@ -14,6 +14,7 @@ import { article as napaOneDayItinerary } from "./napa-valley-one-day-itinerary"
 import { article as sonomaWineTour } from "./sonoma-wine-tour-from-san-francisco";
 import { article as designatedDriverNapa } from "./designated-driver-napa-winery-tour";
 import { article as promLimoRental } from "./prom-limo-rental-bay-area";
+import { article as birthdayLimo } from "./birthday-limo-rental-san-francisco";
 
 export type { Article, ArticleBlock, ArticleFaq } from "./types";
 
@@ -38,6 +39,7 @@ export const articles: Article[] = [
   sonomaWineTour,
   designatedDriverNapa,
   promLimoRental,
+  birthdayLimo,
 ];
 
 export function getArticle(slug: string): Article | undefined {
