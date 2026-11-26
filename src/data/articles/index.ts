@@ -16,6 +16,7 @@ import { article as designatedDriverNapa } from "./designated-driver-napa-winery
 import { article as promLimoRental } from "./prom-limo-rental-bay-area";
 import { article as birthdayLimo } from "./birthday-limo-rental-san-francisco";
 import { article as quinceaneraLimo } from "./quinceanera-limo-san-francisco";
+import { article as oracleParkEvent } from "./oracle-park-event-transportation";
 
 export type { Article, ArticleBlock, ArticleFaq } from "./types";
 
@@ -42,6 +43,7 @@ export const articles: Article[] = [
   promLimoRental,
   birthdayLimo,
   quinceaneraLimo,
+  oracleParkEvent,
 ];
 
 export function getArticle(slug: string): Article | undefined {
