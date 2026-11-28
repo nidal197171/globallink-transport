@@ -18,6 +18,7 @@ import { article as birthdayLimo } from "./birthday-limo-rental-san-francisco";
 import { article as quinceaneraLimo } from "./quinceanera-limo-san-francisco";
 import { article as oracleParkEvent } from "./oracle-park-event-transportation";
 import { article as levisStadiumCharter } from "./levis-stadium-charter-sprinter-rental";
+import { article as chaseCenterEvent } from "./chase-center-event-limo-service";
 
 export type { Article, ArticleBlock, ArticleFaq } from "./types";
 
@@ -46,6 +47,7 @@ export const articles: Article[] = [
   quinceaneraLimo,
   oracleParkEvent,
   levisStadiumCharter,
+  chaseCenterEvent,
 ];
 
 export function getArticle(slug: string): Article | undefined {
